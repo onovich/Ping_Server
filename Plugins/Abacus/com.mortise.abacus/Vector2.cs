@@ -1,4 +1,4 @@
-namespace Ping.Server {
+namespace MortiseFrame.Abacus {
 
     public struct Vector2 {
 
@@ -28,6 +28,10 @@ namespace Ping.Server {
 
         public static Vector2 operator /(Vector2 a, float b) {
             return new Vector2(a.x / b, a.y / b);
+        }
+
+        public static Vector2 operator -(Vector2 a) {
+            return new Vector2(-a.x, -a.y);
         }
 
         public static bool operator ==(Vector2 a, Vector2 b) {
@@ -74,13 +78,34 @@ namespace Ping.Server {
             return (float)System.Math.Sqrt(x * x + y * y);
         }
 
+        public float magnitude => Magnitude();
+
         public Vector2 Normalize() {
-            return this / Magnitude();
+            float magnitude = Magnitude();
+            if (magnitude > 1E-05f) {
+                this = this / magnitude;
+            } else {
+                this = zero;
+            }
+            return this;
+        }
+
+        public Vector2 normalized {
+            get {
+                float magnitude = Magnitude();
+                if (magnitude > 1E-05f) {
+                    return this / magnitude;
+                } else {
+                    return zero;
+                }
+            }
         }
 
         public float SqrMagnitude() {
             return x * x + y * y;
         }
+
+        public float sqrMagnitude => SqrMagnitude();
 
         public static float Dot(Vector2 a, Vector2 b) {
             return a.x * b.x + a.y * b.y;
