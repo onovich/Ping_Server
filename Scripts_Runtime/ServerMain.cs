@@ -36,11 +36,8 @@ namespace Ping.Server {
             templateInfraContext = new TemplateInfraContext();
 
             // Inject
-            loginBusinessContext.uiAppContext = uiAppContext;
-
             gameBusinessContext.inputEntity = inputEntity;
             gameBusinessContext.templateInfraContext = templateInfraContext;
-            gameBusinessContext.uiAppContext = uiAppContext;
 
             Binding();
 
@@ -94,22 +91,9 @@ namespace Ping.Server {
 
             GameBusiness.Init(gameBusinessContext);
 
-            UIApp.Init(uiAppContext);
-
         }
 
         void Binding() {
-            var uiEventCenter = uiAppContext.eventCenter;
-            // UI
-            // - Login
-            uiEventCenter.Login_OnStartGameClickHandle += () => {
-                LoginBusiness.Exit(loginBusinessContext);
-                GameBusiness.StartGame(gameBusinessContext);
-            };
-
-            uiEventCenter.Login_OnExitGameClickHandle += () => {
-                LoginBusiness.ExitLogin(loginBusinessContext);
-            };
         }
 
         async Task LoadAssets() {

@@ -4,7 +4,7 @@ namespace Ping.Server.Business.Game {
 
         public static void Player_BakeInput(GameBusinessContext ctx, float dt) {
             InputEntity inputEntity = ctx.inputEntity;
-            inputEntity.ProcessInput(ctx.mainCamera, dt);
+            inputEntity.ProcessInput(dt);
         }
 
         public static void Owner_BakeInput(GameBusinessContext ctx, PaddleEntity owner) {

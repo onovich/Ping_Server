@@ -5,7 +5,7 @@ namespace Ping.Server.Business.Game {
     public static class GameBallDomain {
 
         public static BallEntity SpawnAtOriginPos(GameBusinessContext ctx, Vector2 pos) {
-            var Ball = GameFactory.Ball_Spawn(ctx.templateInfraContext, ctx.assetsInfraContext, pos);
+            var Ball = GameFactory.Ball_Spawn(ctx.templateInfraContext, pos);
             ctx.Ball_Set(Ball);
             return Ball;
         }

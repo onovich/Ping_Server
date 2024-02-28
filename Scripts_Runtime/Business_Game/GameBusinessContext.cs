@@ -18,15 +18,8 @@ namespace Ping.Server.Business.Game {
         public Collider2D[] overlapTemp;
         public RaycastHit2D[] raycastTemp;
 
-        // UI
-        public UIAppContext uiAppContext;
-
-        // Camera
-        public Camera mainCamera;
-
         // Infra
         public TemplateInfraContext templateInfraContext;
-        public AssetsInfraContext assetsInfraContext;
 
         public GameBusinessContext() {
             gameEntity = new GameEntity();

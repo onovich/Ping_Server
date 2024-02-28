@@ -1,17 +1,15 @@
-using MortiseFrame.Pulse;
+using MortiseFrame.Abacus;
 
 namespace Ping.Server.Business.Game {
 
     public static class GameFactory {
 
         // Field
-        public static FieldEntity Field_Spawn(TemplateInfraContext templateInfraContext,
-                                              AssetsInfraContext assetsInfraContext) {
+        public static FieldEntity Field_Spawn(TemplateInfraContext templateInfraContext) {
 
             var config = templateInfraContext.Config_Get();
 
-            var prefab = assetsInfraContext.Entity_GetField();
-            var field = GameObject.Instantiate(prefab).GetComponent<FieldEntity>();
+            var field = new FieldEntity();
             field.Ctor();
 
             // Set Bound
@@ -22,13 +20,11 @@ namespace Ping.Server.Business.Game {
 
         // Ball
         public static BallEntity Ball_Spawn(TemplateInfraContext templateInfraContext,
-                                            AssetsInfraContext assetsInfraContext,
                                             Vector2 pos) {
 
             var config = templateInfraContext.Config_Get();
 
-            var prefab = assetsInfraContext.Entity_GetBall();
-            var ball = GameObject.Instantiate(prefab).GetComponent<BallEntity>();
+            var ball = new BallEntity();
             ball.Ctor();
 
             // Set Attr
@@ -49,14 +45,12 @@ namespace Ping.Server.Business.Game {
 
         // Paddle
         public static PaddleEntity Paddle_Spawn(TemplateInfraContext templateInfraContext,
-                                                AssetsInfraContext assetsInfraContext,
                                                 int id,
                                                 Vector2 pos) {
 
             var config = templateInfraContext.Config_Get();
 
-            var prefab = assetsInfraContext.Entity_GetPaddle();
-            var paddle = GameObject.Instantiate(prefab).GetComponent<PaddleEntity>();
+            var paddle = new PaddleEntity();
             paddle.Ctor();
 
             // Base Info
