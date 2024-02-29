@@ -7,7 +7,6 @@ namespace Ping.Server.Business.Game {
         // Entity
         public GameEntity gameEntity;
         public PlayerEntity playerEntity;
-        public InputEntity inputEntity;
 
         public FieldEntity fieldEntity;
         public BallEntity ballEntity;
@@ -15,7 +14,6 @@ namespace Ping.Server.Business.Game {
         public PaddleEntity player2PaddleEntity;
 
         // TEMP
-        public Collider2D[] overlapTemp;
         public RaycastHit2D[] raycastTemp;
 
         // Infra
@@ -23,7 +21,6 @@ namespace Ping.Server.Business.Game {
 
         public GameBusinessContext() {
             gameEntity = new GameEntity();
-            overlapTemp = new Collider2D[1000];
             raycastTemp = new RaycastHit2D[1000];
         }
 

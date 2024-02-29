@@ -10,6 +10,11 @@ namespace Ping.Server {
 
         public float rotation;
 
+        // TODO
+        public T GetComponent<T>() {
+            return default(T);
+        }
+
         public TranformComponent() {
             position = Vector2.zero;
             scale = Vector2.one;

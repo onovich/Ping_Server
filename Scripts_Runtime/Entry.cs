@@ -10,17 +10,17 @@ namespace Ping.Server {
         static void Main(string[] args) {
 
             var entry = new ServerMain();
-            var targetFrameRate = 60d;
+            float targetFrameRate = 60f;
 
             var stopWatch = new Stopwatch();
             stopWatch.Start();
 
-            var currentTime = stopWatch.Elapsed.TotalSeconds;
-            var lastTime = currentTime;
+            float currentTime = (float)stopWatch.Elapsed.TotalSeconds;
+            float lastTime = currentTime;
 
-            var targetDt = 1.0d / targetFrameRate;
-            var restTime = 0.0d;
-            var fixedDt = 0.02d;
+            float targetDt = 1.0f / targetFrameRate;
+            float restTime = 0.0f;
+            float fixedDt = 0.02f;
 
             // ResetInput
             entry.ResetInput();
@@ -30,9 +30,9 @@ namespace Ping.Server {
 
             while (true) {
 
-                currentTime = stopWatch.Elapsed.TotalSeconds;
+                currentTime = (float)stopWatch.Elapsed.TotalSeconds;
 
-                var dt = currentTime - lastTime;
+                float dt = currentTime - lastTime;
                 restTime += dt;
 
                 // PreTick
@@ -54,7 +54,7 @@ namespace Ping.Server {
 
                 // Sleep
                 lastTime = currentTime;
-                currentTime = stopWatch.Elapsed.TotalSeconds;
+                currentTime = (float)stopWatch.Elapsed.TotalSeconds;
                 dt = currentTime - lastTime;
 
                 var sleepTime = (int)((targetDt - dt) * 1000);

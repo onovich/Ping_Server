@@ -20,8 +20,6 @@ namespace Ping.Server.Business.Game {
 
         public static void Tick(GameBusinessContext ctx, float dt) {
 
-            ResetInput(ctx);
-            LocalInput(ctx, dt);
             OnNetEvent(ctx, dt);
             LogicTick(ctx, dt);
 
@@ -39,21 +37,6 @@ namespace Ping.Server.Business.Game {
 
             RenderTick(ctx, dt);
 
-        }
-
-        static void ResetInput(GameBusinessContext ctx) {
-            var inputEntity = ctx.inputEntity;
-            inputEntity.Reset();
-        }
-
-        static void LocalInput(GameBusinessContext ctx, float dt) {
-            GameInputDomain.Player_BakeInput(ctx, dt);
-
-            var game = ctx.gameEntity;
-            var status = game.FSM_GetStatus();
-            if (status == GameFSMStatus.Gaming) {
-                GameInputDomain.Owner_BakeInput(ctx, ctx.Paddle_GetLocalOwner());
-            }
         }
 
         static void OnNetEvent(GameBusinessContext ctx, float dt) {
