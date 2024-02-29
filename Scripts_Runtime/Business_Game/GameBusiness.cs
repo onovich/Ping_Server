@@ -20,6 +20,7 @@ namespace Ping.Server.Business.Game {
 
         public static void Tick(GameBusinessContext ctx, float dt) {
 
+            ResetInput(ctx);
             OnNetEvent(ctx, dt);
             LogicTick(ctx, dt);
 
@@ -35,8 +36,20 @@ namespace Ping.Server.Business.Game {
                 }
             }
 
-            RenderTick(ctx, dt);
+            LateTick(ctx, dt);
+            SendNetRes(ctx);
 
+        }
+
+        static void ResetInput(GameBusinessContext ctx) {
+            var paddle1 = ctx.Paddle_Get(1);
+            if (paddle1 != null) {
+                GameInputDomain.Paddle_ResetInput(ctx, paddle1);
+            }
+            var paddle2 = ctx.Paddle_Get(2);
+            if (paddle2 != null) {
+                GameInputDomain.Paddle_ResetInput(ctx, paddle2);
+            }
         }
 
         static void OnNetEvent(GameBusinessContext ctx, float dt) {
@@ -44,6 +57,10 @@ namespace Ping.Server.Business.Game {
 
             // On
 
+        }
+
+        static void SendNetRes(GameBusinessContext ctx) {
+            // Send
         }
 
         static void LogicTick(GameBusinessContext ctx, float dt) {
@@ -70,11 +87,11 @@ namespace Ping.Server.Business.Game {
             if (paddle2 == null) { return; }
             GamePaddleFSMController.FixedTickFSM(ctx, paddle2, dt);
 
-            Physics2D.Simulate(dt);
+            Physics2DInfra.Simulate(ctx.physics2DContext, dt);
 
         }
 
-        static void RenderTick(GameBusinessContext ctx, float dt) {
+        static void LateTick(GameBusinessContext ctx, float dt) {
             var game = ctx.gameEntity;
             var status = game.GetStatus();
             if (status != GameFSMStatus.Gaming) { return; }

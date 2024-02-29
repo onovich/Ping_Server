@@ -3,7 +3,10 @@ using MortiseFrame.Abacus;
 
 namespace Ping.Server {
 
-    public class BallEntity {
+    public class BallEntity : IEntity {
+
+        // Base Info
+        EntityType IEntity.EntityType => EntityType.Ball;
 
         // Attr
         float moveSpeed;
@@ -26,6 +29,11 @@ namespace Ping.Server {
             fsmCom = new BallFSMComponent();
             transform = new TranformComponent();
             rb = new Rigidbody2DComponent();
+        }
+
+        public void Inject() {
+            transform.Inject(this);
+            rb.Inject(transform);
         }
 
         // Pos

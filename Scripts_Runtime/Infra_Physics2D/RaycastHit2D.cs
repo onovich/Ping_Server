@@ -9,6 +9,7 @@ namespace Ping.Server {
         public TranformComponent transform;
         public Vector2 point;
         public Vector2 normal;
+        public float distance;
 
     }
 

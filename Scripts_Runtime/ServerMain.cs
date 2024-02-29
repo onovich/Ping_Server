@@ -10,6 +10,7 @@ namespace Ping.Server {
     public class ServerMain {
 
         TemplateInfraContext templateInfraContext;
+        Physics2DInfraContext physics2DInfraContext;
 
         LoginBusinessContext loginBusinessContext;
         GameBusinessContext gameBusinessContext;
@@ -30,9 +31,11 @@ namespace Ping.Server {
             gameBusinessContext = new GameBusinessContext();
 
             templateInfraContext = new TemplateInfraContext();
+            physics2DInfraContext = new Physics2DInfraContext();
 
             // Inject
             gameBusinessContext.templateInfraContext = templateInfraContext;
+            gameBusinessContext.physics2DContext = physics2DInfraContext;
 
             Binding();
 

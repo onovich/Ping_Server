@@ -4,20 +4,20 @@ namespace Ping.Server.Business.Game {
 
     public static class GamePaddleFSMController {
 
-        public static void FixedTickFSM(GameBusinessContext ctx, PaddleEntity Paddle, float fixdt) {
+        public static void FixedTickFSM(GameBusinessContext ctx, PaddleEntity paddle, float fixdt) {
 
-            FixedTickFSM_Any(ctx, Paddle, fixdt);
+            FixedTickFSM_Any(ctx, paddle, fixdt);
 
-            PaddleFSMStatus status = Paddle.FSM_GetStatus();
+            PaddleFSMStatus status = paddle.FSM_GetStatus();
             if (status == PaddleFSMStatus.Moving) {
-                FixedTickFSM_Moving(ctx, Paddle, fixdt);
+                FixedTickFSM_Moving(ctx, paddle, fixdt);
             } else {
                 PLog.LogError($"GamePaddleFSMController.FixedTickFSM: unknown status: {status}");
             }
 
         }
 
-        static void FixedTickFSM_Any(GameBusinessContext ctx, PaddleEntity Paddle, float fixdt) {
+        static void FixedTickFSM_Any(GameBusinessContext ctx, PaddleEntity paddle, float fixdt) {
 
         }
 
@@ -29,7 +29,7 @@ namespace Ping.Server.Business.Game {
             }
 
             // Move
-            var player = ctx.Player_Get();
+            var player = ctx.Player_Get(paddle.GetPlayerID());
             if (paddle.GetPlayerID() == player.GetPlayerID()) {
                 GamePaddleDomain.ApplyMove(ctx, paddle, fixdt);
             }

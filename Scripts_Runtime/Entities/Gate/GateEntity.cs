@@ -4,9 +4,14 @@ using MortiseFrame.Pulse;
 
 namespace Ping.Server {
 
-    public class GateEntity {
+    public class GateEntity : IEntity {
+
+        // Base Info
+        EntityType IEntity.EntityType => EntityType.Gate;
 
         public int playerID;
+
+        // Physics
         AABB colliderBox;
 
         public void TearDown() {

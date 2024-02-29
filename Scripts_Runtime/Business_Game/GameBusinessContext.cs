@@ -6,10 +6,12 @@ namespace Ping.Server.Business.Game {
 
         // Entity
         public GameEntity gameEntity;
-        public PlayerEntity playerEntity;
+        public PlayerEntity player1Entity;
+        public PlayerEntity player2Entity;
 
         public FieldEntity fieldEntity;
         public BallEntity ballEntity;
+
         public PaddleEntity player1PaddleEntity;
         public PaddleEntity player2PaddleEntity;
 
@@ -18,6 +20,7 @@ namespace Ping.Server.Business.Game {
 
         // Infra
         public TemplateInfraContext templateInfraContext;
+        public Physics2DInfraContext physics2DContext;
 
         public GameBusinessContext() {
             gameEntity = new GameEntity();
@@ -32,16 +35,25 @@ namespace Ping.Server.Business.Game {
         }
 
         // Player
-        public void Player_Set(PlayerEntity playerEntity) {
-            this.playerEntity = playerEntity;
+        public void Player_Set(PlayerEntity playerEntity, int playerID) {
+            if (playerID == 1) {
+                player1Entity = playerEntity;
+            } else {
+                player2Entity = playerEntity;
+            }
         }
 
-        public PlayerEntity Player_Get() {
-            return playerEntity;
+        public PlayerEntity Player_Get(int playerID) {
+            if (playerID == 1) {
+                return player1Entity;
+            } else {
+                return player2Entity;
+            }
         }
 
         public void Player_Clear() {
-            playerEntity = null;
+            player1Entity = null;
+            player2Entity = null;
         }
 
         // Ball
@@ -76,11 +88,6 @@ namespace Ping.Server.Business.Game {
             } else {
                 return player2PaddleEntity;
             }
-        }
-
-        public PaddleEntity Paddle_GetLocalOwner() {
-            var ownerID = gameEntity.GetLocalOwnerPlayerID();
-            return Paddle_Get(ownerID);
         }
 
         // Field

@@ -4,10 +4,11 @@ using MortiseFrame.Pulse;
 
 namespace Ping.Server {
 
-    public class PaddleEntity {
+    public class PaddleEntity : IEntity {
 
         // Base Info
         int playerID;
+        EntityType IEntity.EntityType => EntityType.Paddle;
 
         // Attr
         float moveSpeed;
@@ -32,6 +33,11 @@ namespace Ping.Server {
             fsmCom = new PaddleFSMComponent();
             rb = new Rigidbody2DComponent();
             transform = new TranformComponent();
+        }
+
+        public void Inject() {
+            transform.Inject(this);
+            rb.Inject(transform);
         }
 
         // Base Info
@@ -116,6 +122,10 @@ namespace Ping.Server {
         // Input
         public void Input_SetMoveAxis(Vector2 axis) {
             inputCom.moveAxis = axis;
+        }
+
+        public void Input_Reset() {
+            inputCom.moveAxis = Vector2.zero;
         }
 
     }

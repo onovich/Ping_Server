@@ -26,6 +26,7 @@ namespace Ping.Server.Business.Game {
 
             var ball = new BallEntity();
             ball.Ctor();
+            ball.Inject();
 
             // Set Attr
             ball.Attr_SetMoveSpeed(config.ballMoveSpeed);
@@ -52,6 +53,7 @@ namespace Ping.Server.Business.Game {
 
             var paddle = new PaddleEntity();
             paddle.Ctor();
+            paddle.Inject();
 
             // Base Info
             paddle.SetPlayerID(id);

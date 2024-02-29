@@ -2,7 +2,10 @@ using MortiseFrame.Pulse;
 
 namespace Ping.Server {
 
-    public class WallEntity {
+    public class WallEntity : IEntity {
+
+        // Base Info
+        EntityType IEntity.EntityType => EntityType.Wall;
 
         AABB colliderBox;
 

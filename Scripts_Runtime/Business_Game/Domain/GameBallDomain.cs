@@ -37,7 +37,7 @@ namespace Ping.Server.Business.Game {
             targetLayerMask |= 1 << LayerConst.GATE;
             var hits = ctx.raycastTemp;
             var dir = ball.Pos_GetDirection();
-            int count = Physics2D.CircleCastNonAlloc(ball.Pos_GetPos(), ball.Attr_GetRadius(), dir, hits, dis, targetLayerMask);
+            int count = Physics2DInfra.CircleCastNonAlloc(ctx.physics2DContext, ball.Pos_GetPos(), ball.Attr_GetRadius(), dir, hits, dis, targetLayerMask);
             if (count <= 0) {
                 return succ;
             }

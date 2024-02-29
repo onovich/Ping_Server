@@ -57,7 +57,7 @@ namespace Ping.Server.Business.Game {
         public static void Win(GameBusinessContext ctx, int playerID) {
             var game = ctx.gameEntity;
             game.IncTurn();
-            var player = ctx.Player_Get();
+            var player = ctx.Player_Get(playerID);
             player.Score_Inc();
             // Send Res
         }
