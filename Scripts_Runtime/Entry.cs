@@ -9,7 +9,7 @@ namespace Ping.Server {
 
         static void Main(string[] args) {
 
-            var entry = new ServerMain();
+            var server = new ServerMain();
             float targetFrameRate = 60f;
 
             var stopWatch = new Stopwatch();
@@ -22,11 +22,7 @@ namespace Ping.Server {
             float restTime = 0.0f;
             float fixedDt = 0.02f;
 
-            // ResetInput
-            entry.ResetInput();
-
-            // ProcessInput
-            entry.ProcessInput();
+            server.Start();
 
             while (true) {
 
@@ -35,22 +31,28 @@ namespace Ping.Server {
                 float dt = currentTime - lastTime;
                 restTime += dt;
 
+                // ResetInput
+                server.ResetInput();
+
+                // OnNetEvent
+                server.OnNetEvent(dt);
+
                 // PreTick
-                entry.PreTick(dt);
+                server.PreTick(dt);
 
                 // FixedTick
                 if (restTime <= fixedDt) {
-                    entry.FixedTick(restTime);
+                    server.FixedTick(restTime);
                     restTime = 0;
                 } else {
                     while (restTime >= fixedDt) {
-                        entry.FixedTick(fixedDt);
+                        server.FixedTick(fixedDt);
                         restTime -= fixedDt;
                     }
                 }
 
                 // LateTick
-                entry.LateTick(dt);
+                server.LateTick(dt);
 
                 // Sleep
                 lastTime = currentTime;

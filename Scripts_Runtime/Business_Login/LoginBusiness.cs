@@ -8,7 +8,7 @@ namespace Ping.Server.Business.Login {
         public static void Enter(LoginBusinessContext ctx) {
         }
 
-        public static void Tick(LoginBusinessContext ctx, float dt) {
+        public static void PreTick(LoginBusinessContext ctx, float dt) {
             OnNetEvent(ctx, dt);
         }
 

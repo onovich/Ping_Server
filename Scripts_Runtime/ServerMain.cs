@@ -19,10 +19,10 @@ namespace Ping.Server {
         bool isTearDown;
 
         public void ResetInput() {
-
+            GameBusiness.ResetInput(gameBusinessContext);
         }
 
-        public void ProcessInput() {
+        public void Start() {
 
             isLoadedAssets = false;
             isTearDown = false;
@@ -61,16 +61,29 @@ namespace Ping.Server {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
-            LoginBusiness.Tick(loginBusinessContext, dt);
-            GameBusiness.Tick(gameBusinessContext, dt);
+            LoginBusiness.PreTick(loginBusinessContext, dt);
+            GameBusiness.PreTick(gameBusinessContext, dt);
         }
 
         public void LateTick(float dt) {
-
+            if (!isLoadedAssets || isTearDown) {
+                return;
+            }
+            GameBusiness.LateTick(gameBusinessContext, dt);
         }
 
         public void FixedTick(float dt) {
+             if (!isLoadedAssets || isTearDown) {
+                return;
+            }
+            GameBusiness.FixedTick(gameBusinessContext, dt);
+        }
 
+        public void OnNetEvent(float dt) {
+            if (!isLoadedAssets || isTearDown) {
+                return;
+            }
+            GameBusiness.OnNetEvent(gameBusinessContext, dt);
         }
 
         void Init() {

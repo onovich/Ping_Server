@@ -18,30 +18,7 @@ namespace Ping.Server.Business.Game {
             GameGameDomain.ExitGame(ctx);
         }
 
-        public static void Tick(GameBusinessContext ctx, float dt) {
-
-            ResetInput(ctx);
-            OnNetEvent(ctx, dt);
-            LogicTick(ctx, dt);
-
-            restTime += dt;
-            const float intervalTime = 0.01f;
-            if (restTime <= intervalTime) {
-                FixedTick(ctx, restTime);
-                restTime = 0;
-            } else {
-                while (restTime >= intervalTime) {
-                    FixedTick(ctx, intervalTime);
-                    restTime -= intervalTime;
-                }
-            }
-
-            LateTick(ctx, dt);
-            SendNetRes(ctx);
-
-        }
-
-        static void ResetInput(GameBusinessContext ctx) {
+        public static void ResetInput(GameBusinessContext ctx) {
             var paddle1 = ctx.Paddle_Get(1);
             if (paddle1 != null) {
                 GameInputDomain.Paddle_ResetInput(ctx, paddle1);
@@ -52,7 +29,7 @@ namespace Ping.Server.Business.Game {
             }
         }
 
-        static void OnNetEvent(GameBusinessContext ctx, float dt) {
+        public static void OnNetEvent(GameBusinessContext ctx, float dt) {
             // Receive
 
             // On
@@ -63,7 +40,7 @@ namespace Ping.Server.Business.Game {
             // Send
         }
 
-        static void LogicTick(GameBusinessContext ctx, float dt) {
+        public static void PreTick(GameBusinessContext ctx, float dt) {
 
         }
 
@@ -91,13 +68,16 @@ namespace Ping.Server.Business.Game {
 
         }
 
-        static void LateTick(GameBusinessContext ctx, float dt) {
+        public static void LateTick(GameBusinessContext ctx, float dt) {
             var game = ctx.gameEntity;
             var status = game.GetStatus();
             if (status != GameFSMStatus.Gaming) { return; }
 
             // Time
             GameTimeDomain.ApplyGameTime(ctx, dt);
+
+            // Send Net Res
+            SendNetRes(ctx);
 
         }
 
