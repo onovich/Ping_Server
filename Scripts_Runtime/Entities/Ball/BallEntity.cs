@@ -33,7 +33,7 @@ namespace Ping.Server {
 
         public void Inject() {
             transform.Inject(this);
-            rb.Inject(transform);
+            rb.Inject(transform, collider);
         }
 
         // Pos
@@ -104,6 +104,11 @@ namespace Ping.Server {
 
         public void FSM_SetMovingDir(Vector2 dir) {
             fsmCom.movingDir = dir;
+        }
+
+        // Physics
+        public Rigidbody2DComponent Rigidbody2D_Get() {
+            return rb;
         }
 
         public void TearDown() {

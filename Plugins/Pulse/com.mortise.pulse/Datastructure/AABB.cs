@@ -2,7 +2,7 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class AABB {
+    public class AABB : ICollider {
 
         Vector2 min;
         Vector2 max;

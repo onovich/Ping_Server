@@ -2,7 +2,7 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class OBB {
+    public class OBB : ICollider {
 
         Vector2 axisX;
         Vector2 axisY;

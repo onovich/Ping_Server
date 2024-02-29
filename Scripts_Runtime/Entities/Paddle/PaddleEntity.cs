@@ -37,7 +37,7 @@ namespace Ping.Server {
 
         public void Inject() {
             transform.Inject(this);
-            rb.Inject(transform);
+            rb.Inject(transform, colliderBox);
         }
 
         // Base Info
@@ -126,6 +126,11 @@ namespace Ping.Server {
 
         public void Input_Reset() {
             inputCom.moveAxis = Vector2.zero;
+        }
+
+        // Physics
+        public Rigidbody2DComponent Rigidbody2D_Get() {
+            return rb;
         }
 
     }

@@ -1,4 +1,5 @@
 using MortiseFrame.Abacus;
+using MortiseFrame.Pulse;
 
 namespace Ping.Server {
 
@@ -7,12 +8,15 @@ namespace Ping.Server {
         public Vector2 velocity;
         public TranformComponent transform;
 
+        public ICollider collider;
+
         public Rigidbody2DComponent() {
             velocity = Vector2.zero;
         }
 
-        public void Inject(TranformComponent trans) {
+        public void Inject(TranformComponent trans, ICollider collider) {
             this.transform = trans;
+            this.collider = collider;
         }
 
         public void ApplyPhysics(float deltaTime) {

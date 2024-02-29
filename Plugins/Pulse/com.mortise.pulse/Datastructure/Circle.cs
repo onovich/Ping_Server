@@ -2,7 +2,7 @@ using MortiseFrame.Abacus;
 
 namespace MortiseFrame.Pulse {
 
-    public class Circle {
+    public class Circle  : ICollider{
 
         Vector2 center;
         public Vector2 Center => center;

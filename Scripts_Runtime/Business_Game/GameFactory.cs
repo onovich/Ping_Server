@@ -20,6 +20,7 @@ namespace Ping.Server.Business.Game {
 
         // Ball
         public static BallEntity Ball_Spawn(TemplateInfraContext templateInfraContext,
+                                            Physics2DInfraContext physics2DInfraContext,
                                             Vector2 pos) {
 
             var config = templateInfraContext.Config_Get();
@@ -40,12 +41,17 @@ namespace Ping.Server.Business.Game {
             var fsmCom = ball.FSM_GetComponent();
             fsmCom.EnterIdle();
 
+            // Set Physics
+            var rigidbody2DCom = ball.Rigidbody2D_Get();
+            physics2DInfraContext.Rigidbodies_Add(rigidbody2DCom);
+
             return ball;
 
         }
 
         // Paddle
         public static PaddleEntity Paddle_Spawn(TemplateInfraContext templateInfraContext,
+                                                Physics2DInfraContext physics2DInfraContext,
                                                 int id,
                                                 Vector2 pos) {
 
@@ -69,6 +75,10 @@ namespace Ping.Server.Business.Game {
             // Set FSM
             var fsmCom = paddle.FSM_GetComponent();
             fsmCom.Moving_Enter();
+
+            // Set Physics
+            var rigidbody2DCom = paddle.Rigidbody2D_Get();
+            physics2DInfraContext.Rigidbodies_Add(rigidbody2DCom);
 
             return paddle;
         }
