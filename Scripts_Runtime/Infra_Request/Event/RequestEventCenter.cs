@@ -24,8 +24,8 @@ namespace Ping.Server.Requests {
         }
 
         // Room Start Game Broad
-        public Action<StartGameBroadMessage> RoomStartGame_OnBroadHandle;
-        public void RoomStartGame_OnBroad(StartGameBroadMessage msg) {
+        public Action<GameStartBroadMessage> RoomStartGame_OnBroadHandle;
+        public void RoomStartGame_OnBroad(GameStartBroadMessage msg) {
             RoomStartGame_OnBroadHandle.Invoke(msg);
         }
 
