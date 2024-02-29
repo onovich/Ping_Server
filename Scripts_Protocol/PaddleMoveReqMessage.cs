@@ -5,18 +5,21 @@ namespace Ping.Protocol {
 
     public struct PaddleMoveReqMessage : IMessage<PaddleMoveReqMessage> {
 
+        public int paddleId;
         public Vector2 moveAxis;
 
         public void WriteTo(byte[] dst, ref int offset) {
+            ByteWritter.Write<int>(dst, paddleId, ref offset);
             ByteWritter.Write<Vector2>(dst, moveAxis, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
+            paddleId = ByteReader.Read<int>(src, ref offset);
             moveAxis = ByteReader.Read<Vector2>(src, ref offset);
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
-            int count = 8;
+            int count = 12;
             isCertain = true;
             return count;
         }

@@ -3,30 +3,17 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct RoomStartGameBroadMessage : IMessage<JoinRoomResMessage> {
-        public int[] roleTypeIDArray;
-        public int[] idArray;
+    public struct StartGameBroadMessage : IMessage<StartGameBroadMessage> {
+
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWritter.WriteArray<int>(dst, roleTypeIDArray, ref offset);
-            ByteWritter.WriteArray<int>(dst, idArray, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
-            roleTypeIDArray = ByteReader.ReadArray<int>(src, ref offset);
-            idArray = ByteReader.ReadArray<int>(src, ref offset);
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
-            int count = 4;
-            isCertain = false;
-            if (roleTypeIDArray != null) {
-                count += roleTypeIDArray.Length * 4;
-            }
-
-            if (idArray != null) {
-                count += idArray.Length * 4;
-            }
-
+            int count = 0;
+            isCertain = true;
             return count;
         }
 

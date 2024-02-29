@@ -73,7 +73,7 @@ namespace Ping.Server {
         }
 
         public void FixedTick(float dt) {
-             if (!isLoadedAssets || isTearDown) {
+            if (!isLoadedAssets || isTearDown) {
                 return;
             }
             GameBusiness.FixedTick(gameBusinessContext, dt);
