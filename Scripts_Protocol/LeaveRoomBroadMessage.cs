@@ -5,7 +5,6 @@ namespace Ping.Protocol {
 
     public struct LeaveRoomBroadMessage : IMessage<LeaveRoomBroadMessage> {
 
-
         public void WriteTo(byte[] dst, ref int offset) {
         }
 

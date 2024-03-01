@@ -6,31 +6,19 @@ namespace Ping.Protocol {
 
     public struct PaddleSyncBroadMessage : IMessage<PaddleSyncBroadMessage> {
 
-        public int[] paddleIds;
         public Vector2[] paddlePos;
 
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWriter.Write<int>(dst, paddleIds.Length, ref offset);
-            for (int i = 0; i < paddleIds.Length; i++) {
-                ByteWriter.Write<int>(dst, paddleIds[i], ref offset);
-                ByteWriter.Write<Vector2>(dst, paddlePos[i], ref offset);
-            }
+            ByteWriter.WriteArray<Vector2>(dst, paddlePos, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
-            int count = ByteReader.Read<int>(src, ref offset);
-            paddleIds = new int[count];
-            paddlePos = new Vector2[count];
-            for (int i = 0; i < count; i++) {
-                paddleIds[i] = ByteReader.Read<int>(src, ref offset);
-                paddlePos[i] = ByteReader.Read<Vector2>(src, ref offset);
-            }
+            paddlePos = ByteReader.ReadArray<Vector2>(src, ref offset);
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
             isCertain = false;
-            int count = ByteCounter.CountArray<int>(paddleIds)
-            + ByteCounter.CountArray<Vector2>(paddlePos);
+            int count = ByteCounter.CountArray<Vector2>(paddlePos);
             return count;
         }
 

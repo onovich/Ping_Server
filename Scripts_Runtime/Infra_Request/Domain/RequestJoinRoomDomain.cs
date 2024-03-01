@@ -30,7 +30,7 @@ namespace Ping.Server.Requests {
 
         // Send
         public static void Send_JoinRoomBroadRes(RequestInfraContext ctx) {
-            ctx.CliendState_ForEach((clientState) => {
+            ctx.CliendState_ForEachOrderly((clientState) => {
                 Send_JoinRoomRes(ctx, clientState);
             });
         }
@@ -40,11 +40,9 @@ namespace Ping.Server.Requests {
             var msg = new JoinRoomBroadMessage();
             msg.status = 1;
             msg.ownerIndex = clientState.playerIndex;
-            msg.playerIndexs = new byte[2];
             msg.userNames = new string[2];
-            ctx.CliendState_ForEach((clientState) => {
+            ctx.CliendState_ForEachOrderly((clientState) => {
                 var playerIndex = clientState.playerIndex;
-                msg.playerIndexs[playerIndex] = playerIndex;
                 msg.userNames[playerIndex] = clientState.userName;
             });
 

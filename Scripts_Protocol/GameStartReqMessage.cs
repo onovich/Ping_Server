@@ -5,19 +5,15 @@ namespace Ping.Protocol {
 
     public struct GameStartReqMessage : IMessage<GameStartReqMessage> {
 
-        public int playerIndex;
-
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWriter.Write<int>(dst, playerIndex, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
-            playerIndex = ByteReader.Read<int>(src, ref offset);
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
             isCertain = false;
-            int count = ByteCounter.Count<int>();
+            int count = 0;
             return count;
         }
 

@@ -30,8 +30,8 @@ namespace Ping.Server.Requests {
 
         // Send
         public static void Send_GameStartBroadRes(RequestInfraContext ctx) {
-            ctx.CliendState_ForEach((clientState) => {
-                ctx.CliendState_ForEach((clientState) => {
+            ctx.CliendState_ForEachOrderly((clientState) => {
+                ctx.CliendState_ForEachOrderly((clientState) => {
                     Send_GameStartRes(ctx, clientState);
                 });
             });

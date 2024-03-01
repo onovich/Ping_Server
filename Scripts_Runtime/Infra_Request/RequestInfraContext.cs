@@ -8,26 +8,31 @@ namespace Ping.Server.Requests {
         Socket listenfd;
         public Socket Listenfd => listenfd;
 
-        Dictionary<Socket, ClientStateEntity> clients = new Dictionary<Socket, ClientStateEntity>();
+        Dictionary<Socket, ClientStateEntity> clients;
+        SortedList<int, Socket> clientOrderList;
 
         RequestEventCenter eventCenter;
         public RequestEventCenter EventCenter => eventCenter;
 
         public RequestInfraContext() {
             eventCenter = new RequestEventCenter();
+            clientOrderList = new SortedList<int, Socket>();
+            clients = new Dictionary<Socket, ClientStateEntity>();
         }
 
         public void ClientState_Add(ClientStateEntity clientState) {
             clients.Add(clientState.clientfd, clientState);
+            clientOrderList.Add(clientState.playerIndex, clientState.clientfd);
         }
 
         public void ClientState_Remove(Socket clientfd) {
+            clientOrderList.Remove(clients[clientfd].playerIndex);
             clients.Remove(clientfd);
         }
 
-        public void CliendState_ForEach(Action<ClientStateEntity> action) {
-            foreach (var client in clients.Values) {
-                action.Invoke(client);
+        public void CliendState_ForEachOrderly(Action<ClientStateEntity> action) {
+            for (int i = 0; i < clientOrderList.Count; i++) {
+                action(clients[clientOrderList.Values[i]]);
             }
         }
 

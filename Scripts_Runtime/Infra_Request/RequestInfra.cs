@@ -33,7 +33,7 @@ namespace Ping.Server.Requests {
                 await RequestConnectDomain.AcceptConnectReqAsync(ctx);
             }
 
-            ctx.CliendState_ForEach((clientState) => {
+            ctx.CliendState_ForEachOrderly((clientState) => {
                 var data = new byte[4096];
                 int count = clientState.clientfd.Receive(data);
                 RequestJoinRoomDomain.On_JoinRoomReq(ctx, clientState, data);
