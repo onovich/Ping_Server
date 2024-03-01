@@ -51,13 +51,6 @@ namespace Ping.Server.Requests {
             await RequestConnectDomain.AcceptConnectReqAsync(ctx);
         }
 
-        // Send Res
-        public static void Send_JoinRoomRes(RequestInfraContext ctx, ClientStateEntity state, byte[] data) {
-        }
-
-        public static void Send_StartGameBroadRes(RequestInfraContext ctx, ClientStateEntity state, byte[] data) {
-        }
-
     }
 
 }
