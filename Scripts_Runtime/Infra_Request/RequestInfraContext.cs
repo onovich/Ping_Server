@@ -19,6 +19,9 @@ namespace Ping.Server.Requests {
         // Select
         public List<Socket> checkReadList;
 
+        // Buffer
+        public byte[] readBuff;
+
         // Service
         public IDService idService;
 
@@ -28,6 +31,7 @@ namespace Ping.Server.Requests {
             clients = new Dictionary<Socket, ClientStateEntity>();
             idService = new IDService();
             checkReadList = new List<Socket>();
+            readBuff = new byte[4096];
         }
 
         public void ClientState_Add(ClientStateEntity clientState) {
