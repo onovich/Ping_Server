@@ -31,6 +31,7 @@ namespace Ping.Server.Requests {
             }
             if (!listenfd.Poll(0, SelectMode.SelectRead)) {
                 await RequestConnectDomain.AcceptConnectReqAsync(ctx);
+                PLog.Log("AcceptConnectReqAsync");
             }
 
             ctx.CliendState_ForEachOrderly((clientState) => {
@@ -40,15 +41,6 @@ namespace Ping.Server.Requests {
                 RequestGameStartDomain.On_GameStartReq(ctx, clientState, data);
             });
 
-        }
-
-        public static void Tick_Game(RequestInfraContext ctx, float dt) {
-            return;
-        }
-
-        // Connect
-        public static async Task AcceptNewConnectAsync(RequestInfraContext ctx, ClientStateEntity state) {
-            await RequestConnectDomain.AcceptConnectReqAsync(ctx);
         }
 
     }

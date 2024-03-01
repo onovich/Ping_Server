@@ -9,23 +9,20 @@ namespace Ping.Server.Requests {
         // On
         public static void On_JoinRoomReq(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data) {
 
-            var msgID = data[0];
-            if (msgID != ProtocolIDConst.REQID_JOINROOM) {
-                return;
-            }
-
             int offset = 0;
-            var msg = new JoinRoomReqMessage();
-
-            ushort count = ByteReader.Read<ushort>(data, ref offset);
-            if (count <= 0) {
+            var msgID = ByteReader.Read<byte>(data, ref offset);
+            if (msgID != ProtocolIDConst.REQID_JOINROOM) {
+                PLog.Log("Message ID Is Not Match: " + msgID);
                 return;
             }
+
+            var msg = new JoinRoomReqMessage();
 
             msg.FromBytes(data, ref offset);
             var evt = ctx.EventCenter;
             evt.JoinRoom_On(msg, clientState);
 
+            PLog.Log("Message On_JoinRoomReq: " + msg.userName + " Is Join Ready");
         }
 
         // Send

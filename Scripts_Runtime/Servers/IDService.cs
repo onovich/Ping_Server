@@ -17,6 +17,10 @@ namespace Ping.Server {
             return playerIndexRecord++;
         }
 
+        public void Reset() {
+            playerIndexRecord = 0;
+        }
+
     }
 
 }

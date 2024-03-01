@@ -8,30 +8,30 @@ namespace Ping.Server {
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Log(string msg) {
-            Trace.WriteLine(msg);
+            Console.WriteLine(msg);
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LogWarning(string msg) {
-            Trace.WriteLine($"WARNING: {msg}");
+            Console.WriteLine($"WARNING: {msg}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LogError(string msg) {
-            Trace.TraceError(msg);
+            Console.WriteLine($"ERROR: {msg}");
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LogAssert(bool condition, string msg) {
             if (!condition) {
-                Trace.Fail(msg);
+                Console.WriteLine($"ASSERTION FAILED: {msg}");
             }
         }
 
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void LogAssertWithoutMsg(bool condition) {
             if (!condition) {
-                Trace.Fail("Assertion failed!");
+                Console.WriteLine("ASSERTION FAILED");
             }
         }
 

@@ -16,20 +16,24 @@ namespace Ping.Server.Requests {
             var clientfd = await listenfd.AcceptAsync();
             PLog.Log("New Client Connected");
 
-            ClientStateEntity state = new ClientStateEntity();
-            state.clientfd = clientfd;
+            ClientStateEntity clientState = new ClientStateEntity();
+            clientState.clientfd = clientfd;
 
-            ctx.ClientState_Add(state);
+            var id = ctx.ID_PickPlayerIndex();
+            clientState.playerIndex = id;
+
+            ctx.ClientState_Add(clientState);
 
             var evt = ctx.EventCenter;
-            evt.ConnectRes_On(clientfd);
+            evt.ConnectRes_On(clientState);
 
         }
 
-        public static async Task SendConnectResAsync(RequestInfraContext ctx, Socket clientfd) {
+        public static async Task SendConnectResAsync(RequestInfraContext ctx, ClientStateEntity clientState) {
 
             var msg = new ConnectResMessage();
             msg.status = 1;
+            msg.playerIndex = clientState.playerIndex;
             byte msgID = ProtocolIDConst.RESID_CONNECT;
 
             byte[] data = msg.ToBytes();
@@ -42,7 +46,9 @@ namespace Ping.Server.Requests {
             dst[offset] = msgID;
             offset += 1;
             Buffer.BlockCopy(data, 0, dst, offset, data.Length);
-            await clientfd.SendAsync(dst);
+            await clientState.clientfd.SendAsync(dst);
+
+            PLog.Log("SendConnectResAsync: " + clientState.playerIndex);
 
         }
 

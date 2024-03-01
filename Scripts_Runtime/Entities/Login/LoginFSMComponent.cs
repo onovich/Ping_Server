@@ -12,16 +12,19 @@ namespace Ping.Server {
         public void WaitForJoin_Enter() {
             status = LoginFSMStatus.WaitForJoin;
             waitForJoin_isEntering = true;
+            PLog.Log("LoginBusiness Enter WaitForJoin");
         }
 
         public void WaitForStart_Enter() {
             status = LoginFSMStatus.WaitForStart;
             waitForStart_isEntering = true;
+            PLog.Log("LoginBusiness Enter WaitForStart");
         }
 
         public void LoginDone_Enter() {
             status = LoginFSMStatus.LoginDone;
             loginDone_isEntering = true;
+            PLog.Log("LoginBusiness Enter LoginDone");
         }
 
     }

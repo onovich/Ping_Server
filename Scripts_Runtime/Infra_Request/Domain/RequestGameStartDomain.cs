@@ -9,18 +9,13 @@ namespace Ping.Server.Requests {
         // On
         public static void On_GameStartReq(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data) {
 
-            var msgID = data[0];
+            int offset = 0;
+            var msgID = ByteReader.Read<byte>(data, ref offset);
             if (msgID != ProtocolIDConst.REQID_STARTGAME) {
                 return;
             }
 
-            int offset = 0;
             var msg = new GameStartReqMessage();
-
-            ushort count = ByteReader.Read<ushort>(data, ref offset);
-            if (count <= 0) {
-                return;
-            }
 
             msg.FromBytes(data, ref offset);
             var evt = ctx.EventCenter;

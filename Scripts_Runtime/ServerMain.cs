@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Ping.Server.Business.Game;
 using Ping.Server.Business.Login;
+using Ping.Server.Requests;
 
 namespace Ping.Server {
 
@@ -11,9 +12,11 @@ namespace Ping.Server {
 
         TemplateInfraContext templateInfraContext;
         Physics2DInfraContext physics2DInfraContext;
+        RequestInfraContext requestInfraContext;
 
         LoginBusinessContext loginBusinessContext;
         GameBusinessContext gameBusinessContext;
+
 
         bool isLoadedAssets;
         bool isTearDown;
@@ -32,10 +35,12 @@ namespace Ping.Server {
 
             templateInfraContext = new TemplateInfraContext();
             physics2DInfraContext = new Physics2DInfraContext();
+            requestInfraContext = new RequestInfraContext();
 
             // Inject
             gameBusinessContext.templateInfraContext = templateInfraContext;
             gameBusinessContext.physics2DContext = physics2DInfraContext;
+            loginBusinessContext.reqInfraContext = requestInfraContext;
 
             Binding();
 
@@ -98,10 +103,10 @@ namespace Ping.Server {
 
         void Binding_Request() {
 
-            var evt = loginBusinessContext.reqContext.EventCenter;
+            var evt = loginBusinessContext.reqInfraContext.EventCenter;
 
-            evt.ConnectRer_OnHandle += (clientfd) => {
-                LoginBusiness.On_ConnectReq(loginBusinessContext, clientfd);
+            evt.ConnectRer_OnHandle += (clientState) => {
+                LoginBusiness.On_ConnectReq(loginBusinessContext, clientState);
             };
 
             evt.ConnectRes_OnErrorHandle += (msg) => {

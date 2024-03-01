@@ -5,19 +5,25 @@ namespace Ping.Server.Requests {
 
     public class RequestInfraContext {
 
+        // Socket
         Socket listenfd;
         public Socket Listenfd => listenfd;
 
         Dictionary<Socket, ClientStateEntity> clients;
         SortedList<int, Socket> clientOrderList;
 
+        // Event
         RequestEventCenter eventCenter;
         public RequestEventCenter EventCenter => eventCenter;
+
+        // Service
+        public IDService idService;
 
         public RequestInfraContext() {
             eventCenter = new RequestEventCenter();
             clientOrderList = new SortedList<int, Socket>();
             clients = new Dictionary<Socket, ClientStateEntity>();
+            idService = new IDService();
         }
 
         public void ClientState_Add(ClientStateEntity clientState) {
@@ -47,6 +53,15 @@ namespace Ping.Server.Requests {
 
         public void Listenfd_Set(Socket listenfd) {
             this.listenfd = listenfd;
+        }
+
+        // ID
+        public byte ID_PickPlayerIndex() {
+            return idService.PickPlayerIndex();
+        }
+
+        public void ID_Reset() {
+            idService.Reset();
         }
 
         public void Clear() {

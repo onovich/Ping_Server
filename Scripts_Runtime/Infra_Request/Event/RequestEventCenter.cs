@@ -7,9 +7,9 @@ namespace Ping.Server.Requests {
     public class RequestEventCenter {
 
         // Connect To Server Res
-        public Action<Socket> ConnectRer_OnHandle;
-        public void ConnectRes_On(Socket client) {
-            ConnectRer_OnHandle.Invoke(client);
+        public Action<ClientStateEntity> ConnectRer_OnHandle;
+        public void ConnectRes_On(ClientStateEntity clientState) {
+            ConnectRer_OnHandle.Invoke(clientState);
         }
 
         public Action<string> ConnectRes_OnErrorHandle;

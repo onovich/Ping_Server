@@ -9,6 +9,8 @@ namespace Ping.Server.Business.Login {
         public static void Enter(LoginBusinessContext ctx) {
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
             fsmCom.WaitForJoin_Enter();
+
+            RequestInfra.Bind(ctx.reqInfraContext);
         }
 
         public static void PreTickFSM(LoginBusinessContext ctx, float dt) {
@@ -42,16 +44,16 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            var client1 = ctx.reqContext.ClientState_GetByPlayerIndex(1);
-            var client2 = ctx.reqContext.ClientState_GetByPlayerIndex(2);
+            var client1 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(0);
+            var client2 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(1);
             if (client1 == null || client2 == null) {
-                PLog.LogError("Player1 or Player2 is null");
+                return;
             }
             if (!client1.isJoinReady || !client2.isJoinReady) {
                 return;
             }
 
-            RequestJoinRoomDomain.Send_JoinRoomBroadRes(ctx.reqContext);
+            RequestJoinRoomDomain.Send_JoinRoomBroadRes(ctx.reqInfraContext);
             fsmCom.WaitForStart_Enter();
         }
 
@@ -62,8 +64,8 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            var client1 = ctx.reqContext.ClientState_GetByPlayerIndex(1);
-            var client2 = ctx.reqContext.ClientState_GetByPlayerIndex(2);
+            var client1 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(0);
+            var client2 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(1);
             if (client1 == null || client2 == null) {
                 PLog.LogError("Player1 or Player2 is null");
             }
@@ -71,7 +73,7 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            RequestGameStartDomain.Send_GameStartBroadRes(ctx.reqContext);
+            RequestGameStartDomain.Send_GameStartBroadRes(ctx.reqInfraContext);
             fsmCom.LoginDone_Enter();
         }
 
@@ -86,7 +88,7 @@ namespace Ping.Server.Business.Login {
         }
 
         static void OnNetEvent(LoginBusinessContext ctx, float dt) {
-            RequestInfra.Tick_OnLogin(ctx.reqContext, dt);
+            RequestInfra.Tick_OnLogin(ctx.reqInfraContext, dt);
         }
 
         public static void Exit(LoginBusinessContext ctx) {
@@ -97,8 +99,8 @@ namespace Ping.Server.Business.Login {
         }
 
         // On Net Req
-        public static async void On_ConnectReq(LoginBusinessContext ctx, Socket clientfd) {
-            await RequestConnectDomain.SendConnectResAsync(ctx.reqContext, clientfd);
+        public static async void On_ConnectReq(LoginBusinessContext ctx, ClientStateEntity clientState) {
+            await RequestConnectDomain.SendConnectResAsync(ctx.reqInfraContext, clientState);
         }
 
         public static void On_ConnectResError(LoginBusinessContext ctx, string error) {
@@ -107,12 +109,10 @@ namespace Ping.Server.Business.Login {
 
         public static void On_JoinRoomReq(LoginBusinessContext ctx, JoinRoomReqMessage msg, ClientStateEntity clientState) {
             var userName = msg.userName;
-            var id = ctx.PickPlayerIndex();
-
             clientState.userName = userName;
-            clientState.playerIndex = id;
             clientState.isJoinReady = true;
             clientState.isStartReady = false;
+            PLog.Log("On_JoinRoomReq: " + userName + " Is Join Ready");
         }
 
         public static void On_GameStartReq(LoginBusinessContext ctx, GameStartReqMessage msg, ClientStateEntity clientState) {
