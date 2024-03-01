@@ -16,6 +16,9 @@ namespace Ping.Server.Requests {
         RequestEventCenter eventCenter;
         public RequestEventCenter EventCenter => eventCenter;
 
+        // Select
+        public List<Socket> checkReadList;
+
         // Service
         public IDService idService;
 
@@ -24,6 +27,7 @@ namespace Ping.Server.Requests {
             clientOrderList = new SortedList<int, Socket>();
             clients = new Dictionary<Socket, ClientStateEntity>();
             idService = new IDService();
+            checkReadList = new List<Socket>();
         }
 
         public void ClientState_Add(ClientStateEntity clientState) {
@@ -49,6 +53,10 @@ namespace Ping.Server.Requests {
                 }
             }
             return null;
+        }
+
+        public ClientStateEntity ClientState_GetBySocket(Socket clientfd) {
+            return clients[clientfd];
         }
 
         public void Listenfd_Set(Socket listenfd) {

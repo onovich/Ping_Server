@@ -33,8 +33,8 @@ namespace Ping.Server.Business.Login {
             }
         }
 
-        static void Tick_Any(LoginBusinessContext ctx, float dt) {
-            OnNetEvent(ctx, dt);
+        static async void Tick_Any(LoginBusinessContext ctx, float dt) {
+            await OnNetEvent(ctx, dt);
         }
 
         public static void Tick_WaitForJoin(LoginBusinessContext ctx, float dt) {
@@ -87,8 +87,8 @@ namespace Ping.Server.Business.Login {
             }
         }
 
-        static void OnNetEvent(LoginBusinessContext ctx, float dt) {
-            RequestInfra.Tick_OnLogin(ctx.reqInfraContext, dt);
+        static async Task OnNetEvent(LoginBusinessContext ctx, float dt) {
+            await RequestInfra.Tick_OnLogin(ctx.reqInfraContext, dt);
         }
 
         public static void Exit(LoginBusinessContext ctx) {
