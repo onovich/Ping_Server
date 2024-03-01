@@ -54,10 +54,10 @@ namespace Ping.Server.Business.Game {
 
         }
 
-        public static void Win(GameBusinessContext ctx, int playerID) {
+        public static void Win(GameBusinessContext ctx, int playerIndex) {
             var game = ctx.gameEntity;
             game.IncTurn();
-            var player = ctx.Player_Get(playerID);
+            var player = ctx.Player_Get(playerIndex);
             player.Score_Inc();
             // Send Res
         }

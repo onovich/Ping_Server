@@ -23,8 +23,8 @@ namespace Ping.Server.Business.Login {
         }
 
         // ID
-        public byte PickPlayerID() {
-            return idService.PickPlayerID();
+        public byte PickPlayerIndex() {
+            return idService.PickPlayerIndex();
         }
 
         public void Player_Clear() {

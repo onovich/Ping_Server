@@ -31,9 +31,9 @@ namespace Ping.Server.Requests {
             }
         }
 
-        public ClientStateEntity ClientState_GetByPlayerID(int playerID) {
+        public ClientStateEntity ClientState_GetByPlayerIndex(int playerIndex) {
             foreach (var client in clients.Values) {
-                if (client.playerID == playerID) {
+                if (client.playerIndex == playerIndex) {
                     return client;
                 }
             }

@@ -62,7 +62,7 @@ namespace Ping.Server.Business.Game {
             paddle.Inject();
 
             // Base Info
-            paddle.SetPlayerID(id);
+            paddle.SetPlayerIndex(id);
 
             // Set Attr
             paddle.Attr_SetMoveSpeed(config.paddleMoveSpeed);

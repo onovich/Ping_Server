@@ -47,8 +47,8 @@ namespace Ping.Server.Business.Game {
                 fsm.moving_isEntering = false;
             }
 
-            GameBallDomain.MoveAndApplyHit(ctx, ball, fixdt, (gatePlayerID) => {
-                fsm.EnterDead(gatePlayerID);
+            GameBallDomain.MoveAndApplyHit(ctx, ball, fixdt, (gatePlayerIndex) => {
+                fsm.EnterDead(gatePlayerIndex);
             });
 
         }
@@ -59,7 +59,7 @@ namespace Ping.Server.Business.Game {
                 fsm.dead_isEntering = false;
                 ball.Move_Stop();
                 ball.Pos_SetPos(Vector2.zero);
-                GameGameDomain.Win(ctx, fsm.dead_gatePlayerID);
+                GameGameDomain.Win(ctx, fsm.dead_gatePlayerIndex);
             }
             fsm.EnterIdle();
         }

@@ -9,7 +9,7 @@ namespace Ping.Server {
         // Base Info
         EntityType IEntity.EntityType => EntityType.Gate;
 
-        public int playerID;
+        public int playerIndex;
 
         // Physics
         AABB colliderBox;

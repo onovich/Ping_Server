@@ -3,7 +3,7 @@ namespace Ping.Server {
     public class LoginPlayerEntity {
 
         // Base Info
-        int playerID;
+        int playerIndex;
 
         // Net
         public string ethernetIP;
@@ -17,12 +17,12 @@ namespace Ping.Server {
             isReady = false;
         }
 
-        public void SetPlayerID(int id) {
-            playerID = id;
+        public void SetPlayerIndex(int id) {
+            playerIndex = id;
         }
 
-        public int GetPlayerID() {
-            return playerID;
+        public int GetPlayerIndex() {
+            return playerIndex;
         }
 
     }

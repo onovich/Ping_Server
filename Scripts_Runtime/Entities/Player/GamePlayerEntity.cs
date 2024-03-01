@@ -3,7 +3,7 @@ namespace Ping.Server {
     public class GamePlayerEntity {
 
         // Base Info
-        int playerID;
+        int playerIndex;
 
         // Score
         int score;
@@ -13,12 +13,12 @@ namespace Ping.Server {
         public string publicIP;
         public string token;
 
-        public void SetPlayerID(int id) {
-            playerID = id;
+        public void SetPlayerIndex(int id) {
+            playerIndex = id;
         }
 
-        public int GetPlayerID() {
-            return playerID;
+        public int GetPlayerIndex() {
+            return playerIndex;
         }
 
         // Score

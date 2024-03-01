@@ -39,8 +39,15 @@ namespace Ping.Server.Requests {
 
             var msg = new JoinRoomBroadMessage();
             msg.status = 1;
-            msg.playerID = clientState.playerID;
-            msg.userName = clientState.userName;
+            msg.ownerIndex = clientState.playerIndex;
+            msg.playerIndexs = new byte[2];
+            msg.userNames = new string[2];
+            ctx.CliendState_ForEach((clientState) => {
+                var playerIndex = clientState.playerIndex;
+                msg.playerIndexs[playerIndex] = playerIndex;
+                msg.userNames[playerIndex] = clientState.userName;
+            });
+
             byte msgID = ProtocolIDConst.BROADID_JOINROOM;
 
             byte[] data = msg.ToBytes();

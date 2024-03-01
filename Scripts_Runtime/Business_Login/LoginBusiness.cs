@@ -42,8 +42,8 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            var client1 = ctx.reqContext.ClientState_GetByPlayerID(1);
-            var client2 = ctx.reqContext.ClientState_GetByPlayerID(2);
+            var client1 = ctx.reqContext.ClientState_GetByPlayerIndex(1);
+            var client2 = ctx.reqContext.ClientState_GetByPlayerIndex(2);
             if (client1 == null || client2 == null) {
                 PLog.LogError("Player1 or Player2 is null");
             }
@@ -62,8 +62,8 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            var client1 = ctx.reqContext.ClientState_GetByPlayerID(1);
-            var client2 = ctx.reqContext.ClientState_GetByPlayerID(2);
+            var client1 = ctx.reqContext.ClientState_GetByPlayerIndex(1);
+            var client2 = ctx.reqContext.ClientState_GetByPlayerIndex(2);
             if (client1 == null || client2 == null) {
                 PLog.LogError("Player1 or Player2 is null");
             }
@@ -107,10 +107,10 @@ namespace Ping.Server.Business.Login {
 
         public static void On_JoinRoomReq(LoginBusinessContext ctx, JoinRoomReqMessage msg, ClientStateEntity clientState) {
             var userName = msg.userName;
-            var id = ctx.PickPlayerID();
+            var id = ctx.PickPlayerIndex();
 
             clientState.userName = userName;
-            clientState.playerID = id;
+            clientState.playerIndex = id;
             clientState.isJoinReady = true;
             clientState.isStartReady = false;
         }

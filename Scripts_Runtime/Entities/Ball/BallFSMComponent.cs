@@ -11,7 +11,7 @@ namespace Ping.Server {
         public bool moving_isEntering;
 
         public bool dead_isEntering;
-        public int dead_gatePlayerID;
+        public int dead_gatePlayerIndex;
 
         public Vector2 movingDir;
 
@@ -28,10 +28,10 @@ namespace Ping.Server {
             this.movingDir = movingDir;
         }
 
-        public void EnterDead(int gatePlayerID) {
+        public void EnterDead(int gatePlayerIndex) {
             status = BallFSMStatus.Dead;
             dead_isEntering = true;
-            dead_gatePlayerID = gatePlayerID;
+            dead_gatePlayerIndex = gatePlayerIndex;
         }
 
     }

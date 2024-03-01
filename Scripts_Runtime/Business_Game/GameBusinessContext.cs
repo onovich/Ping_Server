@@ -35,16 +35,16 @@ namespace Ping.Server.Business.Game {
         }
 
         // Player
-        public void Player_Set(GamePlayerEntity playerEntity, int playerID) {
-            if (playerID == 1) {
+        public void Player_Set(GamePlayerEntity playerEntity, int playerIndex) {
+            if (playerIndex == 1) {
                 player1Entity = playerEntity;
             } else {
                 player2Entity = playerEntity;
             }
         }
 
-        public GamePlayerEntity Player_Get(int playerID) {
-            if (playerID == 1) {
+        public GamePlayerEntity Player_Get(int playerIndex) {
+            if (playerIndex == 1) {
                 return player1Entity;
             } else {
                 return player2Entity;
@@ -67,7 +67,7 @@ namespace Ping.Server.Business.Game {
 
         // Paddle
         public void Paddle_Set(PaddleEntity paddleEntity) {
-            if (paddleEntity.GetPlayerID() == 1) {
+            if (paddleEntity.GetPlayerIndex() == 1) {
                 player1PaddleEntity = paddleEntity;
             } else {
                 player2PaddleEntity = paddleEntity;
@@ -75,15 +75,15 @@ namespace Ping.Server.Business.Game {
         }
 
         public void Paddle_Clear(PaddleEntity paddleEntity) {
-            if (paddleEntity.GetPlayerID() == 1) {
+            if (paddleEntity.GetPlayerIndex() == 1) {
                 player1PaddleEntity = null;
             } else {
                 player2PaddleEntity = null;
             }
         }
 
-        public PaddleEntity Paddle_Get(int playerID) {
-            if (playerID == 1) {
+        public PaddleEntity Paddle_Get(int playerIndex) {
+            if (playerIndex == 1) {
                 return player1PaddleEntity;
             } else {
                 return player2PaddleEntity;
