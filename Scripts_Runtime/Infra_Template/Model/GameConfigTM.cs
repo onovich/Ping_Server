@@ -24,17 +24,17 @@ namespace Ping.Server {
 
         public void WriteTo(byte[] dst, ref int offset) {
 
-            ByteWritter.Write<Vector2>(dst, fieldBoundMax, ref offset);
-            ByteWritter.Write<Vector2>(dst, fieldBoundMin, ref offset);
-            ByteWritter.Write<Vector2>(dst, player1PaddleSpawnPos, ref offset);
-            ByteWritter.Write<Vector2>(dst, player2PaddleSpawnPos, ref offset);
-            ByteWritter.Write<float>(dst, ballMoveSpeed, ref offset);
-            ByteWritter.Write<float>(dst, ballMoveSpeedMax, ref offset);
-            ByteWritter.Write<float>(dst, ballRadius, ref offset);
-            ByteWritter.Write<float>(dst, ballSpawnAngleRange, ref offset);
-            ByteWritter.Write<float>(dst, paddleMoveSpeed, ref offset);
-            ByteWritter.Write<float>(dst, paddleMoveSpeedMax, ref offset);
-            ByteWritter.Write<Vector2>(dst, paddleSize, ref offset);
+            ByteWriter.Write<Vector2>(dst, fieldBoundMax, ref offset);
+            ByteWriter.Write<Vector2>(dst, fieldBoundMin, ref offset);
+            ByteWriter.Write<Vector2>(dst, player1PaddleSpawnPos, ref offset);
+            ByteWriter.Write<Vector2>(dst, player2PaddleSpawnPos, ref offset);
+            ByteWriter.Write<float>(dst, ballMoveSpeed, ref offset);
+            ByteWriter.Write<float>(dst, ballMoveSpeedMax, ref offset);
+            ByteWriter.Write<float>(dst, ballRadius, ref offset);
+            ByteWriter.Write<float>(dst, ballSpawnAngleRange, ref offset);
+            ByteWriter.Write<float>(dst, paddleMoveSpeed, ref offset);
+            ByteWriter.Write<float>(dst, paddleMoveSpeedMax, ref offset);
+            ByteWriter.Write<Vector2>(dst, paddleSize, ref offset);
 
         }
 
