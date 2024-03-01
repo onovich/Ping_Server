@@ -61,7 +61,7 @@ namespace Ping.Server {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
-            LoginBusiness.PreTick(loginBusinessContext, dt);
+            LoginBusiness.PreTickFSM(loginBusinessContext, dt);
             GameBusiness.PreTick(gameBusinessContext, dt);
         }
 
@@ -93,6 +93,29 @@ namespace Ping.Server {
         }
 
         void Binding() {
+            Binding_Request();
+        }
+
+        void Binding_Request() {
+
+            var evt = loginBusinessContext.reqContext.EventCenter;
+
+            evt.ConnectRer_OnHandle += (clientfd) => {
+                LoginBusiness.On_ConnectReq(loginBusinessContext, clientfd);
+            };
+
+            evt.ConnectRes_OnErrorHandle += (msg) => {
+                LoginBusiness.On_ConnectResError(loginBusinessContext, msg);
+            };
+
+            evt.JoinRoom_OnHandle += (msg, clientState) => {
+                LoginBusiness.On_JoinRoomReq(loginBusinessContext, msg, clientState);
+            };
+
+            evt.StartGame_OnHandle += (msg, clientState) => {
+                LoginBusiness.On_GameStartReq(loginBusinessContext, msg, clientState);
+            };
+
         }
 
         async Task LoadAssets() {

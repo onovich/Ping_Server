@@ -7,9 +7,9 @@ namespace Ping.Server.Requests {
     public class RequestEventCenter {
 
         // Connect To Server Res
-        public Action<ConnectResMessage> ConnectRes_OnHandle;
-        public void ConnectRes_On(ConnectResMessage msg) {
-            ConnectRes_OnHandle.Invoke(msg);
+        public Action<Socket> ConnectRer_OnHandle;
+        public void ConnectRes_On(Socket client) {
+            ConnectRer_OnHandle.Invoke(client);
         }
 
         public Action<string> ConnectRes_OnErrorHandle;
@@ -17,23 +17,23 @@ namespace Ping.Server.Requests {
             ConnectRes_OnErrorHandle.Invoke(msg);
         }
 
-        // Join Room Res
-        public Action<JoinRoomResMessage> JoinRoom_OnHandle;
-        public void JoinRoom_On(JoinRoomResMessage msg) {
-            JoinRoom_OnHandle.Invoke(msg);
+        // Join Room Req
+        public Action<JoinRoomReqMessage, ClientStateEntity> JoinRoom_OnHandle;
+        public void JoinRoom_On(JoinRoomReqMessage msg, ClientStateEntity clientState) {
+            JoinRoom_OnHandle.Invoke(msg, clientState);
         }
 
-        // Room Start Game Broad
-        public Action<GameStartBroadMessage> RoomStartGame_OnBroadHandle;
-        public void RoomStartGame_OnBroad(GameStartBroadMessage msg) {
-            RoomStartGame_OnBroadHandle.Invoke(msg);
+        // Game Start Broad
+        public Action<GameStartReqMessage, ClientStateEntity> StartGame_OnHandle;
+        public void StartGame_On(GameStartReqMessage msg, ClientStateEntity clientState) {
+            StartGame_OnHandle.Invoke(msg, clientState);
         }
 
         public void Clear() {
-            ConnectRes_OnHandle = null;
+            ConnectRer_OnHandle = null;
             ConnectRes_OnErrorHandle = null;
             JoinRoom_OnHandle = null;
-            RoomStartGame_OnBroadHandle = null;
+            StartGame_OnHandle = null;
         }
 
     }

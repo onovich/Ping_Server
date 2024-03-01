@@ -4,18 +4,18 @@ using Ping.Protocol;
 
 namespace Ping.Server.Requests {
 
-    public static class RequestJoinRoomDomain {
+    public static class RequestGameStartDomain {
 
         // On
-        public static void On_JoinRoomReq(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data) {
+        public static void On_GameStartReq(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data) {
 
             var msgID = data[0];
-            if (msgID != ProtocolIDConst.REQID_JOINROOM) {
+            if (msgID != ProtocolIDConst.REQID_STARTGAME) {
                 return;
             }
 
             int offset = 0;
-            var msg = new JoinRoomReqMessage();
+            var msg = new GameStartReqMessage();
 
             ushort count = ByteReader.Read<ushort>(data, ref offset);
             if (count <= 0) {
@@ -24,24 +24,23 @@ namespace Ping.Server.Requests {
 
             msg.FromBytes(data, ref offset);
             var evt = ctx.EventCenter;
-            evt.JoinRoom_On(msg, clientState);
+            evt.StartGame_OnHandle(msg, clientState);
 
         }
 
         // Send
-        public static void Send_JoinRoomBroadRes(RequestInfraContext ctx) {
+        public static void Send_GameStartBroadRes(RequestInfraContext ctx) {
             ctx.CliendState_ForEach((clientState) => {
-                Send_JoinRoomRes(ctx, clientState);
+                ctx.CliendState_ForEach((clientState) => {
+                    Send_GameStartRes(ctx, clientState);
+                });
             });
         }
 
-        static async void Send_JoinRoomRes(RequestInfraContext ctx, ClientStateEntity clientState) {
+        static async void Send_GameStartRes(RequestInfraContext ctx, ClientStateEntity state) {
 
-            var msg = new JoinRoomBroadMessage();
-            msg.status = 1;
-            msg.playerID = clientState.playerID;
-            msg.userName = clientState.userName;
-            byte msgID = ProtocolIDConst.BROADID_JOINROOM;
+            var msg = new GameStartBroadMessage();
+            byte msgID = ProtocolIDConst.BROADID_STARTGAME;
 
             byte[] data = msg.ToBytes();
             if (data.Length >= 4096 - 2) {
@@ -53,7 +52,7 @@ namespace Ping.Server.Requests {
             dst[offset] = msgID;
             offset += 1;
             Buffer.BlockCopy(data, 0, dst, offset, data.Length);
-            var client = clientState.clientfd;
+            var client = state.clientfd;
             await client.SendAsync(dst);
 
         }

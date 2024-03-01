@@ -1,6 +1,7 @@
 using System.Net;
 using System.Net.Sockets;
 using MortiseFrame.LitIO;
+using Ping.Protocol;
 
 namespace Ping.Server.Requests {
 
@@ -23,32 +24,22 @@ namespace Ping.Server.Requests {
             }
         }
 
-        public static void Tick_Login(RequestInfraContext ctx, float dt) {
+        public static async void Tick_OnLogin(RequestInfraContext ctx, float dt) {
             var listenfd = ctx.Listenfd;
             if (listenfd == null) {
                 return;
             }
             if (!listenfd.Poll(0, SelectMode.SelectRead)) {
-                AcceptAndBakeListenfd(ctx);
+                await RequestConnectDomain.AcceptConnectReqAsync(ctx);
             }
 
-            ctx.Cliendfds_ForEach((client) => {
+            ctx.CliendState_ForEach((clientState) => {
                 var data = new byte[4096];
-                int count = client.clientfd.Receive(data);
-                On_JoinRoomReq(ctx, client, data);
+                int count = clientState.clientfd.Receive(data);
+                RequestJoinRoomDomain.On_JoinRoomReq(ctx, clientState, data);
+                RequestGameStartDomain.On_GameStartReq(ctx, clientState, data);
             });
 
-        }
-
-        static async void AcceptAndBakeListenfd(RequestInfraContext ctx) {
-            var listenfd = ctx.Listenfd;
-            var clientfd = listenfd.Accept();
-            PLog.Log("New Client Connected");
-            ClientState state = new ClientState();
-            state.clientfd = clientfd;
-            ctx.Clientfd_Add(clientfd, state);
-            await AcceptNewConnectAsync(ctx, state);
-            await Send_ConnectResAsync(ctx, state);
         }
 
         public static void Tick_Game(RequestInfraContext ctx, float dt) {
@@ -56,23 +47,15 @@ namespace Ping.Server.Requests {
         }
 
         // Connect
-        public static async Task AcceptNewConnectAsync(RequestInfraContext ctx, ClientState state) {
-            await RequestConnectDomain.AcceptConnectReq(ctx);
+        public static async Task AcceptNewConnectAsync(RequestInfraContext ctx, ClientStateEntity state) {
+            await RequestConnectDomain.AcceptConnectReqAsync(ctx);
         }
 
         // Send Res
-        public static async Task Send_ConnectResAsync(RequestInfraContext ctx, ClientState state) {
-            await RequestConnectDomain.SendConnectResAsync(ctx, state.clientfd);
+        public static void Send_JoinRoomRes(RequestInfraContext ctx, ClientStateEntity state, byte[] data) {
         }
 
-        public static void Send_JoinRoomRes(RequestInfraContext ctx, ClientState state, byte[] data) {
-        }
-
-        public static void Send_StartGameBroadRes(RequestInfraContext ctx, ClientState state, byte[] data) {
-        }
-
-        // On Req
-        public static void On_JoinRoomReq(RequestInfraContext ctx, ClientState state, byte[] data) {
+        public static void Send_StartGameBroadRes(RequestInfraContext ctx, ClientStateEntity state, byte[] data) {
         }
 
     }

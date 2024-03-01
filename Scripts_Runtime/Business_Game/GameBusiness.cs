@@ -30,9 +30,6 @@ namespace Ping.Server.Business.Game {
         }
 
         public static void OnNetEvent(GameBusinessContext ctx, float dt) {
-            // Receive
-
-            // On
 
         }
 

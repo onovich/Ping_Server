@@ -6,8 +6,8 @@ namespace Ping.Server.Business.Game {
 
         // Entity
         public GameEntity gameEntity;
-        public PlayerEntity player1Entity;
-        public PlayerEntity player2Entity;
+        public GamePlayerEntity player1Entity;
+        public GamePlayerEntity player2Entity;
 
         public FieldEntity fieldEntity;
         public BallEntity ballEntity;
@@ -35,7 +35,7 @@ namespace Ping.Server.Business.Game {
         }
 
         // Player
-        public void Player_Set(PlayerEntity playerEntity, int playerID) {
+        public void Player_Set(GamePlayerEntity playerEntity, int playerID) {
             if (playerID == 1) {
                 player1Entity = playerEntity;
             } else {
@@ -43,7 +43,7 @@ namespace Ping.Server.Business.Game {
             }
         }
 
-        public PlayerEntity Player_Get(int playerID) {
+        public GamePlayerEntity Player_Get(int playerID) {
             if (playerID == 1) {
                 return player1Entity;
             } else {

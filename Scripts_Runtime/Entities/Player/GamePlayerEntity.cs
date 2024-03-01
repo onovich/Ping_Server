@@ -1,6 +1,6 @@
 namespace Ping.Server {
 
-    public class PlayerEntity {
+    public class GamePlayerEntity {
 
         // Base Info
         int playerID;

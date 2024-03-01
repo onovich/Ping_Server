@@ -10,16 +10,19 @@ namespace Ping.Server.Requests {
     public static class RequestConnectDomain {
 
         // Send
-        public static async Task AcceptConnectReq(RequestInfraContext ctx) {
+        public static async Task AcceptConnectReqAsync(RequestInfraContext ctx) {
 
             var listenfd = ctx.Listenfd;
             var clientfd = await listenfd.AcceptAsync();
             PLog.Log("New Client Connected");
 
-            ClientState state = new ClientState();
+            ClientStateEntity state = new ClientStateEntity();
             state.clientfd = clientfd;
 
-            ctx.Clientfd_Add(clientfd, state);
+            ctx.ClientState_Add(state);
+
+            var evt = ctx.EventCenter;
+            evt.ConnectRes_On(clientfd);
 
         }
 

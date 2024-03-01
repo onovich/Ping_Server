@@ -5,7 +5,10 @@ namespace Ping.Server.Business.Login {
     public class LoginBusinessContext {
 
         // Entity
-        public PlayerEntity playerEntity;
+        public LoginEntity loginEntity;
+
+        // Service
+        public IDService idService;
 
         // Event
         public LoginEventCenter evt;
@@ -14,20 +17,17 @@ namespace Ping.Server.Business.Login {
         public RequestInfraContext reqContext;
 
         public LoginBusinessContext() {
+            loginEntity = new LoginEntity();
+            idService = new IDService();
             evt = new LoginEventCenter();
         }
 
-        // Player
-        public void Player_Set(PlayerEntity playerEntity) {
-            this.playerEntity = playerEntity;
-        }
-
-        public PlayerEntity Player_Get() {
-            return playerEntity;
+        // ID
+        public byte PickPlayerID() {
+            return idService.PickPlayerID();
         }
 
         public void Player_Clear() {
-            playerEntity = null;
         }
 
     }

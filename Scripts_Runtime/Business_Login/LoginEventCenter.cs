@@ -16,9 +16,15 @@ namespace Ping.Server.Business.Login {
             OnCancleWaitingHandle.Invoke();
         }
 
+        public Action OnLoginDoneHandle;
+        public void LoginDone() {
+            OnLoginDoneHandle.Invoke();
+        }
+
         public void Clear() {
             OnLoginHandle = null;
             OnCancleWaitingHandle = null;
+            OnLoginDoneHandle = null;
         }
 
     }
