@@ -35,11 +35,11 @@ namespace Ping.Server.Requests {
                 if (s == ctx.Listenfd) {
                     await RequestConnectDomain.AcceptConnectReqAsync(ctx);
                 } else {
-                    byte[] data = new byte[4096];
-                    int count = s.Receive(data);
+                    byte[] buff = ctx.readBuff;
+                    int count = s.Receive(buff);
                     var clientState = ctx.ClientState_GetBySocket(s);
-                    RequestJoinRoomDomain.On_JoinRoomReq(ctx, clientState, data);
-                    RequestGameStartDomain.On_GameStartReq(ctx, clientState, data);
+                    RequestJoinRoomDomain.On_JoinRoomReq(ctx, clientState, buff);
+                    RequestGameStartDomain.On_GameStartReq(ctx, clientState, buff);
                 }
             }
         }
