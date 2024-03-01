@@ -8,7 +8,7 @@ namespace Ping.Protocol {
         public sbyte status; // 1 为成功, -1 为失败
 
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWritter.Write<sbyte>(dst, status, ref offset);
+            ByteWriter.Write<sbyte>(dst, status, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
@@ -16,7 +16,7 @@ namespace Ping.Protocol {
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
-            int count = 1;
+            int count = ByteCounter.Count<sbyte>();
             isCertain = true;
             return count;
         }

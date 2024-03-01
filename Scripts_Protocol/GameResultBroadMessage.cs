@@ -10,9 +10,9 @@ namespace Ping.Protocol {
         int[] scores;
 
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWritter.Write<int>(dst, winnerId, ref offset);
-            ByteWritter.Write<int>(dst, gameTurn, ref offset);
-            ByteWritter.WriteArray<int>(dst, scores, ref offset);
+            ByteWriter.Write<int>(dst, winnerId, ref offset);
+            ByteWriter.Write<int>(dst, gameTurn, ref offset);
+            ByteWriter.WriteArray<int>(dst, scores, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
@@ -22,11 +22,10 @@ namespace Ping.Protocol {
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
-            int count = 12;
             isCertain = false;
-            if (scores != null) {
-                count += scores.Length * 4;
-            }
+            int count = ByteCounter.Count<int>()
+            + ByteCounter.Count<int>()
+            + ByteCounter.CountArray<int>(scores);
             return count;
         }
 

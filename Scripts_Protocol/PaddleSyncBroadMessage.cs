@@ -10,10 +10,10 @@ namespace Ping.Protocol {
         public Vector2[] paddlePos;
 
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWritter.Write<int>(dst, paddleIds.Length, ref offset);
+            ByteWriter.Write<int>(dst, paddleIds.Length, ref offset);
             for (int i = 0; i < paddleIds.Length; i++) {
-                ByteWritter.Write<int>(dst, paddleIds[i], ref offset);
-                ByteWritter.Write<Vector2>(dst, paddlePos[i], ref offset);
+                ByteWriter.Write<int>(dst, paddleIds[i], ref offset);
+                ByteWriter.Write<Vector2>(dst, paddlePos[i], ref offset);
             }
         }
 
@@ -28,14 +28,9 @@ namespace Ping.Protocol {
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
-            int count = 8;
             isCertain = false;
-            if (paddleIds != null) {
-                count += paddleIds.Length * 4;
-            }
-            if (paddlePos != null) {
-                count += paddlePos.Length * 8;
-            }
+            int count = ByteCounter.CountArray<int>(paddleIds)
+            + ByteCounter.CountArray<Vector2>(paddlePos);
             return count;
         }
 

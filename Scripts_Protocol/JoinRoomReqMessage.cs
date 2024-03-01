@@ -8,19 +8,16 @@ namespace Ping.Protocol {
         public string userName;
 
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWritter.WriteString(dst, userName, ref offset);
+            ByteWriter.WriteUTF8String(dst, userName, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
-            userName = ByteReader.ReadString(src, ref offset);
+            userName = ByteReader.ReadUTF8String(src, ref offset);
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
-            int count = 4;
             isCertain = false;
-            if (userName != null) {
-                count += userName.Length * 4;
-            }
+            int count = ByteCounter.CountUTF8String(userName);
             return count;
         }
 
