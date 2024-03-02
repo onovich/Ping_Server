@@ -99,6 +99,16 @@ namespace Ping.Server {
 
         void Binding() {
             Binding_Request();
+            Binding_Login();
+        }
+
+        void Binding_Login() {
+
+            var evt = loginBusinessContext.evt;
+
+            evt.OnLoginDoneHandle += () => {
+                PLog.Log("Login Done");
+            };
         }
 
         void Binding_Request() {
