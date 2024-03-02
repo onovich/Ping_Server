@@ -6,8 +6,6 @@ namespace Ping.Server.Business.Game {
 
         // Entity
         public GameEntity gameEntity;
-        public GamePlayerEntity player1Entity;
-        public GamePlayerEntity player2Entity;
 
         public FieldEntity fieldEntity;
         public BallEntity ballEntity;
@@ -22,6 +20,9 @@ namespace Ping.Server.Business.Game {
         public TemplateInfraContext templateInfraContext;
         public Physics2DInfraContext physics2DContext;
 
+        // Main
+        public MainContext mainContext;
+
         public GameBusinessContext() {
             gameEntity = new GameEntity();
             raycastTemp = new RaycastHit2D[1000];
@@ -35,25 +36,8 @@ namespace Ping.Server.Business.Game {
         }
 
         // Player
-        public void Player_Set(GamePlayerEntity playerEntity, int playerIndex) {
-            if (playerIndex == 1) {
-                player1Entity = playerEntity;
-            } else {
-                player2Entity = playerEntity;
-            }
-        }
-
-        public GamePlayerEntity Player_Get(int playerIndex) {
-            if (playerIndex == 1) {
-                return player1Entity;
-            } else {
-                return player2Entity;
-            }
-        }
-
-        public void Player_Clear() {
-            player1Entity = null;
-            player2Entity = null;
+        public PlayerEntity Player_Get(int playerIndex) {
+            return mainContext.Player_Get(playerIndex);
         }
 
         // Ball

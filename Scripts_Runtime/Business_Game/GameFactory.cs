@@ -52,7 +52,7 @@ namespace Ping.Server.Business.Game {
         // Paddle
         public static PaddleEntity Paddle_Spawn(TemplateInfraContext templateInfraContext,
                                                 Physics2DInfraContext physics2DInfraContext,
-                                                int id,
+                                                int playerIndex,
                                                 Vector2 pos) {
 
             var config = templateInfraContext.Config_Get();
@@ -62,7 +62,7 @@ namespace Ping.Server.Business.Game {
             paddle.Inject();
 
             // Base Info
-            paddle.SetPlayerIndex(id);
+            paddle.SetPlayerIndex(playerIndex);
 
             // Set Attr
             paddle.Attr_SetMoveSpeed(config.paddleMoveSpeed);

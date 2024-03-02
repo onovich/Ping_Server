@@ -1,24 +1,30 @@
 namespace Ping.Server {
 
-    public class GamePlayerEntity {
+    public class PlayerEntity {
 
         // Base Info
         int playerIndex;
+        string userName;
 
         // Score
         int score;
 
-        // Net
-        public string ethernetIP;
-        public string publicIP;
-        public string token;
-
+        // Index
         public void SetPlayerIndex(int id) {
             playerIndex = id;
         }
 
         public int GetPlayerIndex() {
             return playerIndex;
+        }
+
+        // Name
+        public void SetUserName(string name) {
+            userName = name;
+        }
+
+        public string GetUserName() {
+            return userName;
         }
 
         // Score

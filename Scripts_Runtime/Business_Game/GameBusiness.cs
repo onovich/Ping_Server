@@ -78,6 +78,10 @@ namespace Ping.Server.Business.Game {
 
         }
 
+        public static void OnLoginDone(GameBusinessContext ctx) {
+            StartGame(ctx);
+        }
+
         public static void TearDown(GameBusinessContext ctx) {
             ExitGame(ctx);
         }

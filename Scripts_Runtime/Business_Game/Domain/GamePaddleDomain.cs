@@ -4,8 +4,8 @@ namespace Ping.Server.Business.Game {
 
     public static class GamePaddleDomain {
 
-        public static PaddleEntity Spawn(GameBusinessContext ctx, int id, Vector2 pos) {
-            var Paddle = GameFactory.Paddle_Spawn(ctx.templateInfraContext, ctx.physics2DContext, id, pos);
+        public static PaddleEntity Spawn(GameBusinessContext ctx, int playerIndex, Vector2 pos) {
+            var Paddle = GameFactory.Paddle_Spawn(ctx.templateInfraContext, ctx.physics2DContext, playerIndex, pos);
             ctx.Paddle_Set(Paddle);
             return Paddle;
         }

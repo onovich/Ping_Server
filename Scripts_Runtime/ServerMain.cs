@@ -17,6 +17,7 @@ namespace Ping.Server {
         LoginBusinessContext loginBusinessContext;
         GameBusinessContext gameBusinessContext;
 
+        MainContext mainContext;
 
         bool isLoadedAssets;
         bool isTearDown;
@@ -37,10 +38,15 @@ namespace Ping.Server {
             physics2DInfraContext = new Physics2DInfraContext();
             requestInfraContext = new RequestInfraContext();
 
+            mainContext = new MainContext();
+
             // Inject
             gameBusinessContext.templateInfraContext = templateInfraContext;
             gameBusinessContext.physics2DContext = physics2DInfraContext;
+            gameBusinessContext.mainContext = mainContext;
+
             loginBusinessContext.reqInfraContext = requestInfraContext;
+            loginBusinessContext.mainContext = mainContext;
 
             Binding();
 
@@ -98,7 +104,7 @@ namespace Ping.Server {
         }
 
         void Binding() {
-            Binding_Request();
+            Binding_Request_Login();
             Binding_Login();
         }
 
@@ -107,11 +113,11 @@ namespace Ping.Server {
             var evt = loginBusinessContext.evt;
 
             evt.OnLoginDoneHandle += () => {
-                PLog.Log("Login Done");
+                GameBusiness.OnLoginDone(gameBusinessContext);
             };
         }
 
-        void Binding_Request() {
+        void Binding_Request_Login() {
 
             var evt = loginBusinessContext.reqInfraContext.EventCenter;
 
