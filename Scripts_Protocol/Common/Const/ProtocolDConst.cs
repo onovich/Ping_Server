@@ -20,7 +20,7 @@ namespace Ping.Protocol {
         public const byte BROADID_LEAVEROOM = 003;
         public const byte BROADID_STARTGAME = 004;
         public const byte BROADID_HEARTBEAT = 005;
-        public const byte BROADID_PADDLESYNC = 006;
+        public const byte BROADID_ENTITIESSYNC = 006;
         public const byte BROADID_BALLMOVE = 007;
 
     }
