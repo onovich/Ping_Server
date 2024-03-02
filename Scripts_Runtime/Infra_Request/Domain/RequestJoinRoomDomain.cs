@@ -12,7 +12,6 @@ namespace Ping.Server.Requests {
             int offset = 0;
             var msgID = ByteReader.Read<byte>(data, ref offset);
             if (msgID != ProtocolIDConst.REQID_JOINROOM) {
-                PLog.Log("Message ID Is Not Match: " + msgID);
                 return;
             }
 
