@@ -95,8 +95,7 @@ namespace Ping.Server {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
-            await LoginBusiness.OnNetEvent(loginBusinessContext, dt);
-            await GameBusiness.OnNetEvent(gameBusinessContext, dt);
+            await RequestInfra.Tick_On(requestInfraContext, dt);
         }
 
         void Init() {

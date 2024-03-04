@@ -82,10 +82,6 @@ namespace Ping.Server.Business.Login {
             }
         }
 
-        public static async Task OnNetEvent(LoginBusinessContext ctx, float dt) {
-            await RequestInfra.Tick_OnLogin(ctx.reqInfraContext, dt);
-        }
-
         public static void Exit(LoginBusinessContext ctx) {
         }
 

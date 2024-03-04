@@ -52,7 +52,6 @@ namespace Ping.Server {
         // Pos
         public void Pos_SetPos(Vector2 pos) {
             transform.position = pos;
-            PLog.Log($"PaddleEntity.Pos_SetPos: {pos}");
         }
 
         public Vector2 Pos_GetPos() {

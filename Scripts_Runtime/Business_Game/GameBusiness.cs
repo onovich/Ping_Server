@@ -29,10 +29,6 @@ namespace Ping.Server.Business.Game {
             }
         }
 
-        public static async Task OnNetEvent(GameBusinessContext ctx, float dt) {
-            await RequestInfra.Tick_OnGaming(ctx.reqInfraContext, dt);
-        }
-
         public static void PreTick(GameBusinessContext ctx, float dt) { }
 
         public static void FixedTick(GameBusinessContext ctx, float dt) {
