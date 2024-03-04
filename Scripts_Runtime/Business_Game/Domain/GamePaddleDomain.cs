@@ -7,18 +7,19 @@ namespace Ping.Server.Business.Game {
         public static PaddleEntity Spawn(GameBusinessContext ctx, int playerIndex, Vector2 pos) {
             var Paddle = GameFactory.Paddle_Spawn(ctx.templateInfraContext, ctx.physics2DContext, playerIndex, pos);
             ctx.Paddle_Set(Paddle);
+            PLog.Log("GamePaddleDomain.Spawn: PlayerIndex " + playerIndex + " pos " + pos);
             return Paddle;
         }
 
         public static void UnSpawn(GameBusinessContext ctx, PaddleEntity paddle) {
-            ctx.Paddle_Clear(paddle);
+            ctx.Paddle_Remove(paddle);
             paddle.TearDown();
         }
 
         public static void ApplyMove(GameBusinessContext ctx, PaddleEntity paddle, float fixdt) {
             var field = ctx.fieldEntity;
             var constrain = field.GetBound();
-            paddle.Move_Move(fixdt, constrain);
+            paddle.Move_MoveByInput(fixdt, constrain);
         }
 
     }

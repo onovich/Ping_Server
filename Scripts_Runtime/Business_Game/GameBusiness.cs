@@ -19,13 +19,18 @@ namespace Ping.Server.Business.Game {
         }
 
         public static void ResetInput(GameBusinessContext ctx) {
+            var game = ctx.gameEntity;
+            var fsm = game.FSM_GetComponent();
+            var status = fsm.status;
+            if (status != GameFSMStatus.Gaming) { return; }
+
+            var paddle0 = ctx.Paddle_Get(0);
+            if (paddle0 != null) {
+                GameInputDomain.Paddle_ResetInput(ctx, paddle0);
+            }
             var paddle1 = ctx.Paddle_Get(1);
             if (paddle1 != null) {
                 GameInputDomain.Paddle_ResetInput(ctx, paddle1);
-            }
-            var paddle2 = ctx.Paddle_Get(2);
-            if (paddle2 != null) {
-                GameInputDomain.Paddle_ResetInput(ctx, paddle2);
             }
         }
 
@@ -44,13 +49,13 @@ namespace Ping.Server.Business.Game {
             GameBallFSMController.FixedTickFSM(ctx, ball, dt);
 
             // Paddle
+            var paddle0 = ctx.Paddle_Get(0);
+            if (paddle0 == null) { return; }
+            GamePaddleFSMController.FixedTickFSM(ctx, paddle0, dt);
+
             var paddle1 = ctx.Paddle_Get(1);
             if (paddle1 == null) { return; }
             GamePaddleFSMController.FixedTickFSM(ctx, paddle1, dt);
-
-            var paddle2 = ctx.Paddle_Get(2);
-            if (paddle2 == null) { return; }
-            GamePaddleFSMController.FixedTickFSM(ctx, paddle2, dt);
 
             Physics2DInfra.Simulate(ctx.physics2DContext, dt);
 
@@ -69,18 +74,33 @@ namespace Ping.Server.Business.Game {
             var ball = ctx.Ball_Get();
             var ballPos = ball.Pos_GetPos();
 
+            var paddle0 = ctx.Paddle_Get(0);
+            var paddle0Pos = paddle0.Pos_GetPos();
+
             var paddle1 = ctx.Paddle_Get(1);
             var paddle1Pos = paddle1.Pos_GetPos();
 
-            var paddle2 = ctx.Paddle_Get(2);
-            var paddle2Pos = paddle2.Pos_GetPos();
-
-            RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle1Pos, paddle2Pos, ballPos);
+            RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
 
         }
 
         public static void OnLoginDone(GameBusinessContext ctx) {
             StartGame(ctx);
+        }
+
+        public static void On_PaddleMoveReq(GameBusinessContext ctx, PaddleMoveReqMessage msg, ClientStateEntity clientState) {
+            var game = ctx.gameEntity;
+            var fsm = game.FSM_GetComponent();
+            var status = fsm.status;
+            if (status != GameFSMStatus.Gaming) { return; }
+
+            var playerIndex = clientState.playerIndex;
+            var paddle = ctx.Paddle_Get(playerIndex);
+            if (paddle == null) {
+                PLog.LogError($"GameBusiness.On_PaddleMoveReq: paddle not found: {playerIndex}");
+            }
+            var axis = msg.moveAxis;
+            GameInputDomain.Paddle_BakeInput(ctx, paddle, axis);
         }
 
         public static void TearDown(GameBusinessContext ctx) {

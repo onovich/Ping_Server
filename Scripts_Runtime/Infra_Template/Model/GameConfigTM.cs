@@ -8,8 +8,8 @@ namespace Ping.Server {
         // Field
         public Vector2 fieldBoundMax;
         public Vector2 fieldBoundMin;
+        public Vector2 player0PaddleSpawnPos;
         public Vector2 player1PaddleSpawnPos;
-        public Vector2 player2PaddleSpawnPos;
 
         // Ball
         public float ballMoveSpeed;
@@ -26,8 +26,8 @@ namespace Ping.Server {
 
             ByteWriter.Write<Vector2>(dst, fieldBoundMax, ref offset);
             ByteWriter.Write<Vector2>(dst, fieldBoundMin, ref offset);
+            ByteWriter.Write<Vector2>(dst, player0PaddleSpawnPos, ref offset);
             ByteWriter.Write<Vector2>(dst, player1PaddleSpawnPos, ref offset);
-            ByteWriter.Write<Vector2>(dst, player2PaddleSpawnPos, ref offset);
             ByteWriter.Write<float>(dst, ballMoveSpeed, ref offset);
             ByteWriter.Write<float>(dst, ballMoveSpeedMax, ref offset);
             ByteWriter.Write<float>(dst, ballRadius, ref offset);
@@ -42,8 +42,8 @@ namespace Ping.Server {
 
             fieldBoundMax = ByteReader.Read<Vector2>(src, ref offset);
             fieldBoundMin = ByteReader.Read<Vector2>(src, ref offset);
+            player0PaddleSpawnPos = ByteReader.Read<Vector2>(src, ref offset);
             player1PaddleSpawnPos = ByteReader.Read<Vector2>(src, ref offset);
-            player2PaddleSpawnPos = ByteReader.Read<Vector2>(src, ref offset);
             ballMoveSpeed = ByteReader.Read<float>(src, ref offset);
             ballMoveSpeedMax = ByteReader.Read<float>(src, ref offset);
             ballRadius = ByteReader.Read<float>(src, ref offset);

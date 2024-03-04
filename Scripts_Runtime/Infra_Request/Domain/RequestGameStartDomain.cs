@@ -19,7 +19,7 @@ namespace Ping.Server.Requests {
 
             msg.FromBytes(data, ref offset);
             var evt = ctx.EventCenter;
-            evt.StartGame_OnHandle(msg, clientState);
+            evt.StartGame_On(msg, clientState);
 
         }
 

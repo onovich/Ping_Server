@@ -6,7 +6,7 @@ namespace Ping.Server.Requests {
 
     public class RequestEventCenter {
 
-        // Connect To Server Res
+        // Connect 
         public Action<ClientStateEntity> ConnectRer_OnHandle;
         public void ConnectRes_On(ClientStateEntity clientState) {
             ConnectRer_OnHandle.Invoke(clientState);
@@ -17,19 +17,18 @@ namespace Ping.Server.Requests {
             ConnectRes_OnErrorHandle.Invoke(msg);
         }
 
-        // Join Room Req
+        // Login
         public Action<JoinRoomReqMessage, ClientStateEntity> JoinRoom_OnHandle;
         public void JoinRoom_On(JoinRoomReqMessage msg, ClientStateEntity clientState) {
             JoinRoom_OnHandle.Invoke(msg, clientState);
         }
 
-        // Game Start Broad
         public Action<GameStartReqMessage, ClientStateEntity> StartGame_OnHandle;
         public void StartGame_On(GameStartReqMessage msg, ClientStateEntity clientState) {
             StartGame_OnHandle.Invoke(msg, clientState);
         }
 
-        // Paddle Move
+        // Game
         public Action<PaddleMoveReqMessage, ClientStateEntity> PaddleMove_OnHandle;
         public void PaddleMove_On(PaddleMoveReqMessage msg, ClientStateEntity clientState) {
             PaddleMove_OnHandle.Invoke(msg, clientState);

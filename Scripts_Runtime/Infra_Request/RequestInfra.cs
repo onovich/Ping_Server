@@ -44,6 +44,7 @@ namespace Ping.Server.Requests {
                     RequestGameStartDomain.On_GameStartReq(ctx, clientState, buff);
 
                     // Game
+                    RequestPaddleMoveDomain.On_RequestPaddleMoveReq(ctx, clientState, buff);
                 }
             }
         }

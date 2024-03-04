@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using MortiseFrame.Pulse;
 using Ping.Server.Requests;
 
@@ -11,8 +12,7 @@ namespace Ping.Server.Business.Game {
         public FieldEntity fieldEntity;
         public BallEntity ballEntity;
 
-        public PaddleEntity player1PaddleEntity;
-        public PaddleEntity player2PaddleEntity;
+        SortedList<int, PaddleEntity> paddles;
 
         // TEMP
         public RaycastHit2D[] raycastTemp;
@@ -28,13 +28,13 @@ namespace Ping.Server.Business.Game {
         public GameBusinessContext() {
             gameEntity = new GameEntity();
             raycastTemp = new RaycastHit2D[1000];
+            paddles = new SortedList<int, PaddleEntity>(2);
         }
 
         public void Reset() {
             fieldEntity = null;
             ballEntity = null;
-            player1PaddleEntity = null;
-            player2PaddleEntity = null;
+            paddles.Clear();
         }
 
         // Player
@@ -53,27 +53,19 @@ namespace Ping.Server.Business.Game {
 
         // Paddle
         public void Paddle_Set(PaddleEntity paddleEntity) {
-            if (paddleEntity.GetPlayerIndex() == 1) {
-                player1PaddleEntity = paddleEntity;
-            } else {
-                player2PaddleEntity = paddleEntity;
-            }
+            paddles[paddleEntity.GetPlayerIndex()] = paddleEntity;
         }
 
-        public void Paddle_Clear(PaddleEntity paddleEntity) {
-            if (paddleEntity.GetPlayerIndex() == 1) {
-                player1PaddleEntity = null;
-            } else {
-                player2PaddleEntity = null;
-            }
+        public void Paddle_Remove(PaddleEntity paddleEntity) {
+            paddles.Remove(paddleEntity.GetPlayerIndex());
         }
 
         public PaddleEntity Paddle_Get(int playerIndex) {
-            if (playerIndex == 1) {
-                return player1PaddleEntity;
-            } else {
-                return player2PaddleEntity;
+            if (paddles.TryGetValue(playerIndex, out var paddle)) {
+                return paddle;
             }
+            PLog.LogError($"GameBusinessContext.Paddle_Get: paddle not found: {playerIndex}");
+            return null;
         }
 
         // Field

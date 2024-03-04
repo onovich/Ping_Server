@@ -1,37 +1,32 @@
+using System.Collections.Generic;
+
 namespace Ping.Server {
 
     public class MainContext {
 
         // Entity
-        public PlayerEntity player1Entity;
-        public PlayerEntity player2Entity;
+        SortedList<int, PlayerEntity> players;
+        PlayerEntity player1Entity;
 
         public MainContext() {
+            players = new SortedList<int, PlayerEntity>(2);
         }
 
         // Player
         public void Player_Add(PlayerEntity playerEntity) {
-            if (playerEntity.GetPlayerIndex() == 0) {
-                player1Entity = playerEntity;
-            }
-            if (playerEntity.GetPlayerIndex() == 1) {
-                player2Entity = playerEntity;
-            }
+            players[playerEntity.GetPlayerIndex()] = playerEntity;
         }
 
         public PlayerEntity Player_Get(int index) {
-            if (index == 0) {
-                return player1Entity;
+            var player = players[index];
+            if (player == null) {
+                PLog.LogError($"MainContext.Player_Get: player not found: {index}");
             }
-            if (index == 1) {
-                return player2Entity;
-            }
-            return null;
+            return player;
         }
 
         public void Player_Clear() {
-            player1Entity = null;
-            player2Entity = null;
+            players.Clear();
         }
 
     }

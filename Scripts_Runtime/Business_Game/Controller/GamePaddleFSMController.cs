@@ -31,7 +31,7 @@ namespace Ping.Server.Business.Game {
             // Move
             var player = ctx.Player_Get(paddle.GetPlayerIndex());
             if (paddle.GetPlayerIndex() == player.GetPlayerIndex()) {
-                // GamePaddleDomain.ApplyMove(ctx, paddle, fixdt);
+                GamePaddleDomain.ApplyMove(ctx, paddle, fixdt);
             }
 
         }

@@ -6,19 +6,19 @@ namespace Ping.Protocol {
 
     public struct EntitiesSyncBroadMessage : IMessage<EntitiesSyncBroadMessage> {
 
+        public Vector2 paddle0Pos;
         public Vector2 paddle1Pos;
-        public Vector2 paddle2Pos;
         public Vector2 ballPos;
 
         public void WriteTo(byte[] dst, ref int offset) {
+            ByteWriter.Write<Vector2>(dst, paddle0Pos, ref offset);
             ByteWriter.Write<Vector2>(dst, paddle1Pos, ref offset);
-            ByteWriter.Write<Vector2>(dst, paddle2Pos, ref offset);
             ByteWriter.Write<Vector2>(dst, ballPos, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
+            paddle0Pos = ByteReader.Read<Vector2>(src, ref offset);
             paddle1Pos = ByteReader.Read<Vector2>(src, ref offset);
-            paddle2Pos = ByteReader.Read<Vector2>(src, ref offset);
             ballPos = ByteReader.Read<Vector2>(src, ref offset);
         }
 

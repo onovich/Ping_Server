@@ -105,8 +105,12 @@ namespace Ping.Server {
 
         void Binding() {
             Binding_Net();
+
             Binding_Request_Login();
             Binding_Login();
+
+            Binding_Request_Game();
+            Binding_Game();
         }
 
         void Binding_Net() {
@@ -114,7 +118,6 @@ namespace Ping.Server {
         }
 
         void Binding_Login() {
-
             var evt = loginBusinessContext.evt;
 
             evt.OnLoginDoneHandle += () => {
@@ -123,8 +126,7 @@ namespace Ping.Server {
         }
 
         void Binding_Request_Login() {
-
-            var evt = loginBusinessContext.reqInfraContext.EventCenter;
+            var evt = requestInfraContext.EventCenter;
 
             evt.ConnectRer_OnHandle += (clientState) => {
                 LoginBusiness.On_ConnectReq(loginBusinessContext, clientState);
@@ -141,6 +143,18 @@ namespace Ping.Server {
             evt.StartGame_OnHandle += (msg, clientState) => {
                 LoginBusiness.On_GameStartReq(loginBusinessContext, msg, clientState);
             };
+        }
+
+        void Binding_Game() {
+            var evt = requestInfraContext.EventCenter;
+
+            evt.PaddleMove_OnHandle += (msg, clientState) => {
+                GameBusiness.On_PaddleMoveReq(gameBusinessContext, msg, clientState);
+            };
+
+        }
+
+        void Binding_Request_Game() {
 
         }
 

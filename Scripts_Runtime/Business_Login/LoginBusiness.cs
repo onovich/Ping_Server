@@ -62,7 +62,7 @@ namespace Ping.Server.Business.Login {
             var client1 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(0);
             var client2 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(1);
             if (client1 == null || client2 == null) {
-                PLog.LogError("Player1 or Player2 is null");
+                PLog.LogError("player0 or player1 is null");
             }
             if (!client1.isStartReady || !client2.isStartReady) {
                 return;

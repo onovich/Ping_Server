@@ -20,8 +20,8 @@ namespace Ping.Server.Business.Game {
             GameBallDomain.SpawnAtOriginPos(ctx, new Vector2(0, 0));
 
             // Paddle 1
-            GamePaddleDomain.Spawn(ctx, 0, config.player1PaddleSpawnPos);
-            GamePaddleDomain.Spawn(ctx, 1, config.player2PaddleSpawnPos);
+            GamePaddleDomain.Spawn(ctx, 0, config.player0PaddleSpawnPos);
+            GamePaddleDomain.Spawn(ctx, 1, config.player1PaddleSpawnPos);
 
             // Send Res
 
@@ -45,11 +45,11 @@ namespace Ping.Server.Business.Game {
             GameBallDomain.UnSpawn(ctx, ball);
 
             // Paddle
+            var paddle0 = ctx.Paddle_Get(0);
+            GamePaddleDomain.UnSpawn(ctx, paddle0);
+
             var paddle1 = ctx.Paddle_Get(1);
             GamePaddleDomain.UnSpawn(ctx, paddle1);
-
-            var paddle2 = ctx.Paddle_Get(2);
-            GamePaddleDomain.UnSpawn(ctx, paddle2);
 
             // Map
             // Send Res
