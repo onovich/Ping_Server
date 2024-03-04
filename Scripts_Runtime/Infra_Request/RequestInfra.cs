@@ -44,6 +44,24 @@ namespace Ping.Server.Requests {
             }
         }
 
+        public static async Task Tick_OnGaming(RequestInfraContext ctx, float dt) {
+            ctx.checkReadList.Clear();
+            ctx.checkReadList.Add(ctx.Listenfd);
+            ctx.CliendState_ForEachOrderly((clientState) => {
+                ctx.checkReadList.Add(clientState.clientfd);
+            });
+            Socket.Select(ctx.checkReadList, null, null, 1000);
+            foreach (Socket s in ctx.checkReadList) {
+                if (s == ctx.Listenfd) {
+                    await RequestConnectDomain.AcceptConnectReqAsync(ctx);
+                } else {
+                    byte[] buff = ctx.readBuff;
+                    int count = s.Receive(buff);
+                    var clientState = ctx.ClientState_GetBySocket(s);
+                }
+            }
+        }
+
     }
 
 }

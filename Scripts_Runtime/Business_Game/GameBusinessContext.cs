@@ -1,4 +1,5 @@
 using MortiseFrame.Pulse;
+using Ping.Server.Requests;
 
 namespace Ping.Server.Business.Game {
 
@@ -19,6 +20,7 @@ namespace Ping.Server.Business.Game {
         // Infra
         public TemplateInfraContext templateInfraContext;
         public Physics2DInfraContext physics2DContext;
+        public RequestInfraContext reqInfraContext;
 
         // Main
         public MainContext mainContext;

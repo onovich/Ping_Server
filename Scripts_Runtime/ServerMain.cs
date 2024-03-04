@@ -41,6 +41,7 @@ namespace Ping.Server {
             mainContext = new MainContext();
 
             // Inject
+            gameBusinessContext.reqInfraContext = requestInfraContext;
             gameBusinessContext.templateInfraContext = templateInfraContext;
             gameBusinessContext.physics2DContext = physics2DInfraContext;
             gameBusinessContext.mainContext = mainContext;
@@ -90,22 +91,27 @@ namespace Ping.Server {
             GameBusiness.FixedTick(gameBusinessContext, dt);
         }
 
-        public void OnNetEvent(float dt) {
+        public async void OnNetEvent(float dt) {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
-            GameBusiness.OnNetEvent(gameBusinessContext, dt);
+            await LoginBusiness.OnNetEvent(loginBusinessContext, dt);
+            await GameBusiness.OnNetEvent(gameBusinessContext, dt);
         }
 
         void Init() {
-
+            LoginBusiness.Init(loginBusinessContext);
             GameBusiness.Init(gameBusinessContext);
-
         }
 
         void Binding() {
+            Binding_Net();
             Binding_Request_Login();
             Binding_Login();
+        }
+
+        void Binding_Net() {
+            RequestInfra.Bind(requestInfraContext);
         }
 
         void Binding_Login() {

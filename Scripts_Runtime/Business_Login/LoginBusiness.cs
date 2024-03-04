@@ -9,12 +9,11 @@ namespace Ping.Server.Business.Login {
         public static void Enter(LoginBusinessContext ctx) {
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
             fsmCom.WaitForJoin_Enter();
-
-            RequestInfra.Bind(ctx.reqInfraContext);
         }
 
+        public static void Init(LoginBusinessContext ctx) { }
+
         public static void PreTickFSM(LoginBusinessContext ctx, float dt) {
-            Tick_Any(ctx, dt);
 
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
             var status = fsmCom.Status;
@@ -31,10 +30,6 @@ namespace Ping.Server.Business.Login {
             if (status == LoginFSMStatus.LoginDone) {
                 Tick_LoginDone(ctx, dt);
             }
-        }
-
-        static async void Tick_Any(LoginBusinessContext ctx, float dt) {
-            await OnNetEvent(ctx, dt);
         }
 
         public static void Tick_WaitForJoin(LoginBusinessContext ctx, float dt) {
@@ -87,7 +82,7 @@ namespace Ping.Server.Business.Login {
             }
         }
 
-        static async Task OnNetEvent(LoginBusinessContext ctx, float dt) {
+        public static async Task OnNetEvent(LoginBusinessContext ctx, float dt) {
             await RequestInfra.Tick_OnLogin(ctx.reqInfraContext, dt);
         }
 

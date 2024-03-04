@@ -1,4 +1,6 @@
 using MortiseFrame.Pulse;
+using Ping.Protocol;
+using Ping.Server.Requests;
 
 namespace Ping.Server.Business.Game {
 
@@ -6,15 +8,13 @@ namespace Ping.Server.Business.Game {
 
         static float restTime;
 
-        public static void Init(GameBusinessContext ctx) {
+        public static void Init(GameBusinessContext ctx) { }
 
-        }
-
-        public static void StartGame(GameBusinessContext ctx) {
+        static void StartGame(GameBusinessContext ctx) {
             GameGameDomain.NewGame(ctx);
         }
 
-        public static void ExitGame(GameBusinessContext ctx) {
+        static void ExitGame(GameBusinessContext ctx) {
             GameGameDomain.ExitGame(ctx);
         }
 
@@ -29,22 +29,17 @@ namespace Ping.Server.Business.Game {
             }
         }
 
-        public static void OnNetEvent(GameBusinessContext ctx, float dt) {
-
+        public static async Task OnNetEvent(GameBusinessContext ctx, float dt) {
+            await RequestInfra.Tick_OnGaming(ctx.reqInfraContext, dt);
         }
 
-        static void SendNetRes(GameBusinessContext ctx) {
-            // Send
-        }
-
-        public static void PreTick(GameBusinessContext ctx, float dt) {
-
-        }
+        public static void PreTick(GameBusinessContext ctx, float dt) { }
 
         public static void FixedTick(GameBusinessContext ctx, float dt) {
 
             var game = ctx.gameEntity;
-            var status = game.GetStatus();
+            var fsm = game.FSM_GetComponent();
+            var status = fsm.status;
             if (status != GameFSMStatus.Gaming) { return; }
 
             // Ball
@@ -67,14 +62,24 @@ namespace Ping.Server.Business.Game {
 
         public static void LateTick(GameBusinessContext ctx, float dt) {
             var game = ctx.gameEntity;
-            var status = game.GetStatus();
+            var fsm = game.FSM_GetComponent();
+            var status = fsm.status;
             if (status != GameFSMStatus.Gaming) { return; }
 
             // Time
             GameTimeDomain.ApplyGameTime(ctx, dt);
 
             // Send Net Res
-            SendNetRes(ctx);
+            var ball = ctx.Ball_Get();
+            var ballPos = ball.Pos_GetPos();
+
+            var paddle1 = ctx.Paddle_Get(1);
+            var paddle1Pos = paddle1.Pos_GetPos();
+
+            var paddle2 = ctx.Paddle_Get(2);
+            var paddle2Pos = paddle2.Pos_GetPos();
+
+            RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle1Pos, paddle2Pos, ballPos);
 
         }
 

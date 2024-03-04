@@ -9,7 +9,8 @@ namespace Ping.Server.Business.Game {
 
             // Game
             var game = ctx.gameEntity;
-            game.FSM_EnterGaming();
+            var fsm = game.FSM_GetComponent();
+            fsm.Gaming_Enter();
             game.random = new RandomService(101052099, 0);
 
             // Field
@@ -30,9 +31,10 @@ namespace Ping.Server.Business.Game {
 
             // Game
             var game = ctx.gameEntity;
-            if (game.FSM_GetStatus() == GameFSMStatus.NotInGame) return;
+            var fsm = game.FSM_GetComponent();
+            if (fsm.status == GameFSMStatus.NotInGame) return;
 
-            game.FSM_EnterNotInGame();
+            fsm.NotInGame_Enter();
 
             // Field
             var field = ctx.Field_Get();

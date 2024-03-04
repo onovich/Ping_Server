@@ -29,11 +29,18 @@ namespace Ping.Server.Requests {
             StartGame_OnHandle.Invoke(msg, clientState);
         }
 
+        // Paddle Move
+        public Action<PaddleMoveReqMessage, ClientStateEntity> PaddleMove_OnHandle;
+        public void PaddleMove_On(PaddleMoveReqMessage msg, ClientStateEntity clientState) {
+            PaddleMove_OnHandle.Invoke(msg, clientState);
+        }
+
         public void Clear() {
             ConnectRer_OnHandle = null;
             ConnectRes_OnErrorHandle = null;
             JoinRoom_OnHandle = null;
             StartGame_OnHandle = null;
+            PaddleMove_OnHandle = null;
         }
 
     }
