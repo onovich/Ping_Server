@@ -93,12 +93,12 @@ namespace Ping.Server {
 
             if (playerIndex == 0) {
                 pos.x = Mathf.Clamp(pos.x, constrainMin.x + size.x / 2, constrainMax.x - size.x / 2);
-                pos.y = Mathf.Clamp(pos.y, constrainCenter.y + size.y / 2, constrainMax.y - size.y / 2);
+                pos.y = Mathf.Clamp(pos.y, constrainMin.y + size.y / 2, constrainCenter.y - size.y / 2);
             }
 
             if (playerIndex == 1) {
                 pos.x = Mathf.Clamp(pos.x, constrainMin.x + size.x / 2, constrainMax.x - size.x / 2);
-                pos.y = Mathf.Clamp(pos.y, constrainMin.y + size.y / 2, constrainCenter.y - size.y / 2);
+                pos.y = Mathf.Clamp(pos.y, constrainCenter.y + size.y / 2, constrainMax.y - size.y / 2);
             }
 
             Pos_SetPos(pos);
