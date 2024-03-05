@@ -12,7 +12,8 @@ namespace Ping.Server {
 
         public static bool Simulate(Physics2DInfraContext ctx, float step) {
             ctx.Rigidbodies_ForEach(rb => {
-                rb.ApplyPhysics(step);
+                var transform = ctx.Rigidbodies_GetTransform(rb);
+                rb.ApplyPhysics(transform, step);
             });
             return true;
         }

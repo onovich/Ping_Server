@@ -2,28 +2,27 @@ namespace Ping.Server {
 
     public class LoginFSMComponent {
 
-        LoginFSMStatus status;
-        public LoginFSMStatus Status => status;
+        public LoginFSMStatus Status { get; private set; }
 
-        public bool waitForJoin_isEntering;
-        public bool waitForStart_isEntering;
-        public bool loginDone_isEntering;
+        public bool WaitForJoin_isEntering { get; set; }
+        public bool WaitForStart_isEntering { get; set; }
+        public bool LoginDone_isEntering { get; set; }
 
         public void WaitForJoin_Enter() {
-            status = LoginFSMStatus.WaitForJoin;
-            waitForJoin_isEntering = true;
+            Status = LoginFSMStatus.WaitForJoin;
+            WaitForJoin_isEntering = true;
             PLog.Log("LoginBusiness Enter WaitForJoin");
         }
 
         public void WaitForStart_Enter() {
-            status = LoginFSMStatus.WaitForStart;
-            waitForStart_isEntering = true;
+            Status = LoginFSMStatus.WaitForStart;
+            WaitForStart_isEntering = true;
             PLog.Log("LoginBusiness Enter WaitForStart");
         }
 
         public void LoginDone_Enter() {
-            status = LoginFSMStatus.LoginDone;
-            loginDone_isEntering = true;
+            Status = LoginFSMStatus.LoginDone;
+            LoginDone_isEntering = true;
             PLog.Log("LoginBusiness Enter LoginDone");
         }
 

@@ -7,105 +7,84 @@ namespace Ping.Server {
     public class PaddleEntity : IEntity {
 
         // Base Info
-        int playerIndex;
-        EntityType IEntity.EntityType => EntityType.Paddle;
+        public int PlayerIndex { get; private set; }
+        public EntityType EntityType => EntityType.Paddle;
 
         // Attr
-        float moveSpeed;
-        float moveSpeedMax;
-        Vector2 size;
+        float MoveSpeed { get; set; }
+        public float MoveSpeedMax { get; private set; }
+        public Vector2 Size { get; private set; }
 
         // FSM
-        PaddleFSMComponent fsmCom;
+        public PaddleFSMComponent FsmCom { get; private set; }
 
         // Input
         PaddleInputComponent inputCom;
 
         // Physics
-        Rigidbody2DComponent rb;
-        AABB colliderBox;
+        public Rigidbody2DComponent RB { get; private set; }
+        public AABB ColliderBox { get; private set; }
 
         // Transform
-        TranformComponent transform;
+        public TranformComponent Transform { get; private set; }
 
         public void Ctor() {
             inputCom = new PaddleInputComponent();
-            fsmCom = new PaddleFSMComponent();
-            rb = new Rigidbody2DComponent();
-            transform = new TranformComponent();
+            FsmCom = new PaddleFSMComponent();
+            RB = new Rigidbody2DComponent();
+            Transform = new TranformComponent();
         }
 
         public void Inject() {
-            transform.Inject(this);
-            rb.Inject(transform, colliderBox);
+            Transform.Inject(this);
         }
 
         // Base Info
-        public void SetPlayerIndex(int id) {
-            playerIndex = id;
-        }
-
-        public int GetPlayerIndex() {
-            return playerIndex;
+        public void PlayerIndex_Set(int id) {
+            PlayerIndex = id;
         }
 
         // Pos
         public void Pos_SetPos(Vector2 pos) {
-            transform.position = pos;
-        }
-
-        public Vector2 Pos_GetPos() {
-            return transform.position;
-        }
-
-        public Vector2 Pos_GetVolecity() {
-            return rb.velocity;
+            Transform.Pos = pos;
         }
 
         // Attr
         public float Attr_GetMoveSpeed() {
-            return Mathf.Clamp(moveSpeed, 0, moveSpeedMax);
+            return Mathf.Clamp(MoveSpeed, 0, MoveSpeedMax);
         }
 
         public void Attr_SetMoveSpeed(float speed) {
-            moveSpeed = speed;
-        }
-
-        public float Attr_GetMoveSpeedMax() {
-            return moveSpeedMax;
+            MoveSpeed = speed;
         }
 
         public void Attr_SetMoveSpeedMax(float speed) {
-            moveSpeedMax = speed;
+            MoveSpeedMax = speed;
         }
 
         public void Attr_SetSize(Vector2 size) {
-            this.size = size;
+            this.Size = size;
         }
 
         // Move
         public void Move_MoveByInput(float dt, AABB constrain) {
-            Move_Apply(inputCom.moveAxis.normalized, Attr_GetMoveSpeed(), dt);
-            var pos = Pos_GetPos();
+            Move_Apply(inputCom.MoveAxis.normalized, Attr_GetMoveSpeed(), dt);
+            var pos = Transform.Pos;
             var constrainMin = constrain.Min;
             var constrainMax = constrain.Max;
             var constrainCenter = constrain.Center;
 
-            if (playerIndex == 0) {
-                pos.x = Mathf.Clamp(pos.x, constrainMin.x + size.x / 2, constrainMax.x - size.x / 2);
-                pos.y = Mathf.Clamp(pos.y, constrainMin.y + size.y / 2, constrainCenter.y - size.y / 2);
+            if (PlayerIndex == 0) {
+                pos.x = Mathf.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
+                pos.y = Mathf.Clamp(pos.y, constrainMin.y + Size.y / 2, constrainCenter.y - Size.y / 2);
             }
 
-            if (playerIndex == 1) {
-                pos.x = Mathf.Clamp(pos.x, constrainMin.x + size.x / 2, constrainMax.x - size.x / 2);
-                pos.y = Mathf.Clamp(pos.y, constrainCenter.y + size.y / 2, constrainMax.y - size.y / 2);
+            if (PlayerIndex == 1) {
+                pos.x = Mathf.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
+                pos.y = Mathf.Clamp(pos.y, constrainCenter.y + Size.y / 2, constrainMax.y - Size.y / 2);
             }
 
             Pos_SetPos(pos);
-        }
-
-        public Vector2 Move_GetVelocity() {
-            return rb.velocity;
         }
 
         public void Move_Stop() {
@@ -113,16 +92,7 @@ namespace Ping.Server {
         }
 
         void Move_Apply(Vector2 dir, float moveSpeed, float fixdt) {
-            rb.velocity = dir.normalized * moveSpeed;
-        }
-
-        // FSM
-        public PaddleFSMStatus FSM_GetStatus() {
-            return fsmCom.status;
-        }
-
-        public PaddleFSMComponent FSM_GetComponent() {
-            return fsmCom;
+            RB.Velocity = dir.normalized * moveSpeed;
         }
 
         public void TearDown() {
@@ -130,16 +100,11 @@ namespace Ping.Server {
 
         // Input
         public void Input_SetMoveAxis(Vector2 axis) {
-            inputCom.moveAxis = axis;
+            inputCom.MoveAxis = axis;
         }
 
         public void Input_Reset() {
-            inputCom.moveAxis = Vector2.zero;
-        }
-
-        // Physics
-        public Rigidbody2DComponent Rigidbody2D_Get() {
-            return rb;
+            inputCom.MoveAxis = Vector2.zero;
         }
 
     }

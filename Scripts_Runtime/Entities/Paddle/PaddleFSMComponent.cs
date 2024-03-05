@@ -2,15 +2,15 @@ namespace Ping.Server {
 
     public class PaddleFSMComponent {
 
-        public PaddleFSMStatus status;
+        public PaddleFSMStatus Status { get; private set; }
 
-        public bool moving_isEntering;
+        public bool Moving_isEntering { get; set; }
 
         public PaddleFSMComponent() { }
 
         public void Moving_Enter() {
-            status = PaddleFSMStatus.Moving;
-            moving_isEntering = true;
+            Status = PaddleFSMStatus.Moving;
+            Moving_isEntering = true;
         }
 
     }

@@ -3,37 +3,29 @@ namespace Ping.Server {
     public class GameEntity {
 
         public RandomService random;
-        GameFSMComponent fsmComponent;
+        public GameFSMComponent FsmCom { get; private set; }
 
-        int turn;
-        float time;
+        public int Turn { get; private set; }
+        public float Time { get; private set; }
 
         public GameEntity() {
-            fsmComponent = new GameFSMComponent();
+            FsmCom = new GameFSMComponent();
         }
 
         public GameFSMComponent FSM_GetComponent() {
-            return fsmComponent;
+            return FsmCom;
         }
 
-        public int GetTurn() {
-            return turn;
+        public void Turn_Inc() {
+            Turn++;
         }
 
-        public void IncTurn() {
-            turn++;
+        public void Turn_Reset() {
+            Turn = 0;
         }
 
-        public void ResetTurn() {
-            turn = 0;
-        }
-
-        public void SetTime(float t) {
-            time = t;
-        }
-
-        public float GetTime() {
-            return time;
+        public void Time_Set(float t) {
+            Time = t;
         }
 
     }

@@ -34,8 +34,8 @@ namespace Ping.Server.Business.Login {
 
         public static void Tick_WaitForJoin(LoginBusinessContext ctx, float dt) {
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
-            if (fsmCom.waitForJoin_isEntering) {
-                fsmCom.waitForJoin_isEntering = false;
+            if (fsmCom.WaitForJoin_isEntering) {
+                fsmCom.WaitForJoin_isEntering = false;
                 return;
             }
 
@@ -54,8 +54,8 @@ namespace Ping.Server.Business.Login {
 
         public static void Tick_WaitForStart(LoginBusinessContext ctx, float dt) {
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
-            if (fsmCom.waitForStart_isEntering) {
-                fsmCom.waitForStart_isEntering = false;
+            if (fsmCom.WaitForStart_isEntering) {
+                fsmCom.WaitForStart_isEntering = false;
                 return;
             }
 
@@ -74,8 +74,8 @@ namespace Ping.Server.Business.Login {
 
         public static void Tick_LoginDone(LoginBusinessContext ctx, float dt) {
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
-            if (fsmCom.loginDone_isEntering) {
-                fsmCom.loginDone_isEntering = false;
+            if (fsmCom.LoginDone_isEntering) {
+                fsmCom.LoginDone_isEntering = false;
                 var evt = ctx.evt;
                 evt.LoginDone();
                 return;

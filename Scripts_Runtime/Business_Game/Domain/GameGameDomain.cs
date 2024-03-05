@@ -32,7 +32,7 @@ namespace Ping.Server.Business.Game {
             // Game
             var game = ctx.gameEntity;
             var fsm = game.FSM_GetComponent();
-            if (fsm.status == GameFSMStatus.NotInGame) return;
+            if (fsm.Status == GameFSMStatus.NotInGame) return;
 
             fsm.NotInGame_Enter();
 
@@ -58,7 +58,7 @@ namespace Ping.Server.Business.Game {
 
         public static void Win(GameBusinessContext ctx, int playerIndex) {
             var game = ctx.gameEntity;
-            game.IncTurn();
+            game.Turn_Inc();
             var player = ctx.Player_Get(playerIndex);
             player.Score_Inc();
             // Send Res

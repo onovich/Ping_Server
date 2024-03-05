@@ -21,7 +21,7 @@ namespace Ping.Server.Business.Game {
         public static void ResetInput(GameBusinessContext ctx) {
             var game = ctx.gameEntity;
             var fsm = game.FSM_GetComponent();
-            var status = fsm.status;
+            var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
 
             var paddle0 = ctx.Paddle_Get(0);
@@ -40,7 +40,7 @@ namespace Ping.Server.Business.Game {
 
             var game = ctx.gameEntity;
             var fsm = game.FSM_GetComponent();
-            var status = fsm.status;
+            var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
 
             // Ball
@@ -64,7 +64,7 @@ namespace Ping.Server.Business.Game {
         public static void LateTick(GameBusinessContext ctx, float dt) {
             var game = ctx.gameEntity;
             var fsm = game.FSM_GetComponent();
-            var status = fsm.status;
+            var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
 
             // Time
@@ -72,13 +72,13 @@ namespace Ping.Server.Business.Game {
 
             // Send Net Res
             var ball = ctx.Ball_Get();
-            var ballPos = ball.Pos_GetPos();
+            var ballPos = ball.Transform.Pos;
 
             var paddle0 = ctx.Paddle_Get(0);
-            var paddle0Pos = paddle0.Pos_GetPos();
+            var paddle0Pos = paddle0.Transform.Pos;
 
             var paddle1 = ctx.Paddle_Get(1);
-            var paddle1Pos = paddle1.Pos_GetPos();
+            var paddle1Pos = paddle1.Transform.Pos;
 
             RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
 
@@ -91,7 +91,7 @@ namespace Ping.Server.Business.Game {
         public static void On_PaddleMoveReq(GameBusinessContext ctx, PaddleMoveReqMessage msg, ClientStateEntity clientState) {
             var game = ctx.gameEntity;
             var fsm = game.FSM_GetComponent();
-            var status = fsm.status;
+            var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
 
             var playerIndex = clientState.playerIndex;

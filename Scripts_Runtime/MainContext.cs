@@ -14,7 +14,7 @@ namespace Ping.Server {
 
         // Player
         public void Player_Add(PlayerEntity playerEntity) {
-            players[playerEntity.GetPlayerIndex()] = playerEntity;
+            players[playerEntity.PlayerIndex] = playerEntity;
         }
 
         public PlayerEntity Player_Get(int index) {

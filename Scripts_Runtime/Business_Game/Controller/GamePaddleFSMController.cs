@@ -8,7 +8,7 @@ namespace Ping.Server.Business.Game {
 
             FixedTickFSM_Any(ctx, paddle, fixdt);
 
-            PaddleFSMStatus status = paddle.FSM_GetStatus();
+            PaddleFSMStatus status = paddle.FsmCom.Status;
             if (status == PaddleFSMStatus.Moving) {
                 FixedTickFSM_Moving(ctx, paddle, fixdt);
             } else {
@@ -22,15 +22,15 @@ namespace Ping.Server.Business.Game {
         }
 
         static void FixedTickFSM_Moving(GameBusinessContext ctx, PaddleEntity paddle, float fixdt) {
-            PaddleFSMComponent fsm = paddle.FSM_GetComponent();
-            if (fsm.moving_isEntering) {
+            PaddleFSMComponent fsm = paddle.FsmCom;
+            if (fsm.Moving_isEntering) {
                 // Anim
-                fsm.moving_isEntering = false;
+                fsm.Moving_isEntering = false;
             }
 
             // Move
-            var player = ctx.Player_Get(paddle.GetPlayerIndex());
-            if (paddle.GetPlayerIndex() == player.GetPlayerIndex()) {
+            var player = ctx.Player_Get(paddle.PlayerIndex);
+            if (paddle.PlayerIndex == player.PlayerIndex) {
                 GamePaddleDomain.ApplyMove(ctx, paddle, fixdt);
             }
 

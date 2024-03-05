@@ -4,34 +4,34 @@ namespace Ping.Server {
 
     public class BallFSMComponent {
 
-        public BallFSMStatus status;
+        public BallFSMStatus Status { get; private set; }
 
-        public bool idle_isEntering;
+        public bool Idle_isEntering { get; set; }
 
-        public bool moving_isEntering;
+        public bool Moving_isEntering { get; set; }
 
-        public bool dead_isEntering;
-        public int dead_gatePlayerIndex;
+        public bool Dead_isEntering { get; set; }
+        public int Dead_gatePlayerIndex { get; set; }
 
         public Vector2 movingDir;
 
         public BallFSMComponent() { }
 
         public void EnterIdle() {
-            status = BallFSMStatus.Idle;
-            idle_isEntering = true;
+            Status = BallFSMStatus.Idle;
+            Idle_isEntering = true;
         }
 
         public void EnterMoving(Vector2 movingDir) {
-            status = BallFSMStatus.Moving;
-            moving_isEntering = true;
+            Status = BallFSMStatus.Moving;
+            Moving_isEntering = true;
             this.movingDir = movingDir;
         }
 
         public void EnterDead(int gatePlayerIndex) {
-            status = BallFSMStatus.Dead;
-            dead_isEntering = true;
-            dead_gatePlayerIndex = gatePlayerIndex;
+            Status = BallFSMStatus.Dead;
+            Dead_isEntering = true;
+            Dead_gatePlayerIndex = gatePlayerIndex;
         }
 
     }

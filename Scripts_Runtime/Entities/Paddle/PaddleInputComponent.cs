@@ -4,7 +4,7 @@ namespace Ping.Server {
 
     public struct PaddleInputComponent {
 
-        public Vector2 moveAxis;
+        public Vector2 MoveAxis { get; set; }
 
     }
 

@@ -18,7 +18,7 @@ namespace Ping.Server.Business.Game {
         public static void MoveAndApplyHit(GameBusinessContext ctx, BallEntity ball, float fixdt, Action<int> hitGate) {
             BallFSMComponent fsm = ball.FSM_GetComponent();
             var dir = fsm.movingDir;
-            if (PredictHit(ctx, ball, ball.Attr_GetRadius(), hitGate)) {
+            if (PredictHit(ctx, ball, ball.Radius, hitGate)) {
                 return;
             }
             ball.Move_ByDir(dir, fixdt);
@@ -37,7 +37,7 @@ namespace Ping.Server.Business.Game {
             targetLayerMask |= 1 << LayerConst.GATE;
             var hits = ctx.raycastTemp;
             var dir = ball.Pos_GetDirection();
-            int count = Physics2DInfra.CircleCastNonAlloc(ctx.physics2DContext, ball.Pos_GetPos(), ball.Attr_GetRadius(), dir, hits, dis, targetLayerMask);
+            int count = Physics2DInfra.CircleCastNonAlloc(ctx.physics2DContext, ball.Transform.Pos, ball.Radius, dir, hits, dis, targetLayerMask);
             if (count <= 0) {
                 return succ;
             }
@@ -88,7 +88,7 @@ namespace Ping.Server.Business.Game {
 
         static void Reflect(GameBusinessContext ctx, BallEntity ball, Vector2 normal) {
             var srcDir = ball.Pos_GetDirection();
-            var drtDir = MathFP.GetReflectDir(srcDir, normal);
+            var drtDir = Vector2.Reflect(srcDir, normal);
             ball.FSM_SetMovingDir(drtDir);
         }
 

@@ -53,11 +53,11 @@ namespace Ping.Server.Business.Game {
 
         // Paddle
         public void Paddle_Set(PaddleEntity paddleEntity) {
-            paddles[paddleEntity.GetPlayerIndex()] = paddleEntity;
+            paddles[paddleEntity.PlayerIndex] = paddleEntity;
         }
 
         public void Paddle_Remove(PaddleEntity paddleEntity) {
-            paddles.Remove(paddleEntity.GetPlayerIndex());
+            paddles.Remove(paddleEntity.PlayerIndex);
         }
 
         public PaddleEntity Paddle_Get(int playerIndex) {

@@ -15,6 +15,10 @@ namespace Ping.Server.Business.Game {
             // Set Bound
             field.SetBound(config.fieldBoundMin, config.fieldBoundMax);
 
+            // Set Wall
+
+            // Set Gate
+
             return field;
         }
 
@@ -43,7 +47,7 @@ namespace Ping.Server.Business.Game {
 
             // Set Physics
             var rigidbody2DCom = ball.Rigidbody2D_Get();
-            physics2DInfraContext.Rigidbodies_Add(rigidbody2DCom);
+            physics2DInfraContext.Rigidbodies_Add(rigidbody2DCom, ball.Transform);
 
             return ball;
 
@@ -62,7 +66,7 @@ namespace Ping.Server.Business.Game {
             paddle.Inject();
 
             // Base Info
-            paddle.SetPlayerIndex(playerIndex);
+            paddle.PlayerIndex_Set(playerIndex);
 
             // Set Attr
             paddle.Attr_SetMoveSpeed(config.paddleMoveSpeed);
@@ -73,12 +77,12 @@ namespace Ping.Server.Business.Game {
             paddle.Pos_SetPos(pos);
 
             // Set FSM
-            var fsmCom = paddle.FSM_GetComponent();
+            var fsmCom = paddle.FsmCom;
             fsmCom.Moving_Enter();
 
             // Set Physics
-            var rigidbody2DCom = paddle.Rigidbody2D_Get();
-            physics2DInfraContext.Rigidbodies_Add(rigidbody2DCom);
+            var rigidbody2DCom = paddle.RB;
+            physics2DInfraContext.Rigidbodies_Add(rigidbody2DCom, paddle.Transform);
 
             return paddle;
         }

@@ -27,11 +27,11 @@ namespace Ping.Server.Business.Game {
 
         static void FixedTickFSM_Idle(GameBusinessContext ctx, BallEntity ball, float fixdt) {
             BallFSMComponent fsm = ball.FSM_GetComponent();
-            if (fsm.idle_isEntering) {
-                fsm.idle_isEntering = false;
+            if (fsm.Idle_isEntering) {
+                fsm.Idle_isEntering = false;
             }
 
-            var turn = ctx.gameEntity.GetTurn();
+            var turn = ctx.gameEntity.Turn;
             var side = turn % 2;
             var dir = side == 0 ? Vector2.down : Vector2.up;
             var game = ctx.gameEntity;
@@ -43,8 +43,8 @@ namespace Ping.Server.Business.Game {
 
         static void FixedTickFSM_Moving(GameBusinessContext ctx, BallEntity ball, float fixdt) {
             BallFSMComponent fsm = ball.FSM_GetComponent();
-            if (fsm.moving_isEntering) {
-                fsm.moving_isEntering = false;
+            if (fsm.Moving_isEntering) {
+                fsm.Moving_isEntering = false;
             }
 
             GameBallDomain.MoveAndApplyHit(ctx, ball, fixdt, (gatePlayerIndex) => {
@@ -55,11 +55,11 @@ namespace Ping.Server.Business.Game {
 
         static void FixedTickFSM_Dead(GameBusinessContext ctx, BallEntity ball, float fixdt) {
             BallFSMComponent fsm = ball.FSM_GetComponent();
-            if (fsm.dead_isEntering) {
-                fsm.dead_isEntering = false;
+            if (fsm.Dead_isEntering) {
+                fsm.Dead_isEntering = false;
                 ball.Move_Stop();
                 ball.Pos_SetPos(Vector2.zero);
-                GameGameDomain.Win(ctx, fsm.dead_gatePlayerIndex);
+                GameGameDomain.Win(ctx, fsm.Dead_gatePlayerIndex);
             }
             fsm.EnterIdle();
         }

@@ -7,7 +7,11 @@ namespace Ping.Server {
         // Base Info
         EntityType IEntity.EntityType => EntityType.Wall;
 
-        AABB colliderBox;
+        public AABB ColliderBox { get; private set; }
+
+        public void ColliderBox_Set(AABB box) {
+            ColliderBox = box;
+        }
 
         public void TearDown() {
         }

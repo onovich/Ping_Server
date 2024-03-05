@@ -4,9 +4,9 @@ namespace Ping.Server {
 
     public class TranformComponent {
 
-        public Vector2 position;
-        public Vector2 scale;
-        public float rotation;
+        public Vector2 Pos { get; set; }
+        public Vector2 Scale { get; set; }
+        public float Rotation { get; set; }
 
         IEntity ie;
         public void Inject(IEntity ie) {
@@ -21,9 +21,9 @@ namespace Ping.Server {
         }
 
         public TranformComponent() {
-            position = Vector2.zero;
-            scale = Vector2.one;
-            rotation = 0;
+            Pos = Vector2.zero;
+            Scale = Vector2.one;
+            Rotation = 0;
         }
 
     }

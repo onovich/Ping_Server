@@ -3,37 +3,25 @@ namespace Ping.Server {
     public class PlayerEntity {
 
         // Base Info
-        int playerIndex;
-        string userName;
+        public int PlayerIndex { get; private set; }
+        public string UserName { get; private set; }
 
         // Score
-        int score;
+        public int score { get; private set; }
 
         // Index
         public void SetPlayerIndex(int id) {
-            playerIndex = id;
-        }
-
-        public int GetPlayerIndex() {
-            return playerIndex;
+            PlayerIndex = id;
         }
 
         // Name
         public void SetUserName(string name) {
-            userName = name;
-        }
-
-        public string GetUserName() {
-            return userName;
+            UserName = name;
         }
 
         // Score
         public void Score_Inc() {
             score++;
-        }
-
-        public int Score_Get() {
-            return score;
         }
 
     }
