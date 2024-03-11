@@ -44,10 +44,8 @@ namespace Ping.Server.Business.Game {
 
             // Set Physical
             var rb = physicalCore.Rigidbody_CreateCircle(pos, config.ballRadius);
-            var mat = new PhysicalMaterial();
             rb.SetMass(1);
-            mat.SetRestitution(1);
-            rb.SetMaterial(mat);
+            rb.SetRestitution(1);
             ball.RB_Set(rb);
 
             return ball;

@@ -28,8 +28,8 @@ namespace MortiseFrame.Pulse {
         public IShape Shape => shape;
 
         // Material
-        PhysicalMaterial material;
-        public PhysicalMaterial Material => material;
+        float restitution;
+        public float Restitution => restitution;
 
         // Trigger
         bool isTrigger;
@@ -82,7 +82,7 @@ namespace MortiseFrame.Pulse {
         }
 
         // Material
-        public void SetMaterial(PhysicalMaterial value) => material = value;
+        public void SetRestitution(float value) => restitution = value;
 
         // Transform
         public void SetPos(FVector2 pos) {
