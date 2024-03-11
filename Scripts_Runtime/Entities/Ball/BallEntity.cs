@@ -50,9 +50,15 @@ namespace Ping.Server {
         }
 
         // Move
+        public void Move_SetVelocity_Once(FVector2 dir) {
+            if (RB.Velocity != FVector2.zero) {
+                return;
+            }
+            var v = dir.Normalize() * MoveSpeed;
+            RB.SetVelocity(v);
+        }
+
         public void Move_ByDir(FVector2 dir, float dt) {
-            PLog.LogAssert(dir != FVector2.zero, "BallEntity.Move_ByDir: dir is zero");
-            PLog.LogAssert(Attr_GetMoveSpeed() > 0, "BallEntity.Move_ByDir: MoveSpeed is zero");
             Move_Apply(dir, Attr_GetMoveSpeed(), dt);
         }
 

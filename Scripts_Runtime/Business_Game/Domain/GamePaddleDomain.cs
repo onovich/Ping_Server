@@ -18,8 +18,7 @@ namespace Ping.Server.Business.Game {
 
         public static void ApplyMove(GameBusinessContext ctx, PaddleEntity paddle, float fixdt) {
             var field = ctx.fieldEntity;
-            var constrain = field.GetBound();
-            paddle.Move_MoveByInput(fixdt, constrain);
+            paddle.Move_MoveByInput(fixdt);
         }
 
     }

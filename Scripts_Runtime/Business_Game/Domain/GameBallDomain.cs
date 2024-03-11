@@ -22,7 +22,7 @@ namespace Ping.Server.Business.Game {
             // if (PredictHit(ctx, ball, ball.Radius, hitGate)) {
             //     return;
             // }
-            ball.Move_ByDir(dir, fixdt);
+            ball.Move_SetVelocity_Once(dir);
             CheckHit(ctx, ball, 0.02f, hitGate);
         }
 

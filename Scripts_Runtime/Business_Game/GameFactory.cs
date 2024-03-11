@@ -38,15 +38,16 @@ namespace Ping.Server.Business.Game {
             ball.Attr_SetMoveSpeedMax(config.ballMoveSpeedMax);
             ball.Attr_SetRadius(config.ballRadius);
 
-            // Set Pos
-            ball.Pos_SetPos(pos);
-
             // Set FSM
             var fsmCom = ball.FSM_GetComponent();
             fsmCom.EnterIdle();
 
             // Set Physical
             var rb = physicalCore.Rigidbody_CreateCircle(pos, config.ballRadius);
+            var mat = new PhysicalMaterial();
+            rb.SetMass(1);
+            mat.SetRestitution(1);
+            rb.SetMaterial(mat);
             ball.RB_Set(rb);
 
             return ball;
@@ -72,15 +73,13 @@ namespace Ping.Server.Business.Game {
             paddle.Attr_SetMoveSpeedMax(config.paddleMoveSpeedMax);
             paddle.Attr_SetSize(config.paddleSize);
 
-            // Set Pos
-            paddle.Pos_SetPos(pos);
-
             // Set FSM
             var fsmCom = paddle.FsmCom;
             fsmCom.Moving_Enter();
 
             // Set Physical
             var rb = physicalCore.Rigidbody_CreateBox(pos, config.paddleSize);
+            rb.SetMass(10);
             paddle.RB_Set(rb);
 
             return paddle;

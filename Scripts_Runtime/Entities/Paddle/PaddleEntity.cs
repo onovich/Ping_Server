@@ -57,22 +57,22 @@ namespace Ping.Server {
         }
 
         // Move
-        public void Move_MoveByInput(float dt, AABB constrain) {
+        public void Move_MoveByInput(float dt) {
             Move_Apply(inputCom.MoveAxis.normalized, Attr_GetMoveSpeed(), dt);
             var pos = RB.Transform.Pos;
-            var constrainMin = constrain.Min;
-            var constrainMax = constrain.Max;
-            var constrainCenter = constrain.Center;
+            // var constrainMin = constrain.Min;
+            // var constrainMax = constrain.Max;
+            // var constrainCenter = constrain.Center;
 
-            if (PlayerIndex == 0) {
-                pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
-                pos.y = FMath.Clamp(pos.y, constrainMin.y + Size.y / 2, constrainCenter.y - Size.y / 2);
-            }
+            // if (PlayerIndex == 0) {
+            //     pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
+            //     pos.y = FMath.Clamp(pos.y, constrainMin.y + Size.y / 2, constrainCenter.y - Size.y / 2);
+            // }
 
-            if (PlayerIndex == 1) {
-                pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
-                pos.y = FMath.Clamp(pos.y, constrainCenter.y + Size.y / 2, constrainMax.y - Size.y / 2);
-            }
+            // if (PlayerIndex == 1) {
+            //     pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
+            //     pos.y = FMath.Clamp(pos.y, constrainCenter.y + Size.y / 2, constrainMax.y - Size.y / 2);
+            // }
 
             Pos_SetPos(pos);
         }
