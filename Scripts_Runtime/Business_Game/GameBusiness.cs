@@ -6,8 +6,6 @@ namespace Ping.Server.Business.Game {
 
     public static class GameBusiness {
 
-        static float restTime;
-
         public static void Init(GameBusinessContext ctx) { }
 
         static void StartGame(GameBusinessContext ctx) {
@@ -101,6 +99,10 @@ namespace Ping.Server.Business.Game {
             }
             var axis = msg.moveAxis;
             GameInputDomain.Paddle_BakeInput(ctx, paddle, axis);
+        }
+
+        public static void OnTriggerEnter(GameBusinessContext ctx, RigidbodyEntity a, RigidbodyEntity b) {
+            GamePhysicalDomain.OnTriggerEnter(ctx, a, b);
         }
 
         public static void TearDown(GameBusinessContext ctx) {

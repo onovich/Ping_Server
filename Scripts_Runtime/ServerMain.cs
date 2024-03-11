@@ -112,10 +112,20 @@ namespace Ping.Server {
 
             Binding_Request_Game();
             Binding_Game();
+
+            Binding_Physical();
         }
 
         void Binding_Net() {
             RequestInfra.Bind(requestInfraContext);
+        }
+
+        void Binding_Physical() {
+            var evt = physicalCore.EventCenter;
+
+            evt.OnTriggerEnterHandle += (a, b) => {
+                GameBusiness.OnTriggerEnter(gameBusinessContext, a, b);
+            };
         }
 
         void Binding_Login() {

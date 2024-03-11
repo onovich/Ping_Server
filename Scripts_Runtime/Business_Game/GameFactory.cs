@@ -18,12 +18,14 @@ namespace Ping.Server.Business.Game {
             var wall0 = new WallEntity();
             var rb_wall0 = physicalCore.Rigidbody_CreateBox(config.wall0Pos, config.wall0Size);
             rb_wall0.SetIsStatic(true);
+            rb_wall0.SetHolder((int)EntityType.Wall, 0);
             wall0.RB_Set(rb_wall0);
             field.Wall_Add(wall0);
 
             var wall1 = new WallEntity();
             var rb_wall1 = physicalCore.Rigidbody_CreateBox(config.wall1Pos, config.wall1Size);
-            rb_wall0.SetIsStatic(true);
+            rb_wall1.SetIsStatic(true);
+            rb_wall1.SetHolder((int)EntityType.Wall, 1);
             wall1.RB_Set(rb_wall1);
             field.Wall_Add(wall1);
 
@@ -31,14 +33,16 @@ namespace Ping.Server.Business.Game {
             var gate0 = new GateEntity(0);
             var rb_gate0 = physicalCore.Rigidbody_CreateBox(config.gate0Pos, config.gate0Size);
             rb_gate0.SetIsTrigger(true);
-            rb_wall0.SetIsStatic(true);
+            rb_gate0.SetIsStatic(true);
+            rb_gate0.SetHolder((int)EntityType.Gate, 0);
             gate0.RB_Set(rb_gate0);
             field.Gate_Add(gate0);
 
             var gate1 = new GateEntity(1);
             var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
-            rb_gate0.SetIsTrigger(true);
-            rb_wall0.SetIsStatic(true);
+            rb_gate1.SetIsTrigger(true);
+            rb_gate1.SetIsStatic(true);
+            rb_gate1.SetHolder((int)EntityType.Gate, 1);
             gate1.RB_Set(rb_gate1);
             field.Gate_Add(gate1);
 
@@ -68,6 +72,7 @@ namespace Ping.Server.Business.Game {
             var rb = physicalCore.Rigidbody_CreateCircle(pos, config.ballRadius);
             rb.SetMass(1);
             rb.SetRestitution(1);
+            rb.SetHolder((int)EntityType.Ball, 0);
             ball.RB_Set(rb);
 
             return ball;
@@ -100,6 +105,7 @@ namespace Ping.Server.Business.Game {
             // Set Physical
             var rb = physicalCore.Rigidbody_CreateBox(pos, config.paddleSize);
             rb.SetMass(10);
+            rb.SetHolder((int)EntityType.Paddle, playerIndex);
             paddle.RB_Set(rb);
 
             return paddle;

@@ -16,49 +16,10 @@ namespace Ping.Server.Business.Game {
             ball.TearDown();
         }
 
-        public static void MoveAndApplyHit(GameBusinessContext ctx, BallEntity ball, float fixdt, Action<int> hitGate) {
+        public static void SetMoveOnce(GameBusinessContext ctx, BallEntity ball, float fixdt) {
             BallFSMComponent fsm = ball.FSM_GetComponent();
             var dir = fsm.movingDir;
             ball.Move_SetVelocity_Once(dir);
-            CheckHit(ctx, ball, 0.02f, hitGate);
-        }
-
-        static bool PredictHit(GameBusinessContext ctx, BallEntity ball, float dis, Action<int> hitGate) {
-            var succ = CheckHit(ctx, ball, dis, hitGate);
-            return succ;
-        }
-
-        static bool CheckHit(GameBusinessContext ctx, BallEntity ball, float dis, Action<int> hitGate) {
-            return false;
-        }
-
-        static bool TryHitPaddle(GameBusinessContext ctx, BallEntity ball, Hits hit) {
-            return true;
-        }
-
-        static bool TryHitWall(GameBusinessContext ctx, BallEntity ball, Hits hit) {
-            // var wall = hit.transform.GetComponent<WallEntity>();
-            // if (wall == null) {
-            //     return false;
-            // }
-            // var normal = hit.normal;
-            // Reflect(ctx, ball, normal);
-            return false;
-        }
-
-        static bool TryHitGate(GameBusinessContext ctx, BallEntity ball, Hits hit, Action<int> hitGate) {
-            // var gate = hit.transform.GetComponent<GateEntity>();
-            // if (gate == null) {
-            //     return false;
-            // }
-            // hitGate.Invoke(gate.playerIndex);
-            return false;
-        }
-
-        static void Reflect(GameBusinessContext ctx, BallEntity ball, FVector2 normal) {
-            var srcDir = ball.Pos_GetDirection();
-            var drtDir = FVector2.Reflect(srcDir, normal);
-            ball.FSM_SetMovingDir(drtDir);
         }
 
     }

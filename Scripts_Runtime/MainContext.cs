@@ -6,7 +6,6 @@ namespace Ping.Server {
 
         // Entity
         SortedList<int, PlayerEntity> players;
-        PlayerEntity player1Entity;
 
         public MainContext() {
             players = new SortedList<int, PlayerEntity>(2);
