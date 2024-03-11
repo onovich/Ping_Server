@@ -14,6 +14,10 @@ namespace Ping.Server {
         // Physics
         RigidbodyEntity RB;
 
+        public GateEntity(int playerIndex) {
+            this.playerIndex = playerIndex;
+        }
+
         public void RB_Set(RigidbodyEntity RB) {
             this.RB = RB;
         }

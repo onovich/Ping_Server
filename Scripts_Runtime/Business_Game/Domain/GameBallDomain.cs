@@ -19,9 +19,6 @@ namespace Ping.Server.Business.Game {
         public static void MoveAndApplyHit(GameBusinessContext ctx, BallEntity ball, float fixdt, Action<int> hitGate) {
             BallFSMComponent fsm = ball.FSM_GetComponent();
             var dir = fsm.movingDir;
-            // if (PredictHit(ctx, ball, ball.Radius, hitGate)) {
-            //     return;
-            // }
             ball.Move_SetVelocity_Once(dir);
             CheckHit(ctx, ball, 0.02f, hitGate);
         }

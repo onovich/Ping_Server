@@ -5,12 +5,20 @@ namespace Ping.Server {
 
     public class FieldEntity {
 
-        AABB bound;
-        WallEntity[] walls;
-        GateEntity[] gates;
+        List<WallEntity> walls;
+        List<GateEntity> gates;
 
         public void Ctor() {
+            walls = new List<WallEntity>(2);
+            gates = new List<GateEntity>(2);
+        }
 
+        public void Wall_Add(WallEntity wall) {
+            walls.Add(wall);
+        }
+
+        public void Gate_Add(GateEntity gate) {
+            gates.Add(gate);
         }
 
         public void TearDown() {

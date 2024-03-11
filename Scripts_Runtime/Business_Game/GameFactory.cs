@@ -17,22 +17,30 @@ namespace Ping.Server.Business.Game {
             // Set Wall
             var wall0 = new WallEntity();
             var rb_wall0 = physicalCore.Rigidbody_CreateBox(config.wall0Pos, config.wall0Size);
+            rb_wall0.SetIsStatic(true);
             wall0.RB_Set(rb_wall0);
+            field.Wall_Add(wall0);
 
             var wall1 = new WallEntity();
             var rb_wall1 = physicalCore.Rigidbody_CreateBox(config.wall1Pos, config.wall1Size);
+            rb_wall0.SetIsStatic(true);
             wall1.RB_Set(rb_wall1);
+            field.Wall_Add(wall1);
 
             // Set Gate
-            var gate0 = new GateEntity();
+            var gate0 = new GateEntity(0);
             var rb_gate0 = physicalCore.Rigidbody_CreateBox(config.gate0Pos, config.gate0Size);
             rb_gate0.SetIsTrigger(true);
+            rb_wall0.SetIsStatic(true);
             gate0.RB_Set(rb_gate0);
+            field.Gate_Add(gate0);
 
-            var gate1 = new GateEntity();
+            var gate1 = new GateEntity(1);
             var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
             rb_gate0.SetIsTrigger(true);
+            rb_wall0.SetIsStatic(true);
             gate1.RB_Set(rb_gate1);
+            field.Gate_Add(gate1);
 
             return field;
         }
