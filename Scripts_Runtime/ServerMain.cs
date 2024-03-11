@@ -11,7 +11,6 @@ namespace Ping.Server {
     public class ServerMain {
 
         TemplateInfraContext templateInfraContext;
-        Physics2DInfraContext physics2DInfraContext;
         RequestInfraContext requestInfraContext;
 
         LoginBusinessContext loginBusinessContext;
@@ -35,7 +34,6 @@ namespace Ping.Server {
             gameBusinessContext = new GameBusinessContext();
 
             templateInfraContext = new TemplateInfraContext();
-            physics2DInfraContext = new Physics2DInfraContext();
             requestInfraContext = new RequestInfraContext();
 
             mainContext = new MainContext();
@@ -43,7 +41,6 @@ namespace Ping.Server {
             // Inject
             gameBusinessContext.reqInfraContext = requestInfraContext;
             gameBusinessContext.templateInfraContext = templateInfraContext;
-            gameBusinessContext.physics2DContext = physics2DInfraContext;
             gameBusinessContext.mainContext = mainContext;
 
             loginBusinessContext.reqInfraContext = requestInfraContext;

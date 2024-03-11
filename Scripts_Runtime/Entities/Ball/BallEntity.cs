@@ -17,36 +17,24 @@ namespace Ping.Server {
         public BallFSMComponent FSMCom { get; private set; }
 
         // Physics
-        public Rigidbody2DComponent RB { get; private set; }
-
-        // Collider
-        public Circle collider { get; private set; }
-
-        // Transform
-        public TranformComponent Transform { get; private set; }
+        public RigidbodyEntity RB { get; private set; }
 
         public void Ctor() {
             FSMCom = new BallFSMComponent();
-            Transform = new TranformComponent();
-            RB = new Rigidbody2DComponent();
-        }
-
-        public void Inject() {
-            Transform.Inject(this);
         }
 
         // Pos
-        public void Pos_SetPos(Vector2 pos) {
-            Transform.Pos = pos;
+        public void Pos_SetPos(FVector2 pos) {
+            RB.SetPos(pos);
         }
 
-        public Vector2 Pos_GetDirection() {
+        public FVector2 Pos_GetDirection() {
             return FSMCom.movingDir;
         }
 
         // Attr
         public float Attr_GetMoveSpeed() {
-            return Mathf.Clamp(MoveSpeed, 0, MoveSpeedMax);
+            return FMath.Clamp(MoveSpeed, 0, MoveSpeedMax);
         }
 
         public void Attr_SetMoveSpeed(float speed) {
@@ -62,18 +50,19 @@ namespace Ping.Server {
         }
 
         // Move
-        public void Move_ByDir(Vector2 dir, float dt) {
-            PLog.LogAssert(dir != Vector2.zero, "BallEntity.Move_ByDir: dir is zero");
+        public void Move_ByDir(FVector2 dir, float dt) {
+            PLog.LogAssert(dir != FVector2.zero, "BallEntity.Move_ByDir: dir is zero");
             PLog.LogAssert(Attr_GetMoveSpeed() > 0, "BallEntity.Move_ByDir: MoveSpeed is zero");
             Move_Apply(dir, Attr_GetMoveSpeed(), dt);
         }
 
         public void Move_Stop() {
-            Move_Apply(Vector2.zero, 0, 0);
+            Move_Apply(FVector2.zero, 0, 0);
         }
 
-        void Move_Apply(Vector2 dir, float MoveSpeed, float fixdt) {
-            RB.Velocity = dir.Normalize() * MoveSpeed;
+        void Move_Apply(FVector2 dir, float MoveSpeed, float fixdt) {
+            var v = dir.Normalize() * MoveSpeed;
+            RB.SetVelocity(v);
         }
 
         // FSM
@@ -85,14 +74,16 @@ namespace Ping.Server {
             return FSMCom;
         }
 
-        public void FSM_SetMovingDir(Vector2 dir) {
+        public void FSM_SetMovingDir(FVector2 dir) {
             FSMCom.movingDir = dir;
         }
 
         // Physics
-        public Rigidbody2DComponent Rigidbody2D_Get() {
-            return RB;
+        public void RB_Set(FVector2 pos, float radius) {
+            var shape = new CircleShape(radius);
+            RB = new RigidbodyEntity(pos, shape);
         }
+
 
         public void TearDown() {
         }

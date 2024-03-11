@@ -57,8 +57,6 @@ namespace Ping.Server.Business.Game {
             if (paddle1 == null) { return; }
             GamePaddleFSMController.FixedTickFSM(ctx, paddle1, dt);
 
-            Physics2DInfra.Simulate(ctx.physics2DContext, dt);
-
         }
 
         public static void LateTick(GameBusinessContext ctx, float dt) {
@@ -72,13 +70,13 @@ namespace Ping.Server.Business.Game {
 
             // Send Net Res
             var ball = ctx.Ball_Get();
-            var ballPos = ball.Transform.Pos;
+            var ballPos = ball.RB.Transform.Pos;
 
             var paddle0 = ctx.Paddle_Get(0);
-            var paddle0Pos = paddle0.Transform.Pos;
+            var paddle0Pos = paddle0.RB.Transform.Pos;
 
             var paddle1 = ctx.Paddle_Get(1);
-            var paddle1Pos = paddle1.Transform.Pos;
+            var paddle1Pos = paddle1.RB.Transform.Pos;
 
             RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
 

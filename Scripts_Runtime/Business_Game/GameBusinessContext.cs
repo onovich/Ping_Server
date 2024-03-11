@@ -15,11 +15,10 @@ namespace Ping.Server.Business.Game {
         SortedList<int, PaddleEntity> paddles;
 
         // TEMP
-        public RaycastHit2D[] raycastTemp;
+        public Hits raycastTemp;
 
         // Infra
         public TemplateInfraContext templateInfraContext;
-        public Physics2DInfraContext physics2DContext;
         public RequestInfraContext reqInfraContext;
 
         // Main
@@ -27,7 +26,6 @@ namespace Ping.Server.Business.Game {
 
         public GameBusinessContext() {
             gameEntity = new GameEntity();
-            raycastTemp = new RaycastHit2D[1000];
             paddles = new SortedList<int, PaddleEntity>(2);
         }
 
@@ -52,7 +50,7 @@ namespace Ping.Server.Business.Game {
         }
 
         // Paddle
-        public void Paddle_Set(PaddleEntity paddleEntity) {
+        public void Paddle_Add(PaddleEntity paddleEntity) {
             paddles[paddleEntity.PlayerIndex] = paddleEntity;
         }
 

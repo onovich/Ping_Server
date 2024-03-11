@@ -13,7 +13,7 @@ namespace Ping.Server {
         public bool Dead_isEntering { get; set; }
         public int Dead_gatePlayerIndex { get; set; }
 
-        public Vector2 movingDir;
+        public FVector2 movingDir;
 
         public BallFSMComponent() { }
 
@@ -22,7 +22,7 @@ namespace Ping.Server {
             Idle_isEntering = true;
         }
 
-        public void EnterMoving(Vector2 movingDir) {
+        public void EnterMoving(FVector2 movingDir) {
             Status = BallFSMStatus.Moving;
             Moving_isEntering = true;
             this.movingDir = movingDir;

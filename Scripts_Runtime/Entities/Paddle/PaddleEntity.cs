@@ -13,7 +13,7 @@ namespace Ping.Server {
         // Attr
         float MoveSpeed { get; set; }
         public float MoveSpeedMax { get; private set; }
-        public Vector2 Size { get; private set; }
+        public FVector2 Size { get; private set; }
 
         // FSM
         public PaddleFSMComponent FsmCom { get; private set; }
@@ -22,21 +22,11 @@ namespace Ping.Server {
         PaddleInputComponent inputCom;
 
         // Physics
-        public Rigidbody2DComponent RB { get; private set; }
-        public AABB ColliderBox { get; private set; }
-
-        // Transform
-        public TranformComponent Transform { get; private set; }
+        public RigidbodyEntity RB { get; private set; }
 
         public void Ctor() {
             inputCom = new PaddleInputComponent();
             FsmCom = new PaddleFSMComponent();
-            RB = new Rigidbody2DComponent();
-            Transform = new TranformComponent();
-        }
-
-        public void Inject() {
-            Transform.Inject(this);
         }
 
         // Base Info
@@ -45,13 +35,13 @@ namespace Ping.Server {
         }
 
         // Pos
-        public void Pos_SetPos(Vector2 pos) {
-            Transform.Pos = pos;
+        public void Pos_SetPos(FVector2 pos) {
+            RB.SetPos(pos);
         }
 
         // Attr
         public float Attr_GetMoveSpeed() {
-            return Mathf.Clamp(MoveSpeed, 0, MoveSpeedMax);
+            return FMath.Clamp(MoveSpeed, 0, MoveSpeedMax);
         }
 
         public void Attr_SetMoveSpeed(float speed) {
@@ -62,49 +52,56 @@ namespace Ping.Server {
             MoveSpeedMax = speed;
         }
 
-        public void Attr_SetSize(Vector2 size) {
+        public void Attr_SetSize(FVector2 size) {
             this.Size = size;
         }
 
         // Move
         public void Move_MoveByInput(float dt, AABB constrain) {
             Move_Apply(inputCom.MoveAxis.normalized, Attr_GetMoveSpeed(), dt);
-            var pos = Transform.Pos;
+            var pos = RB.Transform.Pos;
             var constrainMin = constrain.Min;
             var constrainMax = constrain.Max;
             var constrainCenter = constrain.Center;
 
             if (PlayerIndex == 0) {
-                pos.x = Mathf.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
-                pos.y = Mathf.Clamp(pos.y, constrainMin.y + Size.y / 2, constrainCenter.y - Size.y / 2);
+                pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
+                pos.y = FMath.Clamp(pos.y, constrainMin.y + Size.y / 2, constrainCenter.y - Size.y / 2);
             }
 
             if (PlayerIndex == 1) {
-                pos.x = Mathf.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
-                pos.y = Mathf.Clamp(pos.y, constrainCenter.y + Size.y / 2, constrainMax.y - Size.y / 2);
+                pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
+                pos.y = FMath.Clamp(pos.y, constrainCenter.y + Size.y / 2, constrainMax.y - Size.y / 2);
             }
 
             Pos_SetPos(pos);
         }
 
         public void Move_Stop() {
-            Move_Apply(Vector2.zero, 0, 0);
+            Move_Apply(FVector2.zero, 0, 0);
         }
 
-        void Move_Apply(Vector2 dir, float moveSpeed, float fixdt) {
-            RB.Velocity = dir.normalized * moveSpeed;
+        void Move_Apply(FVector2 dir, float moveSpeed, float fixdt) {
+            var v = dir.normalized * moveSpeed;
+            RB.SetVelocity(v);
+        }
+
+        // Physics
+        public void RB_Set(FVector2 pos, FVector2 size) {
+            var shape = new BoxShape(size);
+            RB = new RigidbodyEntity(pos, shape);
         }
 
         public void TearDown() {
         }
 
         // Input
-        public void Input_SetMoveAxis(Vector2 axis) {
+        public void Input_SetMoveAxis(FVector2 axis) {
             inputCom.MoveAxis = axis;
         }
 
         public void Input_Reset() {
-            inputCom.MoveAxis = Vector2.zero;
+            inputCom.MoveAxis = FVector2.zero;
         }
 
     }

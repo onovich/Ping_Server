@@ -17,13 +17,13 @@ namespace Ping.Server {
             }
         }
 
-        public Vector2 GetRandomDirection(Vector2 baseDir, float angleRange) {
+        public FVector2 GetRandomDirection(FVector2 baseDir, float angleRange) {
 
             float randomAngle = (float)(random.NextDouble() * angleRange - angleRange / 2);
-            float radian = randomAngle * Mathf.Deg2Rad;
-            float cos = Mathf.Cos(radian);
-            float sin = Mathf.Sin(radian);
-            Vector2 newDir = new Vector2(
+            float radian = randomAngle * FMath.Deg2Rad;
+            float cos = FMath.Cos(radian);
+            float sin = FMath.Sin(radian);
+            FVector2 newDir = new FVector2(
                 baseDir.x * cos - baseDir.y * sin,
                 baseDir.x * sin + baseDir.y * cos
             );

@@ -4,7 +4,7 @@ namespace Ping.Server.Business.Game {
 
     public class GameInputDomain {
 
-        public static void Paddle_BakeInput(GameBusinessContext ctx, PaddleEntity paddle, Vector2 axis) {
+        public static void Paddle_BakeInput(GameBusinessContext ctx, PaddleEntity paddle, FVector2 axis) {
             paddle.Input_SetMoveAxis(axis);
         }
 

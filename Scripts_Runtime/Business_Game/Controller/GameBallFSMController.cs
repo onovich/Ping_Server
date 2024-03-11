@@ -33,7 +33,7 @@ namespace Ping.Server.Business.Game {
 
             var turn = ctx.gameEntity.Turn;
             var side = turn % 2;
-            var dir = side == 0 ? Vector2.down : Vector2.up;
+            var dir = side == 0 ? FVector2.down : FVector2.up;
             var game = ctx.gameEntity;
             var config = ctx.templateInfraContext.Config_Get();
             dir = game.random.GetRandomDirection(dir, config.ballSpawnAngleRange);
@@ -58,7 +58,7 @@ namespace Ping.Server.Business.Game {
             if (fsm.Dead_isEntering) {
                 fsm.Dead_isEntering = false;
                 ball.Move_Stop();
-                ball.Pos_SetPos(Vector2.zero);
+                ball.Pos_SetPos(FVector2.zero);
                 GameGameDomain.Win(ctx, fsm.Dead_gatePlayerIndex);
             }
             fsm.EnterIdle();

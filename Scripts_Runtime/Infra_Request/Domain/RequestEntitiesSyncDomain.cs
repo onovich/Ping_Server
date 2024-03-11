@@ -8,14 +8,14 @@ namespace Ping.Server.Requests {
     public static class RequestEntitiesSyncDomain {
 
         // Send
-        public static void Send_EntitiesSyncBroadRes(RequestInfraContext ctx, Vector2 paddle0Pos, Vector2 paddle1Pos, Vector2 ballPos) {
+        public static void Send_EntitiesSyncBroadRes(RequestInfraContext ctx, FVector2 paddle0Pos, FVector2 paddle1Pos, FVector2 ballPos) {
             ctx.CliendState_ForEachOrderly(async (clientState) => {
                 await Send_EntitiesSyncRes(ctx, clientState, paddle0Pos, paddle1Pos, ballPos);
             });
 
         }
 
-        static async Task Send_EntitiesSyncRes(RequestInfraContext ctx, ClientStateEntity clientState, Vector2 paddle0Pos, Vector2 paddle1Pos, Vector2 ballPos) {
+        static async Task Send_EntitiesSyncRes(RequestInfraContext ctx, ClientStateEntity clientState, FVector2 paddle0Pos, FVector2 paddle1Pos, FVector2 ballPos) {
             try {
                 var msg = new EntitiesSyncBroadMessage();
                 msg.paddle0Pos = paddle0Pos;

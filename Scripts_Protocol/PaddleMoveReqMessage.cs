@@ -6,19 +6,19 @@ namespace Ping.Protocol {
 
     public struct PaddleMoveReqMessage : IMessage<PaddleMoveReqMessage> {
 
-        public Vector2 moveAxis;
+        public FVector2 moveAxis;
 
         public void WriteTo(byte[] dst, ref int offset) {
-            ByteWriter.Write<Vector2>(dst, moveAxis, ref offset);
+            ByteWriter.Write<FVector2>(dst, moveAxis, ref offset);
         }
 
         public void FromBytes(byte[] src, ref int offset) {
-            moveAxis = ByteReader.Read<Vector2>(src, ref offset);
+            moveAxis = ByteReader.Read<FVector2>(src, ref offset);
         }
 
         public int GetEvaluatedSize(out bool isCertain) {
             isCertain = true;
-            int count = ByteCounter.Count<Vector2>();
+            int count = ByteCounter.Count<FVector2>();
             return count;
         }
 
