@@ -79,11 +79,9 @@ namespace Ping.Server {
         }
 
         // Physics
-        public void RB_Set(FVector2 pos, float radius) {
-            var shape = new CircleShape(radius);
-            RB = new RigidbodyEntity(pos, shape);
+        public void RB_Set(RigidbodyEntity RB) {
+            this.RB = RB;
         }
-
 
         public void TearDown() {
         }

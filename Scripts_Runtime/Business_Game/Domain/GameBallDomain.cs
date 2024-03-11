@@ -6,7 +6,7 @@ namespace Ping.Server.Business.Game {
     public static class GameBallDomain {
 
         public static BallEntity SpawnAtOriginPos(GameBusinessContext ctx, FVector2 pos) {
-            var Ball = GameFactory.Ball_Spawn(ctx.templateInfraContext, pos);
+            var Ball = GameFactory.Ball_Spawn(ctx.templateInfraContext, ctx.physicalCore, pos);
             ctx.Ball_Set(Ball);
             return Ball;
         }
@@ -32,7 +32,7 @@ namespace Ping.Server.Business.Game {
         }
 
         static bool CheckHit(GameBusinessContext ctx, BallEntity ball, float dis, Action<int> hitGate) {
-            return true;
+            return false;
         }
 
         static bool TryHitPaddle(GameBusinessContext ctx, BallEntity ball, Hits hit) {

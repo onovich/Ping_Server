@@ -57,6 +57,8 @@ namespace Ping.Server.Business.Game {
             if (paddle1 == null) { return; }
             GamePaddleFSMController.FixedTickFSM(ctx, paddle1, dt);
 
+            ctx.physicalCore.Tick(dt);
+
         }
 
         public static void LateTick(GameBusinessContext ctx, float dt) {

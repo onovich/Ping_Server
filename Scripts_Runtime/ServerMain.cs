@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Ping.Server.Business.Game;
 using Ping.Server.Business.Login;
 using Ping.Server.Requests;
+using MortiseFrame.Pulse;
 
 namespace Ping.Server {
 
@@ -17,6 +18,7 @@ namespace Ping.Server {
         GameBusinessContext gameBusinessContext;
 
         MainContext mainContext;
+        PhysicalCore physicalCore;
 
         bool isLoadedAssets;
         bool isTearDown;
@@ -37,11 +39,13 @@ namespace Ping.Server {
             requestInfraContext = new RequestInfraContext();
 
             mainContext = new MainContext();
+            physicalCore = new PhysicalCore();
 
             // Inject
             gameBusinessContext.reqInfraContext = requestInfraContext;
             gameBusinessContext.templateInfraContext = templateInfraContext;
             gameBusinessContext.mainContext = mainContext;
+            gameBusinessContext.physicalCore = physicalCore;
 
             loginBusinessContext.reqInfraContext = requestInfraContext;
             loginBusinessContext.mainContext = mainContext;

@@ -21,6 +21,9 @@ namespace Ping.Server.Business.Game {
         public TemplateInfraContext templateInfraContext;
         public RequestInfraContext reqInfraContext;
 
+        // Core
+        public PhysicalCore physicalCore;
+
         // Main
         public MainContext mainContext;
 

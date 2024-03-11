@@ -1,4 +1,5 @@
 using MortiseFrame.Abacus;
+using MortiseFrame.Pulse;
 
 namespace Ping.Server.Business.Game {
 
@@ -24,6 +25,7 @@ namespace Ping.Server.Business.Game {
 
         // Ball
         public static BallEntity Ball_Spawn(TemplateInfraContext templateInfraContext,
+                                            PhysicalCore physicalCore,
                                             FVector2 pos) {
 
             var config = templateInfraContext.Config_Get();
@@ -43,12 +45,17 @@ namespace Ping.Server.Business.Game {
             var fsmCom = ball.FSM_GetComponent();
             fsmCom.EnterIdle();
 
+            // Set Physical
+            var rb = physicalCore.Rigidbody_CreateCircle(pos, config.ballRadius);
+            ball.RB_Set(rb);
+
             return ball;
 
         }
 
         // Paddle
         public static PaddleEntity Paddle_Spawn(TemplateInfraContext templateInfraContext,
+                                                PhysicalCore physicalCore,
                                                 int playerIndex,
                                                 FVector2 pos) {
 
@@ -71,6 +78,10 @@ namespace Ping.Server.Business.Game {
             // Set FSM
             var fsmCom = paddle.FsmCom;
             fsmCom.Moving_Enter();
+
+            // Set Physical
+            var rb = physicalCore.Rigidbody_CreateBox(pos, config.paddleSize);
+            paddle.RB_Set(rb);
 
             return paddle;
         }

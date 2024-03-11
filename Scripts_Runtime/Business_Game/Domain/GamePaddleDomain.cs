@@ -5,7 +5,7 @@ namespace Ping.Server.Business.Game {
     public static class GamePaddleDomain {
 
         public static PaddleEntity Spawn(GameBusinessContext ctx, int playerIndex, FVector2 pos) {
-            var Paddle = GameFactory.Paddle_Spawn(ctx.templateInfraContext, playerIndex, pos);
+            var Paddle = GameFactory.Paddle_Spawn(ctx.templateInfraContext, ctx.physicalCore, playerIndex, pos);
             ctx.Paddle_Add(Paddle);
             PLog.Log("GamePaddleDomain.Spawn: PlayerIndex " + playerIndex + " pos " + pos);
             return Paddle;
