@@ -5,7 +5,7 @@ namespace Ping.Server.Business.Game {
     public static class GameFieldDomain {
 
         public static FieldEntity Spawn(GameBusinessContext ctx) {
-            var field = GameFactory.Field_Spawn(ctx.templateInfraContext);
+            var field = GameFactory.Field_Spawn(ctx.templateInfraContext, ctx.physicalCore);
             ctx.Field_Set(field);
             return field;
         }

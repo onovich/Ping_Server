@@ -13,14 +13,6 @@ namespace Ping.Server {
 
         }
 
-        public void SetBound(FVector2 min, FVector2 max) {
-            bound = new AABB(min, max);
-        }
-
-        public AABB GetBound() {
-            return bound;
-        }
-
         public void TearDown() {
             foreach (var wall in walls) {
                 wall.TearDown();

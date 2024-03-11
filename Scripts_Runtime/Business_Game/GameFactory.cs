@@ -6,19 +6,33 @@ namespace Ping.Server.Business.Game {
     public static class GameFactory {
 
         // Field
-        public static FieldEntity Field_Spawn(TemplateInfraContext templateInfraContext) {
+        public static FieldEntity Field_Spawn(TemplateInfraContext templateInfraContext,
+                                              PhysicalCore physicalCore) {
 
             var config = templateInfraContext.Config_Get();
 
             var field = new FieldEntity();
             field.Ctor();
 
-            // Set Bound
-            field.SetBound(config.fieldBoundMin, config.fieldBoundMax);
-
             // Set Wall
+            var wall0 = new WallEntity();
+            var rb_wall0 = physicalCore.Rigidbody_CreateBox(config.wall0Pos, config.wall0Size);
+            wall0.RB_Set(rb_wall0);
+
+            var wall1 = new WallEntity();
+            var rb_wall1 = physicalCore.Rigidbody_CreateBox(config.wall1Pos, config.wall1Size);
+            wall1.RB_Set(rb_wall1);
 
             // Set Gate
+            var gate0 = new GateEntity();
+            var rb_gate0 = physicalCore.Rigidbody_CreateBox(config.gate0Pos, config.gate0Size);
+            rb_gate0.SetIsTrigger(true);
+            gate0.RB_Set(rb_gate0);
+
+            var gate1 = new GateEntity();
+            var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
+            rb_gate0.SetIsTrigger(true);
+            gate1.RB_Set(rb_gate1);
 
             return field;
         }

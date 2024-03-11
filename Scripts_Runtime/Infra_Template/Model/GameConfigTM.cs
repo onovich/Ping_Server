@@ -5,21 +5,17 @@ namespace Ping.Server {
 
     public struct GameConfigTM {
 
-        // Field
-        public FVector2 fieldBoundMax;
-        public FVector2 fieldBoundMin;
-
         // Wall
-        public FVector2 wall0Start;
-        public FVector2 wall0End;
-        public FVector2 wall1Start;
-        public FVector2 wall1End;
+        public FVector2 wall0Pos;
+        public FVector2 wall0Size;
+        public FVector2 wall1Pos;
+        public FVector2 wall1Size;
 
         // Gate
-        public FVector2 gate0Start;
-        public FVector2 gate0End;
-        public FVector2 gate1Start;
-        public FVector2 gate1End;
+        public FVector2 gate0Pos;
+        public FVector2 gate0Size;
+        public FVector2 gate1Pos;
+        public FVector2 gate1Size;
 
         // Ball
         public float ballMoveSpeed;
@@ -36,18 +32,15 @@ namespace Ping.Server {
 
         public void WriteTo(byte[] dst, ref int offset) {
 
-            ByteWriter.Write<FVector2>(dst, fieldBoundMax, ref offset);
-            ByteWriter.Write<FVector2>(dst, fieldBoundMin, ref offset);
+            ByteWriter.Write<FVector2>(dst, wall0Pos, ref offset);
+            ByteWriter.Write<FVector2>(dst, wall0Size, ref offset);
+            ByteWriter.Write<FVector2>(dst, wall1Pos, ref offset);
+            ByteWriter.Write<FVector2>(dst, wall1Size, ref offset);
 
-            ByteWriter.Write<FVector2>(dst, wall0Start, ref offset);
-            ByteWriter.Write<FVector2>(dst, wall0End, ref offset);
-            ByteWriter.Write<FVector2>(dst, wall1Start, ref offset);
-            ByteWriter.Write<FVector2>(dst, wall1End, ref offset);
-
-            ByteWriter.Write<FVector2>(dst, gate0Start, ref offset);
-            ByteWriter.Write<FVector2>(dst, gate0End, ref offset);
-            ByteWriter.Write<FVector2>(dst, gate1Start, ref offset);
-            ByteWriter.Write<FVector2>(dst, gate1End, ref offset);
+            ByteWriter.Write<FVector2>(dst, gate0Pos, ref offset);
+            ByteWriter.Write<FVector2>(dst, gate0Size, ref offset);
+            ByteWriter.Write<FVector2>(dst, gate1Pos, ref offset);
+            ByteWriter.Write<FVector2>(dst, gate1Size, ref offset);
 
             ByteWriter.Write<float>(dst, ballMoveSpeed, ref offset);
             ByteWriter.Write<float>(dst, ballMoveSpeedMax, ref offset);
@@ -64,18 +57,15 @@ namespace Ping.Server {
 
         public void FromBytes(byte[] src, ref int offset) {
 
-            fieldBoundMax = ByteReader.Read<FVector2>(src, ref offset);
-            fieldBoundMin = ByteReader.Read<FVector2>(src, ref offset);
+            wall0Pos = ByteReader.Read<FVector2>(src, ref offset);
+            wall0Size = ByteReader.Read<FVector2>(src, ref offset);
+            wall1Pos = ByteReader.Read<FVector2>(src, ref offset);
+            wall1Size = ByteReader.Read<FVector2>(src, ref offset);
 
-            wall0Start = ByteReader.Read<FVector2>(src, ref offset);
-            wall0End = ByteReader.Read<FVector2>(src, ref offset);
-            wall1Start = ByteReader.Read<FVector2>(src, ref offset);
-            wall1End = ByteReader.Read<FVector2>(src, ref offset);
-
-            gate0Start = ByteReader.Read<FVector2>(src, ref offset);
-            gate0End = ByteReader.Read<FVector2>(src, ref offset);
-            gate1Start = ByteReader.Read<FVector2>(src, ref offset);
-            gate1End = ByteReader.Read<FVector2>(src, ref offset);
+            gate0Pos = ByteReader.Read<FVector2>(src, ref offset);
+            gate0Size = ByteReader.Read<FVector2>(src, ref offset);
+            gate1Pos = ByteReader.Read<FVector2>(src, ref offset);
+            gate1Size = ByteReader.Read<FVector2>(src, ref offset);
 
             ballMoveSpeed = ByteReader.Read<float>(src, ref offset);
             ballMoveSpeedMax = ByteReader.Read<float>(src, ref offset);

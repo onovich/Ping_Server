@@ -12,7 +12,11 @@ namespace Ping.Server {
         public int playerIndex;
 
         // Physics
-        AABB colliderBox;
+        RigidbodyEntity RB;
+
+        public void RB_Set(RigidbodyEntity RB) {
+            this.RB = RB;
+        }
 
         public void TearDown() {
         }
