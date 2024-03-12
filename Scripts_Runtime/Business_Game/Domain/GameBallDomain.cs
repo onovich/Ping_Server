@@ -22,6 +22,12 @@ namespace Ping.Server.Business.Game {
             ball.Move_SetVelocity_Once(dir);
         }
 
+        public static void ResetBall(GameBusinessContext ctx, BallEntity ball) {
+            ball.Pos_SetPos(FVector2.zero);
+            var fsm = ball.FSM_GetComponent();
+            fsm.EnterIdle();
+        }
+
     }
 
 }

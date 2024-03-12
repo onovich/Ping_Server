@@ -12,6 +12,7 @@ namespace Ping.Server.Requests {
 
                 IPEndPoint localEndPoint = new IPEndPoint(RequestConst.LOCAL_IP, RequestConst.LOCAL_PORT);
                 var listenfd = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                listenfd.NoDelay = true;
                 listenfd.Bind(localEndPoint);
 
                 listenfd.Listen(0);

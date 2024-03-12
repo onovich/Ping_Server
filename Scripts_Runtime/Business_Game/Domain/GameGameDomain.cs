@@ -1,4 +1,5 @@
 using MortiseFrame.Abacus;
+using Ping.Server.Requests;
 
 namespace Ping.Server.Business.Game {
 
@@ -56,12 +57,26 @@ namespace Ping.Server.Business.Game {
 
         }
 
+        public static void EnterGameResult(GameBusinessContext ctx, int playerIndex) {
+            var game = ctx.gameEntity;
+            var fsm = game.FSM_GetComponent();
+            fsm.GameResult_Enter(playerIndex);
+        }
+
         public static void Win(GameBusinessContext ctx, int playerIndex) {
             var game = ctx.gameEntity;
             game.Turn_Inc();
             var player = ctx.Player_Get(playerIndex);
             player.Score_Inc();
-            // Send Res
+
+            var fsm = game.FSM_GetComponent();
+
+            var winnierPlayerIndex = fsm.GameResult_winnierPlayerIndex;
+            var socre0 = ctx.Player_Get(0).Score;
+            var socre1 = ctx.Player_Get(1).Score;
+            
+            GameBallDomain.ResetBall(ctx, ctx.Ball_Get());
+            RequestGameResultDomain.Send_GameResultBroadRes(ctx.reqInfraContext, winnierPlayerIndex, game.Turn, socre0, socre1);
         }
 
     }

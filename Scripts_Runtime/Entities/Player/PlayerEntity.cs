@@ -7,7 +7,7 @@ namespace Ping.Server {
         public string UserName { get; private set; }
 
         // Score
-        public int score { get; private set; }
+        public int Score { get; private set; }
 
         // Index
         public void SetPlayerIndex(int id) {
@@ -21,7 +21,7 @@ namespace Ping.Server {
 
         // Score
         public void Score_Inc() {
-            score++;
+            Score++;
         }
 
     }

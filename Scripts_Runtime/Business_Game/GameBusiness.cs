@@ -32,7 +32,22 @@ namespace Ping.Server.Business.Game {
             }
         }
 
-        public static void PreTick(GameBusinessContext ctx, float dt) { }
+        public static void PreTick(GameBusinessContext ctx, float dt) {
+
+            var game = ctx.gameEntity;
+            var fsm = game.FSM_GetComponent();
+            var status = fsm.Status;
+            if (status != GameFSMStatus.GameResult) { return; }
+
+            if (fsm.GameResult_isEntering) {
+                fsm.GameResult_isEntering = false;
+                var winnierPlayerIndex = fsm.GameResult_winnierPlayerIndex;
+                GameGameDomain.Win(ctx, winnierPlayerIndex);
+                return;
+            }
+            fsm.Gaming_Enter();
+
+        }
 
         public static void FixedTick(GameBusinessContext ctx, float dt) {
 
@@ -40,6 +55,10 @@ namespace Ping.Server.Business.Game {
             var fsm = game.FSM_GetComponent();
             var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
+
+            if (fsm.Gaming_isEntering) {
+                return;
+            }
 
             // Ball
             var ball = ctx.Ball_Get();
@@ -64,6 +83,11 @@ namespace Ping.Server.Business.Game {
             var fsm = game.FSM_GetComponent();
             var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
+
+            if (fsm.Gaming_isEntering) {
+                fsm.Gaming_isEntering = false;
+                return;
+            }
 
             // Time
             GameTimeDomain.ApplyGameTime(ctx, dt);
