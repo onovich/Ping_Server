@@ -9,6 +9,7 @@ namespace Ping.Protocol {
         public const byte REQID_PADDLEMOVE = 104;
         public const byte REQID_RECONNECT = 105;
         public const byte REQID_STARTGAME = 106;
+        public const byte REQID_KEEPALIVE = 107;
 
         // Res
         public const byte RESID_CONNECT = 202;
@@ -19,7 +20,7 @@ namespace Ping.Protocol {
         public const byte BROADID_GAMERESULT = 002;
         public const byte BROADID_LEAVEROOM = 003;
         public const byte BROADID_STARTGAME = 004;
-        public const byte BROADID_HEARTBEAT = 005;
+        public const byte BROADID_KEEPALIVE = 005;
         public const byte BROADID_ENTITIESSYNC = 006;
         public const byte BROADID_BALLMOVE = 007;
 

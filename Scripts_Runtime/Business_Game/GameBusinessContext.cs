@@ -78,6 +78,11 @@ namespace Ping.Server.Business.Game {
             return fieldEntity;
         }
 
+        // Time
+        public float Time_GetTimestamp() {
+            return gameEntity.Time_Get();
+        }
+
     }
 
 }

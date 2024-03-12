@@ -34,12 +34,18 @@ namespace Ping.Server.Requests {
             PaddleMove_OnHandle.Invoke(msg, clientState);
         }
 
+        public Action<KeepAliveReqMessage> KeepAlive_OnHandle;
+        public void KeepAlive_On(KeepAliveReqMessage msg) {
+            KeepAlive_OnHandle.Invoke(msg);
+        }
+
         public void Clear() {
             ConnectRer_OnHandle = null;
             ConnectRes_OnErrorHandle = null;
             JoinRoom_OnHandle = null;
             StartGame_OnHandle = null;
             PaddleMove_OnHandle = null;
+            KeepAlive_OnHandle = null;
         }
 
     }

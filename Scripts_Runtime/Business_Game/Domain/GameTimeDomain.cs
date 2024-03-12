@@ -7,8 +7,7 @@ namespace Ping.Server.Business.Game {
 
         public static void ApplyGameTime(GameBusinessContext ctx, float dt) {
             var game = ctx.gameEntity;
-            game.Time_Set(game.Time + dt);
-            // Send Res
+            game.Time_Update(dt);
         }
 
     }
