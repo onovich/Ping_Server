@@ -28,7 +28,7 @@ namespace Ping.Server.Requests {
         public static async Task Tick_On(RequestInfraContext ctx, float dt) {
             ctx.checkReadList.Clear();
             ctx.checkReadList.Add(ctx.Listenfd);
-            ctx.CliendState_ForEachOrderly((clientState) => {
+            ctx.ClientState_ForEachOrderly((clientState) => {
                 ctx.checkReadList.Add(clientState.clientfd);
             });
             Socket.Select(ctx.checkReadList, null, null, 1000);
@@ -40,14 +40,48 @@ namespace Ping.Server.Requests {
                     int count = await s.ReceiveAsync(buff);
                     var clientState = ctx.ClientState_GetBySocket(s);
 
-                    // Login
-                    RequestJoinRoomDomain.On_JoinRoomReq(ctx, clientState, buff);
-                    RequestGameStartDomain.On_GameStartReq(ctx, clientState, buff);
-
-                    // Game
-                    RequestPaddleMoveDomain.On_RequestPaddleMoveReq(ctx, clientState, buff);
+                    On(ctx, clientState, buff);
                 }
             }
+        }
+
+        public static void On(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data) {
+
+            int offset = 0;
+            var msgID = ByteReader.Read<byte>(data, ref offset);
+            var msg = ProtocolIDConst.GetObject(msgID) as IMessage;
+
+            msg.FromBytes(data, ref offset);
+            var evt = ctx.EventCenter;
+            evt.On(msg, clientState);
+
+        }
+
+        public static async Task Tick_Send(RequestInfraContext ctx, float dt) {
+            await ctx.ClientState_ForEachOrderlyAsync(async (clientState) => {
+                if (clientState.clientfd == null) {
+                    return;
+                }
+                if (!clientState.clientfd.Connected) {
+                    return;
+                }
+                byte[] dst = new byte[4096];
+                int offset = 0;
+                while (ctx.Message_TryDequeue(clientState.clientfd, out IMessage message)) {
+                    var src = message.ToBytes();
+                    if (src.Length >= 4096 - 2) {
+                        throw new Exception("Message is too long");
+                    }
+
+                    byte msgID = ProtocolIDConst.GetID(message);
+                    dst[offset] = msgID;
+                    offset += 1;
+
+                    Buffer.BlockCopy(src, 0, dst, offset, src.Length);
+                    offset += src.Length;
+                }
+                await clientState.clientfd.SendAsync(dst);
+            });
         }
 
     }

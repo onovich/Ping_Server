@@ -4,7 +4,7 @@ using MortiseFrame.Abacus;
 
 namespace Ping.Protocol {
 
-    public struct EntitiesSyncBroadMessage : IMessage<EntitiesSyncBroadMessage> {
+    public struct EntitiesSyncBroadMessage : IMessage {
 
         public FVector2 paddle0Pos;
         public FVector2 paddle1Pos;

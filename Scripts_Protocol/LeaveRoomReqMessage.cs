@@ -3,7 +3,7 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct LeaveRoomReqMessage : IMessage<LeaveRoomReqMessage> {
+    public struct LeaveRoomReqMessage : IMessage {
 
         public void WriteTo(byte[] dst, ref int offset) {
         }

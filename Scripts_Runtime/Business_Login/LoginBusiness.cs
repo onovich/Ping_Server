@@ -90,8 +90,8 @@ namespace Ping.Server.Business.Login {
         }
 
         // On Net Req
-        public static async void On_ConnectReq(LoginBusinessContext ctx, ClientStateEntity clientState) {
-            await RequestConnectDomain.SendConnectResAsync(ctx.reqInfraContext, clientState);
+        public static void On_ConnectReq(LoginBusinessContext ctx, ClientStateEntity clientState) {
+            RequestConnectDomain.SendConnectResAsync(ctx.reqInfraContext, clientState);
         }
 
         public static void On_ConnectResError(LoginBusinessContext ctx, string error) {

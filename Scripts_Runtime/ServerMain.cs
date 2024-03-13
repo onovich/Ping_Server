@@ -99,6 +99,13 @@ namespace Ping.Server {
             await RequestInfra.Tick_On(requestInfraContext, dt);
         }
 
+        public async void SendNetMessages(float dt) {
+            if (!isLoadedAssets || isTearDown) {
+                return;
+            }
+            await RequestInfra.Tick_Send(requestInfraContext, dt);
+        }
+
         void Init() {
             LoginBusiness.Init(loginBusinessContext);
             GameBusiness.Init(gameBusinessContext);

@@ -18,6 +18,7 @@ namespace Ping.Server.Requests {
 
             ClientStateEntity clientState = new ClientStateEntity();
             clientState.clientfd = clientfd;
+            clientfd.NoDelay = true;
 
             var id = ctx.ID_PickPlayerIndex();
             clientState.playerIndex = id;
@@ -29,25 +30,13 @@ namespace Ping.Server.Requests {
 
         }
 
-        public static async Task SendConnectResAsync(RequestInfraContext ctx, ClientStateEntity clientState) {
+        public static void SendConnectResAsync(RequestInfraContext ctx, ClientStateEntity clientState) {
 
             var msg = new ConnectResMessage();
             msg.status = 1;
             msg.playerIndex = clientState.playerIndex;
-            byte msgID = ProtocolIDConst.RESID_CONNECT;
-
-            byte[] data = msg.ToBytes();
-            if (data.Length >= 4096 - 2) {
-                throw new Exception("Message is too long");
-            }
-
-            byte[] dst = new byte[data.Length + 2];
-            int offset = 0;
-            dst[offset] = msgID;
-            offset += 1;
-            Buffer.BlockCopy(data, 0, dst, offset, data.Length);
-            await clientState.clientfd.SendAsync(dst);
-
+           
+            ctx.Message_Enqueue(msg, clientState.clientfd);
             PLog.Log("SendConnectResAsync: " + clientState.playerIndex);
 
         }

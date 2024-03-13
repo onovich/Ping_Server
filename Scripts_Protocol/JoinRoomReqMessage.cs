@@ -3,7 +3,7 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct JoinRoomReqMessage : IMessage<JoinRoomReqMessage> {
+    public struct JoinRoomReqMessage : IMessage {
 
         public string userName;
 

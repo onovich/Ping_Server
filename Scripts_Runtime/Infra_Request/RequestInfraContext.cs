@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Net.Sockets;
+using System.Collections.Concurrent;
+using Ping.Protocol;
 
 namespace Ping.Server.Requests {
 
@@ -11,6 +13,9 @@ namespace Ping.Server.Requests {
 
         Dictionary<Socket, ClientStateEntity> clients;
         SortedList<int, Socket> clientOrderList;
+
+        // Message
+        Dictionary<Socket, ConcurrentQueue<IMessage>> messageQueue;
 
         // Event
         RequestEventCenter eventCenter;
@@ -32,8 +37,10 @@ namespace Ping.Server.Requests {
             idService = new IDService();
             checkReadList = new List<Socket>();
             readBuff = new byte[4096];
+            messageQueue = new Dictionary<Socket, ConcurrentQueue<IMessage>>();
         }
 
+        // Clientfd
         public void ClientState_Add(ClientStateEntity clientState) {
             clients.Add(clientState.clientfd, clientState);
             clientOrderList.Add(clientState.playerIndex, clientState.clientfd);
@@ -44,9 +51,15 @@ namespace Ping.Server.Requests {
             clients.Remove(clientfd);
         }
 
-        public void CliendState_ForEachOrderly(Action<ClientStateEntity> action) {
+        public void ClientState_ForEachOrderly(Action<ClientStateEntity> action) {
             for (int i = 0; i < clientOrderList.Count; i++) {
                 action(clients[clientOrderList.Values[i]]);
+            }
+        }
+
+        public async Task ClientState_ForEachOrderlyAsync(Func<ClientStateEntity, Task> actionAsync) {
+            for (int i = 0; i < clientOrderList.Count; i++) {
+                await actionAsync(clients[clientOrderList.Values[i]]);
             }
         }
 
@@ -63,8 +76,25 @@ namespace Ping.Server.Requests {
             return clients[clientfd];
         }
 
+        // Listenfd
         public void Listenfd_Set(Socket listenfd) {
             this.listenfd = listenfd;
+        }
+
+        // Message
+        public void Message_Enqueue(IMessage message, Socket clientfd) {
+            if (!messageQueue.ContainsKey(clientfd)) {
+                messageQueue.Add(clientfd, new ConcurrentQueue<IMessage>());
+            }
+            messageQueue[clientfd].Enqueue(message);
+        }
+
+        public bool Message_TryDequeue(Socket clientfd, out IMessage message) {
+            if (messageQueue.ContainsKey(clientfd) && messageQueue[clientfd].Count > 0) {
+                return messageQueue[clientfd].TryDequeue(out message);
+            }
+            message = null;
+            return false;
         }
 
         // ID

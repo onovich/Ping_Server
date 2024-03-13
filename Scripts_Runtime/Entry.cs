@@ -54,6 +54,9 @@ namespace Ping.Server {
                 // LateTick
                 server.LateTick(dt);
 
+                // SendNetEvent
+                server.SendNetMessages(dt);
+
                 // Sleep
                 lastTime = currentTime;
                 currentTime = (float)stopWatch.Elapsed.TotalSeconds;

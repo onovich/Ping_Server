@@ -3,7 +3,7 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct ConnectResMessage : IMessage<ConnectResMessage> {
+    public struct ConnectResMessage : IMessage {
 
         public sbyte status; // 1 为成功, -1 为失败
         public byte playerIndex;

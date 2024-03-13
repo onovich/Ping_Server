@@ -3,7 +3,7 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct JoinRoomBroadMessage : IMessage<JoinRoomBroadMessage> {
+    public struct JoinRoomBroadMessage : IMessage {
 
         public sbyte status; // 1 为成功, -1 为失败
         public string[] userNames;

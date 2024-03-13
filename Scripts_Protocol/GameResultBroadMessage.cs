@@ -3,7 +3,7 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct GameResultBroadMessage : IMessage<GameResultBroadMessage> {
+    public struct GameResultBroadMessage : IMessage {
 
         public int winnerPlayerIndex;
         public int gameTurn;

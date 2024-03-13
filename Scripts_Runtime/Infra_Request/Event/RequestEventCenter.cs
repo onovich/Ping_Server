@@ -6,6 +6,18 @@ namespace Ping.Server.Requests {
 
     public class RequestEventCenter {
 
+        public void On(IMessage msg, ClientStateEntity clientState) {
+            if (msg is KeepAliveReqMessage) {
+                KeepAlive_OnHandle.Invoke((KeepAliveReqMessage)msg);
+            } else if (msg is PaddleMoveReqMessage) {
+                PaddleMove_OnHandle.Invoke((PaddleMoveReqMessage)msg, clientState);
+            } else if (msg is GameStartReqMessage) {
+                StartGame_OnHandle.Invoke((GameStartReqMessage)msg, clientState);
+            } else if (msg is JoinRoomReqMessage) {
+                JoinRoom_OnHandle.Invoke((JoinRoomReqMessage)msg, clientState);
+            }
+        }
+
         // Connect 
         public Action<ClientStateEntity> ConnectRer_OnHandle;
         public void ConnectRes_On(ClientStateEntity clientState) {

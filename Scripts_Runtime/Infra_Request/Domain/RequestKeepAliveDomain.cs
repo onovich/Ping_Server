@@ -11,7 +11,7 @@ namespace Ping.Server.Requests {
 
             int offset = 0;
             var msgID = ByteReader.Read<byte>(data, ref offset);
-            if (msgID != ProtocolIDConst.REQID_KEEPALIVE) {
+            if (msgID != ProtocolIDConst.GetID<KeepAliveReqMessage>()) {
                 return;
             }
 
@@ -25,30 +25,18 @@ namespace Ping.Server.Requests {
 
         // Send
         public static void Send_KeepAliveBroadRes(RequestInfraContext ctx, float timestamp) {
-            ctx.CliendState_ForEachOrderly((clientState) => {
+            ctx.ClientState_ForEachOrderly((clientState) => {
                 Send_KeepAliveRes(ctx, clientState, timestamp);
+                PLog.Log($"Send_KeepAliveRes to {clientState.clientfd.RemoteEndPoint}, timestamp: {timestamp}");
             });
         }
 
-        static async void Send_KeepAliveRes(RequestInfraContext ctx, ClientStateEntity clientState, float timestamp) {
+        static void Send_KeepAliveRes(RequestInfraContext ctx, ClientStateEntity clientState, float timestamp) {
 
             var msg = new KeepAliveResMessage();
             msg.timestamp = timestamp;
 
-            byte msgID = ProtocolIDConst.BROADID_KEEPALIVE;
-
-            byte[] data = msg.ToBytes();
-            if (data.Length >= 4096 - 2) {
-                throw new Exception("Message is too long");
-            }
-
-            byte[] dst = new byte[data.Length + 2];
-            int offset = 0;
-            dst[offset] = msgID;
-            offset += 1;
-            Buffer.BlockCopy(data, 0, dst, offset, data.Length);
-            var client = clientState.clientfd;
-            await client.SendAsync(dst);
+            ctx.Message_Enqueue(msg, clientState.clientfd);
 
         }
 

@@ -11,7 +11,7 @@ namespace Ping.Server.Requests {
 
             int offset = 0;
             var msgID = ByteReader.Read<byte>(data, ref offset);
-            if (msgID != ProtocolIDConst.REQID_STARTGAME) {
+            if (msgID != ProtocolIDConst.GetID<GameStartReqMessage>()) {
                 return;
             }
 
@@ -25,30 +25,15 @@ namespace Ping.Server.Requests {
 
         // Send
         public static void Send_GameStartBroadRes(RequestInfraContext ctx) {
-            ctx.CliendState_ForEachOrderly((clientState) => {
-                ctx.CliendState_ForEachOrderly((clientState) => {
-                    Send_GameStartRes(ctx, clientState);
-                });
+            ctx.ClientState_ForEachOrderly((clientState) => {
+                Send_GameStartRes(ctx, clientState);
             });
         }
 
-        static async void Send_GameStartRes(RequestInfraContext ctx, ClientStateEntity state) {
+        static void Send_GameStartRes(RequestInfraContext ctx, ClientStateEntity state) {
 
             var msg = new GameStartBroadMessage();
-            byte msgID = ProtocolIDConst.BROADID_STARTGAME;
-
-            byte[] data = msg.ToBytes();
-            if (data.Length >= 4096 - 2) {
-                throw new Exception("Message is too long");
-            }
-
-            byte[] dst = new byte[data.Length + 2];
-            int offset = 0;
-            dst[offset] = msgID;
-            offset += 1;
-            Buffer.BlockCopy(data, 0, dst, offset, data.Length);
-            var client = state.clientfd;
-            await client.SendAsync(dst);
+            ctx.Message_Enqueue(msg, state.clientfd);
 
         }
 

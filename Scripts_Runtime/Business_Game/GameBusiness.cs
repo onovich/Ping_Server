@@ -102,8 +102,8 @@ namespace Ping.Server.Business.Game {
             var paddle1 = ctx.Paddle_Get(1);
             var paddle1Pos = paddle1.RB.Transform.Pos;
 
-            RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
             RequestKeepAliveDomain.Send_KeepAliveBroadRes(ctx.reqInfraContext, ctx.Time_GetTimestamp());
+            RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
 
         }
 

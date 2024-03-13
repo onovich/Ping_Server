@@ -3,7 +3,7 @@ using MortiseFrame.LitIO;
 
 namespace Ping.Protocol {
 
-    public struct KeepAliveResMessage : IMessage<ConnectResMessage> {
+    public struct KeepAliveResMessage : IMessage {
 
         public float timestamp;
 

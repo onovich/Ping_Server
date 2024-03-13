@@ -11,7 +11,7 @@ namespace Ping.Server.Requests {
 
             int offset = 0;
             var msgID = ByteReader.Read<byte>(data, ref offset);
-            if (msgID != ProtocolIDConst.REQID_PADDLEMOVE) {
+            if (msgID != ProtocolIDConst.GetID<PaddleMoveReqMessage>()) {
                 return;
             }
 

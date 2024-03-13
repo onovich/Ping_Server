@@ -11,7 +11,7 @@ namespace Ping.Server.Requests {
 
             int offset = 0;
             var msgID = ByteReader.Read<byte>(data, ref offset);
-            if (msgID != ProtocolIDConst.REQID_JOINROOM) {
+            if (msgID != ProtocolIDConst.GetID<JoinRoomReqMessage>()) {
                 return;
             }
 
@@ -26,36 +26,23 @@ namespace Ping.Server.Requests {
 
         // Send
         public static void Send_JoinRoomBroadRes(RequestInfraContext ctx) {
-            ctx.CliendState_ForEachOrderly((clientState) => {
+            ctx.ClientState_ForEachOrderly((clientState) => {
                 Send_JoinRoomRes(ctx, clientState);
             });
         }
 
-        static async void Send_JoinRoomRes(RequestInfraContext ctx, ClientStateEntity clientState) {
+        static void Send_JoinRoomRes(RequestInfraContext ctx, ClientStateEntity clientState) {
 
             var msg = new JoinRoomBroadMessage();
             msg.status = 1;
             msg.ownerIndex = clientState.playerIndex;
             msg.userNames = new string[2];
-            ctx.CliendState_ForEachOrderly((clientState) => {
+            ctx.ClientState_ForEachOrderly((clientState) => {
                 var playerIndex = clientState.playerIndex;
                 msg.userNames[playerIndex] = clientState.userName;
             });
 
-            byte msgID = ProtocolIDConst.BROADID_JOINROOM;
-
-            byte[] data = msg.ToBytes();
-            if (data.Length >= 4096 - 2) {
-                throw new Exception("Message is too long");
-            }
-
-            byte[] dst = new byte[data.Length + 2];
-            int offset = 0;
-            dst[offset] = msgID;
-            offset += 1;
-            Buffer.BlockCopy(data, 0, dst, offset, data.Length);
-            var client = clientState.clientfd;
-            await client.SendAsync(dst);
+            ctx.Message_Enqueue(msg, clientState.clientfd);
 
         }
 

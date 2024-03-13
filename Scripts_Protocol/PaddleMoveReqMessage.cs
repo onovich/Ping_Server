@@ -4,7 +4,7 @@ using MortiseFrame.Abacus;
 
 namespace Ping.Protocol {
 
-    public struct PaddleMoveReqMessage : IMessage<PaddleMoveReqMessage> {
+    public struct PaddleMoveReqMessage : IMessage {
 
         public FVector2 moveAxis;
 
