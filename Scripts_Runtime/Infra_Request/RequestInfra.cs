@@ -74,8 +74,8 @@ namespace Ping.Server.Requests {
 
         }
 
-        public static async Task Tick_Send(RequestInfraContext ctx, float dt) {
-            await ctx.ClientState_ForEachOrderlyAsync(async (clientState) => {
+        public static void Tick_Send(RequestInfraContext ctx, float dt) {
+            ctx.ClientState_ForEachOrderly((clientState) => {
                 if (clientState.clientfd == null) {
                     return;
                 }
@@ -114,7 +114,7 @@ namespace Ping.Server.Requests {
                     return;
                 }
 
-                await clientState.clientfd.SendAsync(buff);
+                clientState.clientfd.Send(buff);
                 ctx.Buffer_ClearWriteBuffer();
             });
         }

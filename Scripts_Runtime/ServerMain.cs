@@ -92,18 +92,18 @@ namespace Ping.Server {
             GameBusiness.FixedTick(gameBusinessContext, dt);
         }
 
-        public async void OnNetEvent(float dt) {
+        public async Task OnNetEvent(float dt) {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
             await RequestInfra.Tick_On(requestInfraContext, dt);
         }
 
-        public async void SendNetMessages(float dt) {
+        public void SendNetMessages(float dt) {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
-            await RequestInfra.Tick_Send(requestInfraContext, dt);
+            RequestInfra.Tick_Send(requestInfraContext, dt);
         }
 
         void Init() {
