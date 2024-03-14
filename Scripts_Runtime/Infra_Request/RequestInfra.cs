@@ -26,31 +26,40 @@ namespace Ping.Server.Requests {
         }
 
         public static async Task Tick_On(RequestInfraContext ctx, float dt) {
+
             ctx.checkReadList.Clear();
             ctx.checkReadList.Add(ctx.Listenfd);
             ctx.ClientState_ForEachOrderly((clientState) => {
                 ctx.checkReadList.Add(clientState.clientfd);
             });
             Socket.Select(ctx.checkReadList, null, null, 1000);
+
             foreach (Socket s in ctx.checkReadList) {
+
                 if (s == ctx.Listenfd) {
                     await RequestConnectDomain.AcceptConnectReqAsync(ctx);
                 } else {
                     byte[] buff = ctx.readBuff;
                     int count = await s.ReceiveAsync(buff);
+                    if (count == 0) {
+                        continue;
+                    }
+
                     var clientState = ctx.ClientState_GetBySocket(s);
                     var offset = 0;
                     var msgCount = ByteReader.Read<int>(buff, ref offset);
+                    
                     for (int i = 0; i < msgCount; i++) {
                         var len = ByteReader.Read<int>(buff, ref offset);
-                        if (len < 5) {
+                        if (len == 0) {
                             break;
                         }
-                        PLog.Log("Receive Message: Len: " + len);
                         On(ctx, clientState, buff, ref offset);
                     }
                 }
+
             }
+            ctx.Buffer_Clear();
         }
 
         public static void On(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data, ref int offset) {
@@ -88,13 +97,13 @@ namespace Ping.Server.Requests {
                         throw new Exception("Message is too long");
                     }
 
-                    int len = src.Length + 5;
+                    int len = src.Length;
                     byte msgID = ProtocolIDConst.GetID(message);
 
                     ByteWriter.Write<int>(buff, len, ref offset);
                     ByteWriter.Write<byte>(buff, msgID, ref offset);
                     Buffer.BlockCopy(src, 0, buff, offset, src.Length);
-offset += src.Length;
+                    offset += src.Length;
 
                 }
 

@@ -113,6 +113,11 @@ namespace Ping.Server.Requests {
             idService.Reset();
         }
 
+        // Buffer
+        public void Buffer_Clear() {
+            Array.Clear(readBuff, 0, readBuff.Length);
+        }
+
         public void Clear() {
             listenfd = null;
             clients.Clear();

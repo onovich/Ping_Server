@@ -48,6 +48,7 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
+            PLog.Log("All Players Are Ready");
             RequestJoinRoomDomain.Send_JoinRoomBroadRes(ctx.reqInfraContext);
             fsmCom.WaitForStart_Enter();
         }

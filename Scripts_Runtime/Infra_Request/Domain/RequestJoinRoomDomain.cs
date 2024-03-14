@@ -6,23 +6,6 @@ namespace Ping.Server.Requests {
 
     public static class RequestJoinRoomDomain {
 
-        // On
-        public static void On_JoinRoomReq(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data) {
-
-            int offset = 0;
-            var msgID = ByteReader.Read<byte>(data, ref offset);
-            if (msgID != ProtocolIDConst.GetID<JoinRoomReqMessage>()) {
-                return;
-            }
-
-            var msg = new JoinRoomReqMessage();
-
-            msg.FromBytes(data, ref offset);
-            var evt = ctx.EventCenter;
-            evt.JoinRoom_On(msg, clientState);
-
-        }
-
         // Send
         public static void Send_JoinRoomBroadRes(RequestInfraContext ctx) {
             ctx.ClientState_ForEachOrderly((clientState) => {
@@ -42,6 +25,7 @@ namespace Ping.Server.Requests {
             });
 
             ctx.Message_Enqueue(msg, clientState.clientfd);
+            PLog.Log("Send Message: " + msg.GetType().Name + " ID: " + ProtocolIDConst.GetID(msg));
 
         }
 
