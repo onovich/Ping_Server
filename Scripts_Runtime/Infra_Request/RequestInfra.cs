@@ -105,7 +105,7 @@ namespace Ping.Server.Requests {
                         return;
                     }
 
-                    clientState.clientfd.Send(buff);
+                    clientState.clientfd.Send(buff, 0, offset, SocketFlags.None);
                     ctx.Buffer_ClearWriteBuffer();
                 }
 
