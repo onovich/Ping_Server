@@ -93,8 +93,8 @@ namespace Ping.Server.Requests {
 
                     ByteWriter.Write<int>(buff, len, ref offset);
                     ByteWriter.Write<byte>(buff, msgID, ref offset);
-                    ByteWriter.WriteArray<byte>(buff, src, ref offset);
-                    PLog.Log("Send Message: " + message.GetType().Name + " ID: " + msgID + " Len: " + len);
+                    Buffer.BlockCopy(src, 0, buff, offset, src.Length);
+offset += src.Length;
 
                 }
 
