@@ -60,7 +60,7 @@ namespace Ping.Server.Requests {
                 }
 
             }
-            ctx.Buffer_Clear();
+            ctx.Buffer_ClearReadBuffer();
         }
 
         public static void On(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data, ref int offset) {
@@ -72,8 +72,6 @@ namespace Ping.Server.Requests {
             var evt = ctx.EventCenter;
             evt.On(msg, clientState);
 
-            PLog.Log("Receive Message: " + msg.GetType().Name + " ID: " + msgID + " From: " + clientState.playerIndex + " " + clientState.userName);
-
         }
 
         public static async Task Tick_Send(RequestInfraContext ctx, float dt) {
@@ -84,7 +82,7 @@ namespace Ping.Server.Requests {
                 if (!clientState.clientfd.Connected) {
                     return;
                 }
-                byte[] buff = new byte[4096];
+                byte[] buff = ctx.writeBuff;
                 int offset = 0;
                 int msgCount = ctx.Message_GetCount(clientState.clientfd);
                 if (msgCount == 0) {
@@ -117,7 +115,7 @@ namespace Ping.Server.Requests {
                 }
 
                 await clientState.clientfd.SendAsync(buff);
-                PLog.Log("Send Message To: " + clientState.playerIndex + " " + clientState.userName);
+                ctx.Buffer_ClearWriteBuffer();
             });
         }
 

@@ -10,7 +10,6 @@ namespace Ping.Server.Requests {
         public static void Send_KeepAliveBroadRes(RequestInfraContext ctx, float timestamp) {
             ctx.ClientState_ForEachOrderly((clientState) => {
                 Send_KeepAliveRes(ctx, clientState, timestamp);
-                PLog.Log($"Send_KeepAliveRes to {clientState.clientfd.RemoteEndPoint}, timestamp: {timestamp}");
             });
         }
 
