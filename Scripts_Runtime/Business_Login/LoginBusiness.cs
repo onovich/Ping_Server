@@ -103,7 +103,7 @@ namespace Ping.Server.Business.Login {
             clientState.userName = userName;
             clientState.isJoinReady = true;
             clientState.isStartReady = false;
-            PLog.Log("On_JoinRoomReq: " + userName + " Is Join Ready");
+            PLog.Log("On_JoinRoomReq:" + userName + " Is Join Ready");
 
             var player = new PlayerEntity();
             player.SetPlayerIndex(clientState.playerIndex);

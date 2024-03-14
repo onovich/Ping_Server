@@ -21,7 +21,6 @@ namespace Ping.Server.Requests {
             var evt = ctx.EventCenter;
             evt.JoinRoom_On(msg, clientState);
 
-            PLog.Log("Message On_JoinRoomReq: " + msg.userName + " Is Join Ready");
         }
 
         // Send

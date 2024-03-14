@@ -17,18 +17,12 @@ namespace Ping.Protocol {
             secondToFirst[second] = first;
         }
 
-        public TSecond GetByFirst(TFirst first) {
-            if (firstToSecond.TryGetValue(first, out TSecond second)) {
-                return second;
-            }
-            throw new KeyNotFoundException("First value not found.");
+        public bool TryGetByFirst(TFirst first, out TSecond second) {
+            return firstToSecond.TryGetValue(first, out second);
         }
 
-        public TFirst GetBySecond(TSecond second) {
-            if (secondToFirst.TryGetValue(second, out TFirst first)) {
-                return first;
-            }
-            throw new KeyNotFoundException("Second value not found.");
+        public bool TryGetBySecond(TSecond second, out TFirst first) {
+            return secondToFirst.TryGetValue(second, out first);
         }
 
         public IEnumerator<KeyValuePair<TFirst, TSecond>> GetEnumerator() {

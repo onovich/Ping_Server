@@ -97,6 +97,13 @@ namespace Ping.Server.Requests {
             return false;
         }
 
+        public int Message_GetCount(Socket clientfd) {
+            if (messageQueue.ContainsKey(clientfd)) {
+                return messageQueue[clientfd].Count;
+            }
+            return 0;
+        }
+
         // ID
         public byte ID_PickPlayerIndex() {
             return idService.PickPlayerIndex();
