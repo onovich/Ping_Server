@@ -25,7 +25,7 @@ namespace Ping.Server.Requests {
             });
 
             ctx.Message_Enqueue(msg, clientState.clientfd);
-            PLog.Log("Send Message: " + msg.GetType().Name + " ID: " + ProtocolIDConst.GetID(msg));
+            PLog.Log("Send Message: " + msg.GetType().Name + " ID: " + ProtocolIDConst.GetID(msg) + " To: " + clientState.playerIndex + " " + clientState.userName);
 
         }
 

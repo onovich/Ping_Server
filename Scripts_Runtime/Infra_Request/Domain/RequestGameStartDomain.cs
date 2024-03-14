@@ -17,7 +17,7 @@ namespace Ping.Server.Requests {
 
             var msg = new GameStartBroadMessage();
             ctx.Message_Enqueue(msg, state.clientfd);
-            PLog.Log("Send Message: " + msg.GetType().Name + " ID: " + ProtocolIDConst.GetID(msg));
+            PLog.Log("Send Message: " + msg.GetType().Name + " ID: " + ProtocolIDConst.GetID(msg) + " To: " + state.playerIndex + " " + state.userName);
 
         }
 

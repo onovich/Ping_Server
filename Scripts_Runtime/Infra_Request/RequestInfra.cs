@@ -46,9 +46,10 @@ namespace Ping.Server.Requests {
                     }
 
                     var clientState = ctx.ClientState_GetBySocket(s);
+
                     var offset = 0;
                     var msgCount = ByteReader.Read<int>(buff, ref offset);
-                    
+
                     for (int i = 0; i < msgCount; i++) {
                         var len = ByteReader.Read<int>(buff, ref offset);
                         if (len == 0) {
@@ -64,14 +65,14 @@ namespace Ping.Server.Requests {
 
         public static void On(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data, ref int offset) {
 
-            var msgID = ByteReader.Read<byte>(data, ref offset);
-            var msg = ProtocolIDConst.GetObject(msgID) as IMessage;
+            byte msgID = ByteReader.Read<byte>(data, ref offset);
+            IMessage msg = ProtocolIDConst.GetObject(msgID) as IMessage;
 
             msg.FromBytes(data, ref offset);
             var evt = ctx.EventCenter;
             evt.On(msg, clientState);
 
-            PLog.Log("Receive Message: " + msg.GetType().Name + " ID: " + msgID);
+            PLog.Log("Receive Message: " + msg.GetType().Name + " ID: " + msgID + " From: " + clientState.playerIndex + " " + clientState.userName);
 
         }
 
@@ -86,6 +87,10 @@ namespace Ping.Server.Requests {
                 byte[] buff = new byte[4096];
                 int offset = 0;
                 int msgCount = ctx.Message_GetCount(clientState.clientfd);
+                if (msgCount == 0) {
+                    return;
+                }
+
                 ByteWriter.Write<int>(buff, msgCount, ref offset);
                 while (ctx.Message_TryDequeue(clientState.clientfd, out IMessage message)) {
                     if (message == null) {
@@ -97,7 +102,7 @@ namespace Ping.Server.Requests {
                         throw new Exception("Message is too long");
                     }
 
-                    int len = src.Length;
+                    int len = src.Length + 5;
                     byte msgID = ProtocolIDConst.GetID(message);
 
                     ByteWriter.Write<int>(buff, len, ref offset);
@@ -107,10 +112,12 @@ namespace Ping.Server.Requests {
 
                 }
 
-                byte[] dst = new byte[offset];
-                Buffer.BlockCopy(buff, 0, dst, 0, offset);
+                if (offset == 0) {
+                    return;
+                }
 
-                await clientState.clientfd.SendAsync(dst);
+                await clientState.clientfd.SendAsync(buff);
+                PLog.Log("Send Message To: " + clientState.playerIndex + " " + clientState.userName);
             });
         }
 
