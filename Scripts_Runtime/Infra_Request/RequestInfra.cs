@@ -46,11 +46,8 @@ namespace Ping.Server.Requests {
                     }
 
                     var clientState = ctx.ClientState_GetBySocket(s);
-
                     var offset = 0;
-                    var msgCount = ByteReader.Read<int>(buff, ref offset);
-
-                    for (int i = 0; i < msgCount; i++) {
+                    while (offset < count) {
                         var len = ByteReader.Read<int>(buff, ref offset);
                         if (len == 0) {
                             break;
@@ -82,18 +79,14 @@ namespace Ping.Server.Requests {
                 if (!clientState.clientfd.Connected) {
                     return;
                 }
-                byte[] buff = ctx.writeBuff;
-                int offset = 0;
-                int msgCount = ctx.Message_GetCount(clientState.clientfd);
-                if (msgCount == 0) {
-                    return;
-                }
 
-                ByteWriter.Write<int>(buff, msgCount, ref offset);
                 while (ctx.Message_TryDequeue(clientState.clientfd, out IMessage message)) {
                     if (message == null) {
                         continue;
                     }
+
+                    byte[] buff = ctx.writeBuff;
+                    int offset = 0;
 
                     var src = message.ToBytes();
                     if (src.Length >= 4096 - 5) {
@@ -108,14 +101,14 @@ namespace Ping.Server.Requests {
                     Buffer.BlockCopy(src, 0, buff, offset, src.Length);
                     offset += src.Length;
 
+                    if (offset == 0) {
+                        return;
+                    }
+
+                    clientState.clientfd.Send(buff);
+                    ctx.Buffer_ClearWriteBuffer();
                 }
 
-                if (offset == 0) {
-                    return;
-                }
-
-                clientState.clientfd.Send(buff);
-                ctx.Buffer_ClearWriteBuffer();
             });
         }
 

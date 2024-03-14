@@ -15,7 +15,7 @@ namespace Ping.Server.Requests {
         SortedList<int, Socket> clientOrderList;
 
         // Message
-        Dictionary<Socket, ConcurrentQueue<IMessage>> messageQueue;
+        Dictionary<Socket, Queue<IMessage>> messageQueue;
 
         // Event
         RequestEventCenter eventCenter;
@@ -39,7 +39,7 @@ namespace Ping.Server.Requests {
             checkReadList = new List<Socket>();
             readBuff = new byte[4096];
             writeBuff = new byte[4096];
-            messageQueue = new Dictionary<Socket, ConcurrentQueue<IMessage>>();
+            messageQueue = new Dictionary<Socket, Queue<IMessage>>();
         }
 
         // Clientfd
@@ -86,7 +86,7 @@ namespace Ping.Server.Requests {
         // Message
         public void Message_Enqueue(IMessage message, Socket clientfd) {
             if (!messageQueue.ContainsKey(clientfd)) {
-                messageQueue.Add(clientfd, new ConcurrentQueue<IMessage>());
+                messageQueue.Add(clientfd, new Queue<IMessage>());
             }
             messageQueue[clientfd].Enqueue(message);
         }
