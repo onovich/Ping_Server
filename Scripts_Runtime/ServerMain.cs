@@ -40,6 +40,7 @@ namespace Ping.Server {
 
             mainContext = new MainContext();
             physicalCore = new PhysicalCore();
+            physicalCore.Ignore(LayerConst.BALL, LayerConst.FAKE_WALL);
 
             // Inject
             gameBusinessContext.reqInfraContext = requestInfraContext;

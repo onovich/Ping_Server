@@ -10,6 +10,8 @@ namespace Ping.Server {
         public FVector2 wall0Size;
         public FVector2 wall1Pos;
         public FVector2 wall1Size;
+        public FVector2 wall2Pos;
+        public FVector2 wall2Size;
 
         // Gate
         public FVector2 gate0Pos;
@@ -36,6 +38,8 @@ namespace Ping.Server {
             ByteWriter.Write<FVector2>(dst, wall0Size, ref offset);
             ByteWriter.Write<FVector2>(dst, wall1Pos, ref offset);
             ByteWriter.Write<FVector2>(dst, wall1Size, ref offset);
+            ByteWriter.Write<FVector2>(dst, wall2Pos, ref offset);
+            ByteWriter.Write<FVector2>(dst, wall2Size, ref offset);
 
             ByteWriter.Write<FVector2>(dst, gate0Pos, ref offset);
             ByteWriter.Write<FVector2>(dst, gate0Size, ref offset);
@@ -61,6 +65,8 @@ namespace Ping.Server {
             wall0Size = ByteReader.Read<FVector2>(src, ref offset);
             wall1Pos = ByteReader.Read<FVector2>(src, ref offset);
             wall1Size = ByteReader.Read<FVector2>(src, ref offset);
+            wall2Pos = ByteReader.Read<FVector2>(src, ref offset);
+            wall2Size = ByteReader.Read<FVector2>(src, ref offset);
 
             gate0Pos = ByteReader.Read<FVector2>(src, ref offset);
             gate0Size = ByteReader.Read<FVector2>(src, ref offset);

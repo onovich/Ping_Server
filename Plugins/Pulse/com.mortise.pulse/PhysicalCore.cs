@@ -45,6 +45,15 @@ namespace MortiseFrame.Pulse {
             return context.Rigidbody_TakeAll(out res);
         }
 
+        // Ignore
+        public void Ignore(uint layerA, uint layerB) {
+            context.Ignore_Add(layerA, layerB);
+        }
+
+        public void Unignore(uint layerA, uint layerB) {
+            context.Ignore_Remove(layerA, layerB);
+        }
+
         public void Tick(float dt) {
 
             // 重力 阻力 速度

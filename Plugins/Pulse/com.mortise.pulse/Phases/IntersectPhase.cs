@@ -17,6 +17,10 @@ namespace MortiseFrame.Pulse {
 
         static void ApplyIntersection(PhysicalContext context, RigidbodyEntity a, RigidbodyEntity b) {
 
+            if (context.Ignore_Contains(a.Layer, b.Layer)) {
+                return;
+            }
+
             var eventCenter = context.EventCenter;
             if (context.IntersectContact_TryGet(a, b, out var contact)) {
                 // Trigger Stay

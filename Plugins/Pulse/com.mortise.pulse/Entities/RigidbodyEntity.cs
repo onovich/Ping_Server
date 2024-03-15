@@ -16,8 +16,8 @@ namespace MortiseFrame.Pulse {
         public int HolderID => holderID;
 
         // Layer
-        int layer;
-        public int Layer => layer;
+        uint layer;
+        public uint Layer => layer;
 
         // Transform
         TFComponent transform;
@@ -80,6 +80,9 @@ namespace MortiseFrame.Pulse {
             holderType = type;
             holderID = id;
         }
+
+        // Layer
+        public void SetLayer(uint value) => layer = value;
 
         // Material
         public void SetRestitution(float value) => restitution = value;

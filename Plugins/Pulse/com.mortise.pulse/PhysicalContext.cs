@@ -32,6 +32,9 @@ namespace MortiseFrame.Pulse {
         Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)> intersectContacts;
         Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)> collisionContacts;
 
+        // Ignore
+        HashSet<ulong> ignoreDict;
+
         public PhysicalContext() {
             rigidbodies = new Dictionary<uint, RigidbodyEntity>();
             tempRigidBodyArray = new RigidbodyEntity[0];
@@ -44,6 +47,7 @@ namespace MortiseFrame.Pulse {
             triggerExitQueue = new Queue<(RigidbodyEntity, RigidbodyEntity)>();
             collisionContacts = new Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>();
             intersectContacts = new Dictionary<ulong, (ulong, RigidbodyEntity, RigidbodyEntity)>();
+            ignoreDict = new HashSet<ulong>();
         }
 
         // Rigidbody
@@ -240,6 +244,22 @@ namespace MortiseFrame.Pulse {
 
         public void IntersectContact_Clear() {
             intersectContacts.Clear();
+        }
+
+        // Ignore
+        public void Ignore_Add(uint layerA, uint layerB) {
+            ulong key = IDService.ContactKey(layerA, layerB);
+            ignoreDict.Add(key);
+        }
+
+        public void Ignore_Remove(uint layerA, uint layerB) {
+            ulong key = IDService.ContactKey(layerA, layerB);
+            ignoreDict.Remove(key);
+        }
+
+        public bool Ignore_Contains(uint layerA, uint layerB) {
+            ulong key = IDService.ContactKey(layerA, layerB);
+            return ignoreDict.Contains(key);
         }
 
         public void Clear() {
