@@ -114,6 +114,11 @@ namespace Ping.Server.Business.Game {
             rb.SetLayer(LayerConst.PADDLE);
             paddle.RB_Set(rb);
 
+            // Set Constraint
+            var constraintPos = playerIndex == 0 ? config.constraint0Pos : config.constraint1Pos;
+            var constraintSize = playerIndex == 0 ? config.constraint0Size : config.constraint1Size;
+            paddle.Constrain_Set(constraintPos, constraintSize);
+
             return paddle;
         }
 

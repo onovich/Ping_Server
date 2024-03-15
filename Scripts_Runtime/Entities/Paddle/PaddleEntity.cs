@@ -24,6 +24,9 @@ namespace Ping.Server {
         // Physics
         public RigidbodyEntity RB { get; private set; }
 
+        // Constructor
+        public AABB Constrain { get; private set; }
+
         public void Ctor() {
             inputCom = new PaddleInputComponent();
             FsmCom = new PaddleFSMComponent();
@@ -56,23 +59,21 @@ namespace Ping.Server {
             this.Size = size;
         }
 
+        // Constraint
+        public void Constrain_Set(FVector2 pos, FVector2 size) {
+            this.Constrain = new AABB(pos, size);
+        }
+
         // Move
         public void Move_MoveByInput(float dt) {
             Move_Apply(inputCom.MoveAxis.normalized, Attr_GetMoveSpeed(), dt);
             var pos = RB.Transform.Pos;
-            // var constrainMin = constrain.Min;
-            // var constrainMax = constrain.Max;
-            // var constrainCenter = constrain.Center;
+            var constrainMin = Constrain.Min;
+            var constrainMax = Constrain.Max;
+            var constrainCenter = Constrain.Center;
 
-            // if (PlayerIndex == 0) {
-            //     pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
-            //     pos.y = FMath.Clamp(pos.y, constrainMin.y + Size.y / 2, constrainCenter.y - Size.y / 2);
-            // }
-
-            // if (PlayerIndex == 1) {
-            //     pos.x = FMath.Clamp(pos.x, constrainMin.x + Size.x / 2, constrainMax.x - Size.x / 2);
-            //     pos.y = FMath.Clamp(pos.y, constrainCenter.y + Size.y / 2, constrainMax.y - Size.y / 2);
-            // }
+            pos.x = FMath.Clamp(pos.x, constrainMin.x, constrainMax.x);
+            pos.y = FMath.Clamp(pos.y, constrainMin.y, constrainMax.y);
 
             Pos_SetPos(pos);
         }
