@@ -8,7 +8,8 @@ namespace MortiseFrame.Rill {
     public class ConnectionEntity {
 
         internal Socket clientfd;
-        internal int clientIndex;
+        internal int connectionIndex;
+        public int ConnectionIndex => connectionIndex;
 
         // Buffer
         byte[] buffer;
@@ -20,9 +21,9 @@ namespace MortiseFrame.Rill {
         Queue<IMessage> messageQueue;
         Queue<byte[]> receiveDataQueue;
 
-        internal ConnectionEntity(Socket client, int clientIndex) {
-            this.clientfd = client;
-            this.clientIndex = clientIndex;
+        internal ConnectionEntity(Socket conn, int connIndex) {
+            this.clientfd = conn;
+            this.connectionIndex = connIndex;
             this.buffer = new byte[CommonConst.BufferLength];
             locker = new object();
             messageQueue = new Queue<IMessage>();

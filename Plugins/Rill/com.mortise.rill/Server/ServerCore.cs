@@ -24,6 +24,11 @@ namespace MortiseFrame.Rill {
             ServerReceiveDomain.Tick_DeserializeAll(ctx);
         }
 
+        // Connects
+        public void ForEachOrderly(Action<ConnectionEntity> action) {
+            ctx.Connection_ForEachOrderly(action);
+        }
+
         // Send
         public void Send(IMessage msg, ConnectionEntity client) {
             ServerSendDomain.Enqueue(ctx, msg, client);

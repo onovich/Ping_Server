@@ -48,14 +48,14 @@ namespace MortiseFrame.Rill {
             this.listener = socket;
         }
 
-        // Client
+        // Connects
         public void Connection_Add(ConnectionEntity connection) {
             clients.Add(connection.clientfd, connection);
-            clientOrderList.Add(connection.clientIndex, connection.clientfd);
+            clientOrderList.Add(connection.connectionIndex, connection.clientfd);
         }
 
         public void Connection_Remove(Socket client) {
-            clientOrderList.Remove(clients[client].clientIndex);
+            clientOrderList.Remove(clients[client].connectionIndex);
             clients.Remove(client);
         }
 
