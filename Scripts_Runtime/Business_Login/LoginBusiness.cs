@@ -1,6 +1,7 @@
 using System.Net.Sockets;
 using Ping.Protocol;
 using Ping.Server.Requests;
+using MortiseFrame.Rill;
 
 namespace Ping.Server.Business.Login {
 
@@ -9,6 +10,7 @@ namespace Ping.Server.Business.Login {
         public static void Enter(LoginBusinessContext ctx) {
             var fsmCom = ctx.loginEntity.FSM_GetComponent();
             fsmCom.WaitForJoin_Enter();
+            RequestInfra.Start(ctx.reqInfraContext);
         }
 
         public static void Init(LoginBusinessContext ctx) { }
@@ -39,17 +41,13 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            var client1 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(0);
-            var client2 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(1);
-            if (client1 == null || client2 == null) {
-                return;
-            }
-            if (!client1.isJoinReady || !client2.isJoinReady) {
+            if (!ctx.reqInfraContext.UserStatus_IsJoinReady(0) || !ctx.reqInfraContext.UserStatus_IsJoinReady(1)) {
                 return;
             }
 
             PLog.Log("All Players Are Ready");
-            RequestJoinRoomDomain.Send_JoinRoomBroadRes(ctx.reqInfraContext);
+            var names = ctx.reqInfraContext.UserNamesArray;
+            RequestInfra.SendJoinRoomBroad(ctx.reqInfraContext, names);
             fsmCom.WaitForStart_Enter();
         }
 
@@ -60,16 +58,11 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            var client1 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(0);
-            var client2 = ctx.reqInfraContext.ClientState_GetByPlayerIndex(1);
-            if (client1 == null || client2 == null) {
-                PLog.LogError("player0 or player1 is null");
-            }
-            if (!client1.isStartReady || !client2.isStartReady) {
+            if (!ctx.reqInfraContext.UserStatus_IsStartReady(0) || !ctx.reqInfraContext.UserStatus_IsStartReady(1)) {
                 return;
             }
 
-            RequestGameStartDomain.Send_GameStartBroadRes(ctx.reqInfraContext);
+            RequestInfra.SendGameStartBroad(ctx.reqInfraContext);
             fsmCom.LoginDone_Enter();
         }
 
@@ -91,29 +84,28 @@ namespace Ping.Server.Business.Login {
         }
 
         // On Net Req
-        public static void On_ConnectReq(LoginBusinessContext ctx, ClientStateEntity clientState) {
-            RequestConnectDomain.SendConnectResAsync(ctx.reqInfraContext, clientState);
+        public static void On_ConnectReq(LoginBusinessContext ctx, ConnectionEntity conn) {
+            RequestInfra.SendConnectRes(ctx.reqInfraContext, conn);
         }
 
         public static void On_ConnectResError(LoginBusinessContext ctx, string error) {
             PLog.LogError(error);
         }
 
-        public static void On_JoinRoomReq(LoginBusinessContext ctx, JoinRoomReqMessage msg, ClientStateEntity clientState) {
+        public static void On_JoinRoomReq(LoginBusinessContext ctx, JoinRoomReqMessage msg, ConnectionEntity conn) {
             var userName = msg.userName;
-            clientState.userName = userName;
-            clientState.isJoinReady = true;
-            clientState.isStartReady = false;
+            ctx.reqInfraContext.AddUserName((byte)conn.ConnectionIndex, userName);
+            ctx.reqInfraContext.UserStatus_IsJoinReady((byte)conn.ConnectionIndex);
             PLog.Log("On_JoinRoomReq:" + userName + " Is Join Ready");
 
             var player = new PlayerEntity();
-            player.SetPlayerIndex(clientState.playerIndex);
+            player.SetPlayerIndex(conn.ConnectionIndex);
             player.SetUserName(userName);
             ctx.Player_Add(player);
         }
 
-        public static void On_GameStartReq(LoginBusinessContext ctx, GameStartReqMessage msg, ClientStateEntity clientState) {
-            clientState.isStartReady = true;
+        public static void On_GameStartReq(LoginBusinessContext ctx, GameStartReqMessage msg, ConnectionEntity conn) {
+            ctx.reqInfraContext.UserStatus_IsStartReady((byte)conn.ConnectionIndex);
         }
 
         public static void TearDown(LoginBusinessContext ctx) {

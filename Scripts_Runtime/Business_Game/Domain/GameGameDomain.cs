@@ -74,9 +74,9 @@ namespace Ping.Server.Business.Game {
             var winnierPlayerIndex = fsm.GameResult_winnierPlayerIndex;
             var socre0 = ctx.Player_Get(0).Score;
             var socre1 = ctx.Player_Get(1).Score;
-            
+
             GameBallDomain.ResetBall(ctx, ctx.Ball_Get());
-            RequestGameResultDomain.Send_GameResultBroadRes(ctx.reqInfraContext, winnierPlayerIndex, game.Turn, socre0, socre1);
+            RequestInfra.SendGameResultBroad(ctx.reqInfraContext, winnierPlayerIndex, game.Turn, socre0, socre1);
         }
 
     }

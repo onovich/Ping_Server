@@ -2,17 +2,19 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ping.Protocol;
 using Ping.Server.Business.Game;
 using Ping.Server.Business.Login;
 using Ping.Server.Requests;
 using MortiseFrame.Pulse;
+using MortiseFrame.Rill;
 
 namespace Ping.Server {
 
     public class ServerMain {
 
         TemplateInfraContext templateInfraContext;
-        RequestInfraContext requestInfraContext;
+        RequestInfraContext reqInfraContext;
 
         LoginBusinessContext loginBusinessContext;
         GameBusinessContext gameBusinessContext;
@@ -36,21 +38,22 @@ namespace Ping.Server {
             gameBusinessContext = new GameBusinessContext();
 
             templateInfraContext = new TemplateInfraContext();
-            requestInfraContext = new RequestInfraContext();
+            reqInfraContext = new RequestInfraContext();
 
             mainContext = new MainContext();
             physicalCore = new PhysicalCore();
 
             // Inject
-            gameBusinessContext.reqInfraContext = requestInfraContext;
+            gameBusinessContext.reqInfraContext = reqInfraContext;
             gameBusinessContext.templateInfraContext = templateInfraContext;
             gameBusinessContext.mainContext = mainContext;
             gameBusinessContext.physicalCore = physicalCore;
 
-            loginBusinessContext.reqInfraContext = requestInfraContext;
+            loginBusinessContext.reqInfraContext = reqInfraContext;
             loginBusinessContext.mainContext = mainContext;
 
-            Binding();
+            RegisterProtocols();
+            BindingEvents();
 
             Action action = async () => {
                 try {
@@ -92,18 +95,11 @@ namespace Ping.Server {
             GameBusiness.FixedTick(gameBusinessContext, dt);
         }
 
-        public async Task OnNetEvent(float dt) {
+        public void Tick(float dt) {
             if (!isLoadedAssets || isTearDown) {
                 return;
             }
-            await RequestInfra.Tick_On(requestInfraContext, dt);
-        }
-
-        public void SendNetMessages(float dt) {
-            if (!isLoadedAssets || isTearDown) {
-                return;
-            }
-            RequestInfra.Tick_Send(requestInfraContext, dt);
+            RequestInfra.Tick(reqInfraContext, dt);
         }
 
         void Init() {
@@ -111,68 +107,50 @@ namespace Ping.Server {
             GameBusiness.Init(gameBusinessContext);
         }
 
-        void Binding() {
-            Binding_Net();
-
-            Binding_Request_Login();
-            Binding_Login();
-
-            Binding_Request_Game();
-            Binding_Game();
-
-            Binding_Physical();
+        void RegisterProtocols() {
+            RequestInfra.RegisterAllProtocol(reqInfraContext);
         }
 
-        void Binding_Net() {
-            RequestInfra.Bind(requestInfraContext);
-        }
+        void BindingEvents() {
 
-        void Binding_Physical() {
-            var evt = physicalCore.EventCenter;
+            // Physical
+            {
+                var evt = physicalCore.EventCenter;
+                evt.OnTriggerEnterHandle += (a, b) => {
+                    GameBusiness.OnTriggerEnter(gameBusinessContext, a, b);
+                };
+            }
 
-            evt.OnTriggerEnterHandle += (a, b) => {
-                GameBusiness.OnTriggerEnter(gameBusinessContext, a, b);
-            };
-        }
+            // Login
+            {
+                var evt = loginBusinessContext.evt;
+                evt.OnLoginDoneHandle += () => {
+                    GameBusiness.OnLoginDone(gameBusinessContext);
+                };
+            }
 
-        void Binding_Login() {
-            var evt = loginBusinessContext.evt;
+            // Request Login
+            {
+                RequestInfra.OnConnected(reqInfraContext, (conn) => {
+                    LoginBusiness.On_ConnectReq(loginBusinessContext, conn);
+                });
+                RequestInfra.OnError(reqInfraContext, (msg, conn) => {
+                    LoginBusiness.On_ConnectResError(loginBusinessContext, msg);
+                });
+                RequestInfra.On<JoinRoomReqMessage>(reqInfraContext, (msg, conn) => {
+                    LoginBusiness.On_JoinRoomReq(loginBusinessContext, (JoinRoomReqMessage)msg, conn);
+                });
+                RequestInfra.On<GameStartReqMessage>(reqInfraContext, (msg, conn) => {
+                    LoginBusiness.On_GameStartReq(loginBusinessContext, (GameStartReqMessage)msg, conn);
+                });
+            }
 
-            evt.OnLoginDoneHandle += () => {
-                GameBusiness.OnLoginDone(gameBusinessContext);
-            };
-        }
-
-        void Binding_Request_Login() {
-            var evt = requestInfraContext.EventCenter;
-
-            evt.ConnectRer_OnHandle += (clientState) => {
-                LoginBusiness.On_ConnectReq(loginBusinessContext, clientState);
-            };
-
-            evt.ConnectRes_OnErrorHandle += (msg) => {
-                LoginBusiness.On_ConnectResError(loginBusinessContext, msg);
-            };
-
-            evt.JoinRoom_OnHandle += (msg, clientState) => {
-                LoginBusiness.On_JoinRoomReq(loginBusinessContext, msg, clientState);
-            };
-
-            evt.StartGame_OnHandle += (msg, clientState) => {
-                LoginBusiness.On_GameStartReq(loginBusinessContext, msg, clientState);
-            };
-        }
-
-        void Binding_Game() {
-            var evt = requestInfraContext.EventCenter;
-
-            evt.PaddleMove_OnHandle += (msg, clientState) => {
-                GameBusiness.On_PaddleMoveReq(gameBusinessContext, msg, clientState);
-            };
-
-        }
-
-        void Binding_Request_Game() {
+            // Request Game
+            {
+                RequestInfra.On<PaddleMoveReqMessage>(reqInfraContext, (msg, clientState) => {
+                    GameBusiness.On_PaddleMoveReq(gameBusinessContext, (PaddleMoveReqMessage)msg, clientState);
+                });
+            }
 
         }
 
@@ -187,6 +165,7 @@ namespace Ping.Server {
             isTearDown = true;
 
             loginBusinessContext.evt.Clear();
+            reqInfraContext.Clear();
 
             GameBusiness.TearDown(gameBusinessContext);
             LoginBusiness.TearDown(loginBusinessContext);

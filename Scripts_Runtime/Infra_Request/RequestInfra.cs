@@ -1,114 +1,129 @@
-using System.Net;
-using System.Net.Sockets;
-using MortiseFrame.LitIO;
+using System;
+using MortiseFrame.Abacus;
+using MortiseFrame.Rill;
 using Ping.Protocol;
 
 namespace Ping.Server.Requests {
 
     public static class RequestInfra {
 
-        public static void Bind(RequestInfraContext ctx) {
-            try {
-
-                IPEndPoint localEndPoint = new IPEndPoint(RequestConst.LOCAL_IP, RequestConst.LOCAL_PORT);
-                var listenfd = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                listenfd.NoDelay = true;
-                listenfd.Bind(localEndPoint);
-
-                listenfd.Listen(0);
-                ctx.Listenfd_Set(listenfd);
-
-                PLog.Log($"Server Has Started On {RequestConst.LOCAL_IP}:{RequestConst.LOCAL_PORT}.\nWaiting For A Connection...");
-
-            } catch (Exception e) {
-                PLog.Log(e.ToString());
-            }
+        //  Register
+        public static void RegisterAllProtocol(RequestInfraContext ctx) {
+            var server = ctx.ServerCore;
+            server.Register(typeof(ConnectResMessage));
+            server.Register(typeof(EntitiesSyncBroadMessage));
+            server.Register(typeof(GameResultBroadMessage));
+            server.Register(typeof(GameStartBroadMessage));
+            server.Register(typeof(GameStartReqMessage));
+            server.Register(typeof(JoinRoomBroadMessage));
+            server.Register(typeof(JoinRoomReqMessage));
+            server.Register(typeof(KeepAliveReqMessage));
+            server.Register(typeof(KeepAliveResMessage));
+            server.Register(typeof(LeaveRoomBroadMessage));
+            server.Register(typeof(LeaveRoomReqMessage));
+            server.Register(typeof(PaddleMoveReqMessage));
         }
 
-        public static async Task Tick_On(RequestInfraContext ctx, float dt) {
+        //  Send
+        static void Send(RequestInfraContext ctx, IMessage msg, ConnectionEntity conn) {
+            ctx.ServerCore.Send(msg, conn);
+        }
 
-            ctx.checkReadList.Clear();
-            ctx.checkReadList.Add(ctx.Listenfd);
-            ctx.ClientState_ForEachOrderly((clientState) => {
-                ctx.checkReadList.Add(clientState.clientfd);
+        //  Tick
+        public static void Tick(RequestInfraContext ctx, float dt) {
+            ctx.ServerCore.Tick(dt);
+        }
+
+        //  Connect
+        public static void Start(RequestInfraContext ctx) {
+            var ip = RequestConst.LOCAL_IP;
+            var port = RequestConst.LOCAL_PORT;
+            ctx.ServerCore.Start(ip, port);
+        }
+
+        //  On  
+        public static void On<T>(RequestInfraContext ctx, Action<IMessage, ConnectionEntity> listener) where T : IMessage {
+            ctx.ServerCore.On<T>(listener);
+        }
+
+        public static void OnError(RequestInfraContext ctx, Action<string, ConnectionEntity> listener) {
+            ctx.ServerCore.OnError(listener);
+        }
+
+        public static void OnConnected(RequestInfraContext ctx, Action<ConnectionEntity> listener) {
+            ctx.ServerCore.OnConnect(listener);
+        }
+
+        //  Off
+        public static void Off<T>(RequestInfraContext ctx, Action<IMessage, ConnectionEntity> listener) where T : IMessage {
+            ctx.ServerCore.Off<T>(listener);
+        }
+
+        public static void OffError(RequestInfraContext ctx, Action<string, ConnectionEntity> listener) {
+            ctx.ServerCore.OffError(listener);
+        }
+
+        public static void OffConnected(RequestInfraContext ctx, Action<ConnectionEntity> listener) {
+            ctx.ServerCore.OffConnect(listener);
+        }
+
+        public static void Stop(RequestInfraContext ctx) {
+            ctx.ServerCore.Stop();
+        }
+
+        // Send Res And Broad
+        // - Login
+        public static void SendConnectRes(RequestInfraContext ctx, ConnectionEntity conn) {
+            var msg = new ConnectResMessage();
+            msg.status = 1;
+            msg.playerIndex = (byte)conn.ConnectionIndex;
+            ctx.ServerCore.Send(msg, conn);
+        }
+
+        public static void SendJoinRoomBroad(RequestInfraContext ctx, string[] userNames) {
+            ctx.ServerCore.ForEachOrderly((conn) => {
+                var msg = new JoinRoomBroadMessage();
+                msg.status = 1;
+                msg.ownerIndex = (byte)conn.ConnectionIndex;
+                msg.userNames = userNames;
+                ctx.ServerCore.Send(msg, conn);
             });
-            Socket.Select(ctx.checkReadList, null, null, 1000);
-
-            foreach (Socket s in ctx.checkReadList) {
-
-                if (s == ctx.Listenfd) {
-                    await RequestConnectDomain.AcceptConnectReqAsync(ctx);
-                } else {
-                    byte[] buff = ctx.readBuff;
-                    int count = await s.ReceiveAsync(buff);
-                    if (count == 0) {
-                        continue;
-                    }
-
-                    var clientState = ctx.ClientState_GetBySocket(s);
-                    var offset = 0;
-                    while (offset < count) {
-                        var len = ByteReader.Read<int>(buff, ref offset);
-                        if (len == 0) {
-                            break;
-                        }
-                        On(ctx, clientState, buff, ref offset);
-                    }
-                }
-
-            }
-            ctx.Buffer_ClearReadBuffer();
         }
 
-        public static void On(RequestInfraContext ctx, ClientStateEntity clientState, byte[] data, ref int offset) {
-
-            byte msgID = ByteReader.Read<byte>(data, ref offset);
-            IMessage msg = ProtocolIDConst.GetObject(msgID) as IMessage;
-
-            msg.FromBytes(data, ref offset);
-            var evt = ctx.EventCenter;
-            evt.On(msg, clientState);
-
+        public static void SendGameStartBroad(RequestInfraContext ctx) {
+            ctx.ServerCore.ForEachOrderly((conn) => {
+                var msg = new GameStartBroadMessage();
+                ctx.ServerCore.Send(msg, conn);
+            });
         }
 
-        public static void Tick_Send(RequestInfraContext ctx, float dt) {
-            ctx.ClientState_ForEachOrderly((clientState) => {
-                if (clientState.clientfd == null) {
-                    return;
-                }
-                if (!clientState.clientfd.Connected) {
-                    return;
-                }
+        // - Game
+        public static void SendGameEntitiesSyncBroad(RequestInfraContext ctx, FVector2 paddle0Pos, FVector2 paddle1Pos, FVector2 ballPos) {
+            ctx.ServerCore.ForEachOrderly((conn) => {
+                var msg = new EntitiesSyncBroadMessage();
+                msg.paddle0Pos = paddle0Pos;
+                msg.paddle1Pos = paddle1Pos;
+                msg.ballPos = ballPos;
+                ctx.ServerCore.Send(msg, conn);
+            });
+        }
 
-                while (ctx.Message_TryDequeue(clientState.clientfd, out IMessage message)) {
-                    if (message == null) {
-                        continue;
-                    }
+        public static void SendGameResultBroad(RequestInfraContext ctx, int winnerIndex, int gameTurn, int score0, int score1) {
+            ctx.ServerCore.ForEachOrderly((conn) => {
+                var msg = new GameResultBroadMessage();
+                msg.winnerPlayerIndex = winnerIndex;
+                msg.gameTurn = gameTurn;
+                msg.score0 = score0;
+                msg.score1 = score1;
+                ctx.ServerCore.Send(msg, conn);
+            });
+        }
 
-                    byte[] buff = ctx.writeBuff;
-                    int offset = 0;
-
-                    var src = message.ToBytes();
-                    if (src.Length >= 4096 - 5) {
-                        throw new Exception("Message is too long");
-                    }
-
-                    int len = src.Length + 5;
-                    byte msgID = ProtocolIDConst.GetID(message);
-
-                    ByteWriter.Write<int>(buff, len, ref offset);
-                    ByteWriter.Write<byte>(buff, msgID, ref offset);
-                    Buffer.BlockCopy(src, 0, buff, offset, src.Length);
-                    offset += src.Length;
-
-                    if (offset == 0) {
-                        return;
-                    }
-
-                    clientState.clientfd.Send(buff, 0, offset, SocketFlags.None);
-                    ctx.Buffer_ClearWriteBuffer();
-                }
-
+        public static void SendKeepAliveRes(RequestInfraContext ctx, float timestamp) {
+            ctx.ServerCore.ForEachOrderly((conn) => {
+                var msg = new KeepAliveResMessage();
+                msg.timestamp = timestamp;
+                ctx.ServerCore.Send(msg, conn);
             });
         }
 

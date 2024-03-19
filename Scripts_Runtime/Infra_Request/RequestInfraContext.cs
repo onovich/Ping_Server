@@ -1,133 +1,62 @@
-using System.Collections.Generic;
-using System.Net.Sockets;
-using System.Collections.Concurrent;
-using Ping.Protocol;
+using System;
+using MortiseFrame.Rill;
 
 namespace Ping.Server.Requests {
 
     public class RequestInfraContext {
 
-        // Socket
-        Socket listenfd;
-        public Socket Listenfd => listenfd;
+        ServerCore serverCore;
+        public ServerCore ServerCore => serverCore;
 
-        Dictionary<Socket, ClientStateEntity> clients;
-        SortedList<int, Socket> clientOrderList;
+        SortedList<byte, string> userNames;
+        SortedList<byte, byte> userStatus;
 
-        // Message
-        Dictionary<Socket, Queue<IMessage>> messageQueue;
+        string[] userNamesArray;
+        public string[] UserNamesArray => userNamesArray;
 
-        // Event
-        RequestEventCenter eventCenter;
-        public RequestEventCenter EventCenter => eventCenter;
-
-        // Select
-        public List<Socket> checkReadList;
-
-        // Buffer
-        public byte[] readBuff;
-        public byte[] writeBuff;
-
-        // Service
-        public IDService idService;
+        byte[] userStatusArray;
+        public byte[] UserStatusArray => userStatusArray;
 
         public RequestInfraContext() {
-            eventCenter = new RequestEventCenter();
-            clientOrderList = new SortedList<int, Socket>();
-            clients = new Dictionary<Socket, ClientStateEntity>();
-            idService = new IDService();
-            checkReadList = new List<Socket>();
-            readBuff = new byte[4096];
-            writeBuff = new byte[4096];
-            messageQueue = new Dictionary<Socket, Queue<IMessage>>();
+            serverCore = new ServerCore();
+            userNames = new SortedList<byte, string>();
+            userStatus = new SortedList<byte, byte>(2);
+            userStatus.Add(0, 0);
+            userStatus.Add(1, 0);
         }
 
-        // Clientfd
-        public void ClientState_Add(ClientStateEntity clientState) {
-            clients.Add(clientState.clientfd, clientState);
-            clientOrderList.Add(clientState.playerIndex, clientState.clientfd);
+        public void AddUserName(byte index, string name) {
+            userNames.Add(index, name);
+            userNamesArray = userNames.Values.ToArray();
         }
 
-        public void ClientState_Remove(Socket clientfd) {
-            clientOrderList.Remove(clients[clientfd].playerIndex);
-            clients.Remove(clientfd);
+        public string GetUserName(byte index) {
+            return userNames[index];
         }
 
-        public void ClientState_ForEachOrderly(Action<ClientStateEntity> action) {
-            for (int i = 0; i < clientOrderList.Count; i++) {
-                action(clients[clientOrderList.Values[i]]);
-            }
+        public void UserStatus_SetJoinReady(byte index) {
+            userStatus[index] |= 1;
+            userStatusArray = userStatus.Values.ToArray();
         }
 
-        public async Task ClientState_ForEachOrderlyAsync(Func<ClientStateEntity, Task> actionAsync) {
-            for (int i = 0; i < clientOrderList.Count; i++) {
-                await actionAsync(clients[clientOrderList.Values[i]]);
-            }
+        public void UserStatus_SetStartReady(byte index) {
+            userStatus[index] |= 2;
+            userStatusArray = userStatus.Values.ToArray();
         }
 
-        public ClientStateEntity ClientState_GetByPlayerIndex(int playerIndex) {
-            foreach (var client in clients.Values) {
-                if (client.playerIndex == playerIndex) {
-                    return client;
-                }
-            }
-            return null;
+        public bool UserStatus_IsJoinReady(byte index) {
+            return (userStatus[index] & 1) == 1;
         }
 
-        public ClientStateEntity ClientState_GetBySocket(Socket clientfd) {
-            return clients[clientfd];
-        }
-
-        // Listenfd
-        public void Listenfd_Set(Socket listenfd) {
-            this.listenfd = listenfd;
-        }
-
-        // Message
-        public void Message_Enqueue(IMessage message, Socket clientfd) {
-            if (!messageQueue.ContainsKey(clientfd)) {
-                messageQueue.Add(clientfd, new Queue<IMessage>());
-            }
-            messageQueue[clientfd].Enqueue(message);
-        }
-
-        public bool Message_TryDequeue(Socket clientfd, out IMessage message) {
-            if (messageQueue.ContainsKey(clientfd) && messageQueue[clientfd].Count > 0) {
-                return messageQueue[clientfd].TryDequeue(out message);
-            }
-            message = null;
-            return false;
-        }
-
-        public int Message_GetCount(Socket clientfd) {
-            if (messageQueue.ContainsKey(clientfd)) {
-                return messageQueue[clientfd].Count;
-            }
-            return 0;
-        }
-
-        // ID
-        public byte ID_PickPlayerIndex() {
-            return idService.PickPlayerIndex();
-        }
-
-        public void ID_Reset() {
-            idService.Reset();
-        }
-
-        // Buffer
-        public void Buffer_ClearReadBuffer() {
-            Array.Clear(readBuff, 0, readBuff.Length);
-        }
-
-        public void Buffer_ClearWriteBuffer() {
-            Array.Clear(writeBuff, 0, writeBuff.Length);
+        public bool UserStatus_IsStartReady(byte index) {
+            return (userStatus[index] & 2) == 2;
         }
 
         public void Clear() {
-            listenfd = null;
-            clients.Clear();
-            eventCenter.Clear();
+            userNames.Clear();
+            userStatus.Clear();
+            Array.Clear(userNamesArray, 0, userNamesArray.Length);
+            Array.Clear(userStatusArray, 0, userStatusArray.Length);
         }
 
     }

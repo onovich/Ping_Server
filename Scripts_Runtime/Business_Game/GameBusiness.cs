@@ -1,6 +1,7 @@
 using MortiseFrame.Pulse;
 using Ping.Protocol;
 using Ping.Server.Requests;
+using MortiseFrame.Rill;
 
 namespace Ping.Server.Business.Game {
 
@@ -102,8 +103,8 @@ namespace Ping.Server.Business.Game {
             var paddle1 = ctx.Paddle_Get(1);
             var paddle1Pos = paddle1.RB.Transform.Pos;
 
-            RequestEntitiesSyncDomain.Send_EntitiesSyncBroadRes(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
-            RequestKeepAliveDomain.Send_KeepAliveBroadRes(ctx.reqInfraContext, ctx.Time_GetTimestamp());
+            RequestInfra.SendGameEntitiesSyncBroad(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
+            RequestInfra.SendKeepAliveRes(ctx.reqInfraContext, ctx.Time_GetTimestamp());
 
         }
 
@@ -111,13 +112,13 @@ namespace Ping.Server.Business.Game {
             StartGame(ctx);
         }
 
-        public static void On_PaddleMoveReq(GameBusinessContext ctx, PaddleMoveReqMessage msg, ClientStateEntity clientState) {
+        public static void On_PaddleMoveReq(GameBusinessContext ctx, PaddleMoveReqMessage msg, ConnectionEntity clientState) {
             var game = ctx.gameEntity;
             var fsm = game.FSM_GetComponent();
             var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
 
-            var playerIndex = clientState.playerIndex;
+            var playerIndex = clientState.ConnectionIndex;
             var paddle = ctx.Paddle_Get(playerIndex);
             if (paddle == null) {
                 PLog.LogError($"GameBusiness.On_PaddleMoveReq: paddle not found: {playerIndex}");

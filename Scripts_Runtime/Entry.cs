@@ -7,7 +7,7 @@ namespace Ping.Server {
 
     public class Entry {
 
-        static async Task Main(string[] args) {
+        static void Main(string[] args) {
 
             var server = new ServerMain();
             float targetFrameRate = 60f;
@@ -34,9 +34,6 @@ namespace Ping.Server {
                 // ResetInput
                 server.ResetInput();
 
-                // OnNetEvent
-                await server.OnNetEvent(dt);
-
                 // PreTick
                 server.PreTick(dt);
 
@@ -55,7 +52,7 @@ namespace Ping.Server {
                 server.LateTick(dt);
 
                 // SendNetEvent
-                server.SendNetMessages(dt);
+                server.Tick(dt);
 
                 // Sleep
                 lastTime = currentTime;
