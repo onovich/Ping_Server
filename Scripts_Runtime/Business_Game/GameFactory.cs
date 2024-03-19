@@ -32,23 +32,23 @@ namespace Ping.Server.Business.Game {
             field.Wall_Add(wall1);
 
             // Set Gate
-            var gate0 = new GateEntity(0);
-            var rb_gate0 = physicalCore.Rigidbody_CreateBox(config.gate0Pos, config.gate0Size);
-            rb_gate0.SetIsTrigger(true);
-            rb_gate0.SetIsStatic(true);
-            rb_gate0.SetHolder((int)EntityType.Gate, 0);
-            rb_gate0.SetLayer(LayerConst.GATE);
-            gate0.RB_Set(rb_gate0);
-            field.Gate_Add(gate0);
-
             var gate1 = new GateEntity(1);
-            var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
+            var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate0Pos, config.gate0Size);
             rb_gate1.SetIsTrigger(true);
             rb_gate1.SetIsStatic(true);
-            rb_gate1.SetHolder((int)EntityType.Gate, 1);
+            rb_gate1.SetHolder((int)EntityType.Gate, 0);
             rb_gate1.SetLayer(LayerConst.GATE);
             gate1.RB_Set(rb_gate1);
             field.Gate_Add(gate1);
+
+            var gate2 = new GateEntity(2);
+            var rb_gate2 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
+            rb_gate2.SetIsTrigger(true);
+            rb_gate2.SetIsStatic(true);
+            rb_gate2.SetHolder((int)EntityType.Gate, 1);
+            rb_gate2.SetLayer(LayerConst.GATE);
+            gate2.RB_Set(rb_gate2);
+            field.Gate_Add(gate2);
 
             return field;
         }

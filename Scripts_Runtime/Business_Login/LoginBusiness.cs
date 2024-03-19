@@ -41,7 +41,7 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            if (!ctx.reqInfraContext.UserStatus_IsJoinReady(0) || !ctx.reqInfraContext.UserStatus_IsJoinReady(1)) {
+            if (!ctx.reqInfraContext.UserStatus_IsJoinReady(1) || !ctx.reqInfraContext.UserStatus_IsJoinReady(2)) {
                 return;
             }
 
@@ -58,7 +58,7 @@ namespace Ping.Server.Business.Login {
                 return;
             }
 
-            if (!ctx.reqInfraContext.UserStatus_IsStartReady(0) || !ctx.reqInfraContext.UserStatus_IsStartReady(1)) {
+            if (!ctx.reqInfraContext.UserStatus_IsStartReady(1) || !ctx.reqInfraContext.UserStatus_IsStartReady(2)) {
                 return;
             }
 

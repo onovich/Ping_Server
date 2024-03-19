@@ -46,11 +46,11 @@ namespace Ping.Server.Business.Game {
             GameBallDomain.UnSpawn(ctx, ball);
 
             // Paddle
-            var paddle0 = ctx.Paddle_Get(0);
-            GamePaddleDomain.UnSpawn(ctx, paddle0);
-
             var paddle1 = ctx.Paddle_Get(1);
             GamePaddleDomain.UnSpawn(ctx, paddle1);
+
+            var paddle2 = ctx.Paddle_Get(2);
+            GamePaddleDomain.UnSpawn(ctx, paddle2);
 
             // Map
             // Send Res
@@ -72,11 +72,11 @@ namespace Ping.Server.Business.Game {
             var fsm = game.FSM_GetComponent();
 
             var winnierPlayerIndex = fsm.GameResult_winnierPlayerIndex;
-            var socre0 = ctx.Player_Get(0).Score;
             var socre1 = ctx.Player_Get(1).Score;
+            var socre2 = ctx.Player_Get(2).Score;
 
             GameBallDomain.ResetBall(ctx, ctx.Ball_Get());
-            RequestInfra.SendGameResultBroad(ctx.reqInfraContext, winnierPlayerIndex, game.Turn, socre0, socre1);
+            RequestInfra.SendGameResultBroad(ctx.reqInfraContext, winnierPlayerIndex, game.Turn, socre1, socre2);
         }
 
     }

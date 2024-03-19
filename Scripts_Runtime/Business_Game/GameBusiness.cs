@@ -23,13 +23,13 @@ namespace Ping.Server.Business.Game {
             var status = fsm.Status;
             if (status != GameFSMStatus.Gaming) { return; }
 
-            var paddle0 = ctx.Paddle_Get(0);
-            if (paddle0 != null) {
-                GameInputDomain.Paddle_ResetInput(ctx, paddle0);
-            }
             var paddle1 = ctx.Paddle_Get(1);
             if (paddle1 != null) {
                 GameInputDomain.Paddle_ResetInput(ctx, paddle1);
+            }
+            var paddle2 = ctx.Paddle_Get(2);
+            if (paddle2 != null) {
+                GameInputDomain.Paddle_ResetInput(ctx, paddle2);
             }
         }
 
@@ -67,13 +67,13 @@ namespace Ping.Server.Business.Game {
             GameBallFSMController.FixedTickFSM(ctx, ball, dt);
 
             // Paddle
-            var paddle0 = ctx.Paddle_Get(0);
-            if (paddle0 == null) { return; }
-            GamePaddleFSMController.FixedTickFSM(ctx, paddle0, dt);
-
             var paddle1 = ctx.Paddle_Get(1);
             if (paddle1 == null) { return; }
             GamePaddleFSMController.FixedTickFSM(ctx, paddle1, dt);
+
+            var paddle2 = ctx.Paddle_Get(2);
+            if (paddle2 == null) { return; }
+            GamePaddleFSMController.FixedTickFSM(ctx, paddle2, dt);
 
             ctx.physicalCore.Tick(dt);
 
@@ -97,13 +97,13 @@ namespace Ping.Server.Business.Game {
             var ball = ctx.Ball_Get();
             var ballPos = ball.RB.Transform.Pos;
 
-            var paddle0 = ctx.Paddle_Get(0);
-            var paddle0Pos = paddle0.RB.Transform.Pos;
-
             var paddle1 = ctx.Paddle_Get(1);
             var paddle1Pos = paddle1.RB.Transform.Pos;
 
-            RequestInfra.SendGameEntitiesSyncBroad(ctx.reqInfraContext, paddle0Pos, paddle1Pos, ballPos);
+            var paddle2 = ctx.Paddle_Get(2);
+            var paddle2Pos = paddle2.RB.Transform.Pos;
+
+            RequestInfra.SendGameEntitiesSyncBroad(ctx.reqInfraContext, paddle1Pos, paddle2Pos, ballPos);
             RequestInfra.SendKeepAliveRes(ctx.reqInfraContext, ctx.Time_GetTimestamp());
 
         }
