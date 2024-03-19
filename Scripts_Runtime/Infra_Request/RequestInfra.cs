@@ -80,12 +80,13 @@ namespace Ping.Server.Requests {
             ctx.ServerCore.Send(msg, conn);
         }
 
-        public static void SendJoinRoomBroad(RequestInfraContext ctx, string[] userNames) {
+        public static void SendJoinRoomBroad(RequestInfraContext ctx, string userName1, string userName2) {
             ctx.ServerCore.ForEachOrderly((conn) => {
                 var msg = new JoinRoomBroadMessage();
                 msg.status = 1;
                 msg.ownerIndex = (byte)conn.ConnectionIndex;
-                msg.userNames = userNames;
+                msg.userName1 = userName1;
+                msg.userName2 = userName2;
                 ctx.ServerCore.Send(msg, conn);
             });
         }

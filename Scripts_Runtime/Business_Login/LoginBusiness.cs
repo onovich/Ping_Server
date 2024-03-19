@@ -46,8 +46,9 @@ namespace Ping.Server.Business.Login {
             }
 
             PLog.Log("All Players Are Ready");
-            var names = ctx.reqInfraContext.UserNamesArray;
-            RequestInfra.SendJoinRoomBroad(ctx.reqInfraContext, names);
+            var name1 = ctx.reqInfraContext.GetUserName(1);
+            var name2 = ctx.reqInfraContext.GetUserName(2);
+            RequestInfra.SendJoinRoomBroad(ctx.reqInfraContext, name1, name2);
             fsmCom.WaitForStart_Enter();
         }
 
