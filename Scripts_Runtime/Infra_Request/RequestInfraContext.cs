@@ -30,10 +30,6 @@ namespace Ping.Server.Requests {
             userNamesArray = userNames.Values.ToArray();
         }
 
-        public string GetUserName(byte index) {
-            return userNames[index];
-        }
-
         public void UserStatus_SetJoinReady(byte index) {
             userStatus[index] |= 1;
             userStatusArray = userStatus.Values.ToArray();

@@ -95,7 +95,7 @@ namespace Ping.Server.Business.Login {
         public static void On_JoinRoomReq(LoginBusinessContext ctx, JoinRoomReqMessage msg, ConnectionEntity conn) {
             var userName = msg.userName;
             ctx.reqInfraContext.AddUserName((byte)conn.ConnectionIndex, userName);
-            ctx.reqInfraContext.UserStatus_IsJoinReady((byte)conn.ConnectionIndex);
+            ctx.reqInfraContext.UserStatus_SetJoinReady((byte)conn.ConnectionIndex);
             PLog.Log("On_JoinRoomReq:" + userName + " Is Join Ready");
 
             var player = new PlayerEntity();
@@ -105,7 +105,7 @@ namespace Ping.Server.Business.Login {
         }
 
         public static void On_GameStartReq(LoginBusinessContext ctx, GameStartReqMessage msg, ConnectionEntity conn) {
-            ctx.reqInfraContext.UserStatus_IsStartReady((byte)conn.ConnectionIndex);
+            ctx.reqInfraContext.UserStatus_SetStartReady((byte)conn.ConnectionIndex);
         }
 
         public static void TearDown(LoginBusinessContext ctx) {
