@@ -98,11 +98,11 @@ namespace Ping.Server.Requests {
         }
 
         // - Game
-        public static void SendGameEntitiesSyncBroad(RequestInfraContext ctx, FVector2 paddle0Pos, FVector2 paddle1Pos, FVector2 ballPos) {
+        public static void SendGameEntitiesSyncBroad(RequestInfraContext ctx, FVector2 paddle1Pos, FVector2 paddle2Pos, FVector2 ballPos) {
             ctx.ServerCore.ForEachOrderly((conn) => {
                 var msg = new EntitiesSyncBroadMessage();
-                msg.paddle0Pos = paddle0Pos;
                 msg.paddle1Pos = paddle1Pos;
+                msg.paddle2Pos = paddle2Pos;
                 msg.ballPos = ballPos;
                 ctx.ServerCore.Send(msg, conn);
             });
@@ -113,8 +113,8 @@ namespace Ping.Server.Requests {
                 var msg = new GameResultBroadMessage();
                 msg.winnerPlayerIndex = winnerIndex;
                 msg.gameTurn = gameTurn;
-                msg.score0 = score0;
-                msg.score1 = score1;
+                msg.score1 = score0;
+                msg.score2 = score1;
                 ctx.ServerCore.Send(msg, conn);
             });
         }

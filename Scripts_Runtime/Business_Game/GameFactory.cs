@@ -33,7 +33,7 @@ namespace Ping.Server.Business.Game {
 
             // Set Gate
             var gate1 = new GateEntity(1);
-            var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate0Pos, config.gate0Size);
+            var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
             rb_gate1.SetIsTrigger(true);
             rb_gate1.SetIsStatic(true);
             rb_gate1.SetHolder((int)EntityType.Gate, 0);
@@ -42,7 +42,7 @@ namespace Ping.Server.Business.Game {
             field.Gate_Add(gate1);
 
             var gate2 = new GateEntity(2);
-            var rb_gate2 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
+            var rb_gate2 = physicalCore.Rigidbody_CreateBox(config.gate2Pos, config.gate2Size);
             rb_gate2.SetIsTrigger(true);
             rb_gate2.SetIsStatic(true);
             rb_gate2.SetHolder((int)EntityType.Gate, 1);
@@ -115,8 +115,8 @@ namespace Ping.Server.Business.Game {
             paddle.RB_Set(rb);
 
             // Set Constraint
-            var constraintPos = playerIndex == 0 ? config.constraint0Pos : config.constraint1Pos;
-            var constraintSize = playerIndex == 0 ? config.constraint0Size : config.constraint1Size;
+            var constraintPos = playerIndex == 0 ? config.constraint1Pos : config.constraint2Pos;
+            var constraintSize = playerIndex == 0 ? config.constraint1Size : config.constraint2Size;
             paddle.Constrain_Set(constraintPos, constraintSize);
 
             return paddle;
