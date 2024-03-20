@@ -36,9 +36,9 @@ namespace MortiseFrame.Rill {
                 IPAddress ipAddress = IPAddress.Parse(remoteIP);
                 IPEndPoint ep = new IPEndPoint(ipAddress, port);
 
-                client.NoDelay = CommonConst.NoDelay;
-                client.SendTimeout = CommonConst.SendTimeout;
-                client.ReceiveTimeout = CommonConst.ReceiveTimeout;
+                client.NoDelay = ctx.NoDelay;
+                client.SendTimeout = ctx.SendTimeout;
+                client.ReceiveTimeout = ctx.ReceiveTimeout;
 
                 client.Connect(ep);
                 ctx.Connecting_Set(false);

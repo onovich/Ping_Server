@@ -28,7 +28,7 @@ namespace MortiseFrame.Rill {
 
                 IPEndPoint localEndPoint = new IPEndPoint(ip, port);
                 var listener = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                listener.NoDelay = CommonConst.NoDelay;
+                listener.NoDelay = ctx.NoDelay;
                 listener.Bind(localEndPoint);
 
                 listener.Listen(0);
@@ -40,12 +40,12 @@ namespace MortiseFrame.Rill {
 
                     Socket clientfd = listener.Accept();
 
-                    clientfd.NoDelay = CommonConst.NoDelay;
-                    clientfd.SendTimeout = CommonConst.SendTimeout;
-                    clientfd.ReceiveTimeout = CommonConst.ReceiveTimeout;
+                    clientfd.NoDelay = ctx.NoDelay;
+                    clientfd.SendTimeout = ctx.SendTimeout;
+                    clientfd.ReceiveTimeout = ctx.ReceiveTimeout;
 
                     int clientIndex = ctx.IDService.PickClientIndex();
-                    var client = new ConnectionEntity(clientfd, clientIndex);
+                    var client = new ConnectionEntity(clientfd, clientIndex, ctx.BufferLength);
                     ctx.Connection_Add(client);
                     RLog.Log("Server Client Connected: " + clientfd.RemoteEndPoint);
 

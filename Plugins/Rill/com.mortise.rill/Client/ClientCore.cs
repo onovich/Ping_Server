@@ -52,7 +52,7 @@ namespace MortiseFrame.Rill {
         }
 
         // Off
-        public void Off<T>(Action<object> listener) where T : IMessage {
+        public void Off<T>(Action<IMessage> listener) where T : IMessage {
             ctx.Evt.Off<T>(ctx, listener);
         }
 
@@ -71,6 +71,23 @@ namespace MortiseFrame.Rill {
         // Stop
         public void Stop() {
             ClientStopDomain.Stop(ctx);
+        }
+
+        // Config
+        public void SetNoDelay(bool value) {
+            ctx.NoDelay = value;
+        }
+
+        public void SetSendTimeout(int value) {
+            ctx.SendTimeout = value;
+        }
+
+        public void SetReceiveTimeout(int value) {
+            ctx.ReceiveTimeout = value;
+        }
+
+        public void SetBufferLength(int value) {
+            ctx.BufferLength = value;
         }
 
     }

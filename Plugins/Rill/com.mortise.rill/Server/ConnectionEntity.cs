@@ -22,11 +22,11 @@ namespace MortiseFrame.Rill {
         Queue<IMessage> messageQueue;
         Queue<byte[]> receiveDataQueue;
 
-        internal ConnectionEntity(Socket conn, int connIndex) {
+        internal ConnectionEntity(Socket conn, int connIndex, int bufferLength) {
             this.clientfd = conn;
             this.connectionIndex = connIndex;
-            this.readBuffer = new byte[CommonConst.BufferLength];
-            this.writeBuffer = new byte[CommonConst.BufferLength];
+            this.readBuffer = new byte[bufferLength];
+            this.writeBuffer = new byte[bufferLength];
             locker = new object();
             messageQueue = new Queue<IMessage>();
             receiveDataQueue = new Queue<byte[]>();

@@ -47,10 +47,16 @@ namespace MortiseFrame.Rill {
         object locker;
         ManualResetEvent sendPending;
 
+        // Config
+        internal bool NoDelay = true;
+        internal int SendTimeout = 5000;
+        internal int ReceiveTimeout = 0;
+        internal int BufferLength = 4096;
+
         internal ClientContext() {
             messageQueue = new Queue<IMessage>();
-            readBuffer = new byte[CommonConst.BufferLength];
-            writeBuffer = new byte[CommonConst.BufferLength];
+            readBuffer = new byte[BufferLength];
+            writeBuffer = new byte[BufferLength];
             evt = new ClientEventCenter();
             idService = new IDService();
             receiveDataQueue = new Queue<byte[]>();

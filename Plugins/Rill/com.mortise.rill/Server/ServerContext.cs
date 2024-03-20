@@ -35,6 +35,12 @@ namespace MortiseFrame.Rill {
         // Locker
         object locker;
 
+        // Const
+        internal bool NoDelay = true;
+        internal int SendTimeout = 5000;
+        internal int ReceiveTimeout = 0;
+        internal int BufferLength = 4096;
+
         internal ServerContext() {
             clients = new Dictionary<Socket, ConnectionEntity>();
             clientOrderList = new SortedList<int, Socket>();

@@ -70,6 +70,23 @@ namespace MortiseFrame.Rill {
             ServerStopDomain.Stop(ctx);
         }
 
+        // Config
+        public void SetNoDelay(bool noDelay) {
+            ctx.NoDelay = noDelay;
+        }
+
+        public void SetSendTimeout(int sendTimeout) {
+            ctx.SendTimeout = sendTimeout;
+        }
+
+        public void SetReceiveTimeout(int receiveTimeout) {
+            ctx.ReceiveTimeout = receiveTimeout;
+        }
+
+        public void SetBufferLength(int bufferLength) {
+            ctx.BufferLength = bufferLength;
+        }
+
     }
 
 }
