@@ -47,26 +47,20 @@ namespace MortiseFrame.Rill {
                 }
 
                 byte[] buff = ctx.WriteBuffer_Get();
-                int offset = 0;
 
-                var src = message.ToBytes();
-                if (src.Length >= 4096 - 5) {
-                    RLog.Log("Message is too long");
-                }
-
-                int len = src.Length + 5;
+                int offset = 4;
                 byte msgID = ctx.GetMessageID(message.GetType());
-
-                ByteWriter.Write<int>(buff, len, ref offset);
                 ByteWriter.Write<byte>(buff, msgID, ref offset);
-                Buffer.BlockCopy(src, 0, buff, offset, src.Length);
-                offset += src.Length;
+                message.WriteTo(buff, ref offset);
+
+                int len = offset;
+                offset = 0;
+                ByteWriter.Write<int>(buff, len, ref offset);
 
                 if (offset == 0) {
                     return;
                 }
                 ctx.Client.Send(buff, 0, offset, System.Net.Sockets.SocketFlags.None);
-                RLog.Log("Client Sent: " + message.GetType());
                 ctx.WriteBuffer_Clear();
             }
         }
