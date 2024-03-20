@@ -57,7 +57,7 @@ namespace Ping.Server.Business.Game {
                 fsm.Dead_isEntering = false;
                 ball.Move_Stop();
                 var gateIndex = fsm.Dead_gatePlayerIndex;
-                var winnerPlayerIndex = 1 - gateIndex;
+                var winnerPlayerIndex = 3 - gateIndex; // 偷懒做法
                 GameGameDomain.EnterGameResult(ctx, winnerPlayerIndex);
             }
         }

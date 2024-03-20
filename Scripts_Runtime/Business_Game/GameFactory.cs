@@ -36,7 +36,7 @@ namespace Ping.Server.Business.Game {
             var rb_gate1 = physicalCore.Rigidbody_CreateBox(config.gate1Pos, config.gate1Size);
             rb_gate1.SetIsTrigger(true);
             rb_gate1.SetIsStatic(true);
-            rb_gate1.SetHolder((int)EntityType.Gate, 0);
+            rb_gate1.SetHolder((int)EntityType.Gate, 1);
             rb_gate1.SetLayer(LayerConst.GATE);
             gate1.RB_Set(rb_gate1);
             field.Gate_Add(gate1);
@@ -45,7 +45,7 @@ namespace Ping.Server.Business.Game {
             var rb_gate2 = physicalCore.Rigidbody_CreateBox(config.gate2Pos, config.gate2Size);
             rb_gate2.SetIsTrigger(true);
             rb_gate2.SetIsStatic(true);
-            rb_gate2.SetHolder((int)EntityType.Gate, 1);
+            rb_gate2.SetHolder((int)EntityType.Gate, 2);
             rb_gate2.SetLayer(LayerConst.GATE);
             gate2.RB_Set(rb_gate2);
             field.Gate_Add(gate2);
