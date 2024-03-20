@@ -46,7 +46,7 @@ namespace MortiseFrame.Rill {
                     continue;
                 }
 
-                byte[] buff = ctx.Buffer_Get();
+                byte[] buff = ctx.WriteBuffer_Get();
                 int offset = 0;
 
                 var src = message.ToBytes();
@@ -67,7 +67,7 @@ namespace MortiseFrame.Rill {
                 }
                 ctx.Client.Send(buff, 0, offset, System.Net.Sockets.SocketFlags.None);
                 RLog.Log("Client Sent: " + message.GetType());
-                ctx.Buffer_Clear();
+                ctx.WriteBuffer_Clear();
             }
         }
 

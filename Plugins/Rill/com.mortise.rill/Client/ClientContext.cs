@@ -36,7 +36,8 @@ namespace MortiseFrame.Rill {
         BiDictionary<byte, Type> protocolDicts;
 
         // Buffer
-        byte[] buffer;
+        byte[] readBuffer;
+        byte[] writeBuffer;
 
         // Service
         IDService idService;
@@ -48,7 +49,8 @@ namespace MortiseFrame.Rill {
 
         internal ClientContext() {
             messageQueue = new Queue<IMessage>();
-            buffer = new byte[4096];
+            readBuffer = new byte[CommonConst.BufferLength];
+            writeBuffer = new byte[CommonConst.BufferLength];
             evt = new ClientEventCenter();
             idService = new IDService();
             receiveDataQueue = new Queue<byte[]>();
@@ -80,16 +82,20 @@ namespace MortiseFrame.Rill {
         }
 
         // Buffer
-        internal void Buffer_Clear() {
-            lock (locker) {
-                Array.Clear(buffer, 0, buffer.Length);
-            }
+        internal void ReadBuffer_Clear() {
+            Array.Clear(readBuffer, 0, readBuffer.Length);
         }
 
-        internal byte[] Buffer_Get() {
-            lock (locker) {
-                return buffer;
-            }
+        internal void WriteBuffer_Clear() {
+            Array.Clear(writeBuffer, 0, writeBuffer.Length);
+        }
+
+        internal byte[] ReadBuffer_Get() {
+            return readBuffer;
+        }
+
+        internal byte[] WriteBuffer_Get() {
+            return writeBuffer;
         }
 
         // Protocol

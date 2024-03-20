@@ -10,7 +10,7 @@ namespace MortiseFrame.Rill {
             try {
 
                 while (true) {
-                    byte[] buff = ctx.Buffer_Get();
+                    byte[] buff = ctx.ReadBuffer_Get();
                     var client = ctx.Client;
                     int count = client.Receive(buff);
                     if (count <= 0) {
@@ -21,7 +21,7 @@ namespace MortiseFrame.Rill {
                     Buffer.BlockCopy(buff, 0, data, 0, count);
                     Enqueue(ctx, data);
 
-                    ctx.Buffer_Clear();
+                    ctx.ReadBuffer_Clear();
                 }
 
             } catch (Exception exception) {

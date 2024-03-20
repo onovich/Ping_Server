@@ -50,7 +50,7 @@ namespace MortiseFrame.Rill {
                     continue;
                 }
 
-                byte[] buff = connection.Buffer_Get();
+                byte[] buff = connection.WriteBuffer_Get();
                 int offset = 0;
 
                 var src = message.ToBytes();
@@ -71,7 +71,7 @@ namespace MortiseFrame.Rill {
                 }
 
                 connection.clientfd.Send(buff, 0, offset, System.Net.Sockets.SocketFlags.None);
-                connection.Buffer_Clear();
+                connection.WriteBuffer_Clear();
             }
         }
 

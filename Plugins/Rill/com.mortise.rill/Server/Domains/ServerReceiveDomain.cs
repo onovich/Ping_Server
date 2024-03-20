@@ -12,7 +12,7 @@ namespace MortiseFrame.Rill {
 
                 while (true) {
 
-                    byte[] buff = connection.Buffer_Get();
+                    byte[] buff = connection.ReadBuffer_Get();
                     int count = connection.clientfd.Receive(buff);
                     if (count <= 0) {
                         return;
@@ -22,7 +22,7 @@ namespace MortiseFrame.Rill {
                     Buffer.BlockCopy(buff, 0, data, 0, count);
                     Enqueue(ctx, connection, data);
 
-                    connection.Buffer_Clear();
+                    connection.ReadBuffer_Clear();
 
                 }
 
