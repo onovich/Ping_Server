@@ -23,26 +23,6 @@ namespace Ping.Protocol {
             ballPos = ByteReader.Read<FVector2>(src, ref offset);
         }
 
-        public int GetEvaluatedSize(out bool isCertain) {
-            isCertain = true;
-            int count = ByteCounter.Count<FVector2>() + ByteCounter.Count<FVector2>() + ByteCounter.Count<FVector2>();
-            return count;
-        }
-
-        public byte[] ToBytes() {
-            int count = GetEvaluatedSize(out bool isCertain);
-            int offset = 0;
-            byte[] src = new byte[count];
-            WriteTo(src, ref offset);
-            if (isCertain) {
-                return src;
-            } else {
-                byte[] dst = new byte[offset];
-                Buffer.BlockCopy(src, 0, dst, 0, offset);
-                return dst;
-            }
-        }
-
     }
 
 }
