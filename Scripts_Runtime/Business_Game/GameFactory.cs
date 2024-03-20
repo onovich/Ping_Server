@@ -115,9 +115,17 @@ namespace Ping.Server.Business.Game {
             paddle.RB_Set(rb);
 
             // Set Constraint
-            var constraintPos = playerIndex == 0 ? config.constraint1Pos : config.constraint2Pos;
-            var constraintSize = playerIndex == 0 ? config.constraint1Size : config.constraint2Size;
-            paddle.Constrain_Set(constraintPos, constraintSize);
+            if (playerIndex == 1) {
+                var constraintPos = config.constraint1Pos;
+                var constraintSize = config.constraint1Size;
+                paddle.Constrain_Set(constraintPos, constraintSize);
+            }
+
+            if (playerIndex == 2) {
+                var constraintPos = config.constraint2Pos;
+                var constraintSize = config.constraint2Size;
+                paddle.Constrain_Set(constraintPos, constraintSize);
+            }
 
             return paddle;
         }
