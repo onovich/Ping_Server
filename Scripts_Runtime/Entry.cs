@@ -34,6 +34,9 @@ namespace Ping.Server {
                 // ResetInput
                 server.ResetInput();
 
+                // SendNetEvent
+                server.Tick(dt);
+
                 // PreTick
                 server.PreTick(dt);
 
@@ -50,9 +53,6 @@ namespace Ping.Server {
 
                 // LateTick
                 server.LateTick(dt);
-
-                // SendNetEvent
-                server.Tick(dt);
 
                 // Sleep
                 lastTime = currentTime;
