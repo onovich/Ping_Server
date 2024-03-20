@@ -72,8 +72,8 @@ namespace Ping.Server {
             var constrainMax = Constrain.Max;
             var constrainCenter = Constrain.Center;
 
-            // pos.x = FMath.Clamp(pos.x, constrainMin.x, constrainMax.x);
-            // pos.y = FMath.Clamp(pos.y, constrainMin.y, constrainMax.y);
+            pos.x = FMath.Clamp(pos.x, constrainMin.x, constrainMax.x);
+            pos.y = FMath.Clamp(pos.y, constrainMin.y, constrainMax.y);
 
             Pos_SetPos(pos);
         }
