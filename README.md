@@ -1,3 +1,5 @@
+![](https://github.com/onovich/Ping/blob/main/Assets/Resources_Sample/Cover_Sample.png)
+
 # About
 This project was created to help me understand the basics of online gaming infrastructure. Before this, I had not worked on an online project.<br/>
 **写这个项目是为了帮助我自己理解联机游戏的基本构成。在此之前，我没有做过联机项目。**
