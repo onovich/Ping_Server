@@ -52,6 +52,8 @@ namespace Ping.Server {
             loginBusinessContext.reqInfraContext = reqInfraContext;
             loginBusinessContext.mainContext = mainContext;
 
+            reqInfraContext.templateInfraContext = templateInfraContext;
+
             RegisterProtocols();
             BindingEvents();
 

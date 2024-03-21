@@ -8,6 +8,8 @@ namespace Ping.Server.Requests {
         ServerCore serverCore;
         public ServerCore ServerCore => serverCore;
 
+        public TemplateInfraContext templateInfraContext;
+
         SortedList<byte, string> userNames;
         SortedList<byte, byte> userStatus;
 

@@ -36,6 +36,11 @@ namespace Ping.Server {
         public FVector2 constraint2Pos;
         public FVector2 constraint2Size;
 
+        // Request
+        public string remoteIP_test;
+        public int remotePort;
+        public string remoteIP;
+
         public void FromBytes(byte[] src, ref int offset) {
 
             wall0Pos = ByteReader.Read<FVector2>(src, ref offset);
@@ -63,6 +68,10 @@ namespace Ping.Server {
             constraint1Size = ByteReader.Read<FVector2>(src, ref offset);
             constraint2Pos = ByteReader.Read<FVector2>(src, ref offset);
             constraint2Size = ByteReader.Read<FVector2>(src, ref offset);
+
+            remoteIP_test = ByteReader.ReadUTF8String(src, ref offset);
+            remotePort = ByteReader.Read<int>(src, ref offset);
+            remoteIP = ByteReader.ReadUTF8String(src, ref offset);
 
         }
 

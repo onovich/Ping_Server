@@ -36,8 +36,9 @@ namespace Ping.Server.Requests {
 
         //  Connect
         public static void Start(RequestInfraContext ctx) {
+            var config = ctx.templateInfraContext.Config_Get();
             var ip = RequestConst.LOCAL_IP;
-            var port = RequestConst.LOCAL_PORT;
+            var port = config.remotePort;
             ctx.ServerCore.Start(ip, port);
         }
 
